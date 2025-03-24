@@ -6,63 +6,29 @@ interface CustomField {
 }
 
 interface CustomFieldsFormProps {
-  skills: string;
-  priceRange: string;
   customFields: CustomField[];
   showCustomFields: boolean;
   onCustomFieldChange: (index: number, field: 'key' | 'value', value: string) => void;
   onAddCustomField: () => void;
   onRemoveCustomField: (index: number) => void;
   onShowCustomFields: (show: boolean) => void;
-  onSkillsChange: (value: string) => void;
-  onPriceRangeChange: (value: string) => void;
   onBack: () => void;
   onProceed: () => void;
 }
 
 export default function CustomFieldsForm({
-  skills,
-  priceRange,
   customFields,
   showCustomFields,
   onCustomFieldChange,
   onAddCustomField,
   onRemoveCustomField,
   onShowCustomFields,
-  onSkillsChange,
-  onPriceRangeChange,
   onBack,
   onProceed
 }: CustomFieldsFormProps) {
   return (
     <div className="bg-white rounded-xl p-8 w-[450px] shadow-2xl">
       <div className="flex flex-col gap-2">
-        <div>
-          <label className="text-gray-500 text-sm">Skills:</label>
-          <div className="relative">
-            <input
-              type="text"
-              value={skills}
-              onChange={(e) => onSkillsChange(e.target.value)}
-              placeholder="What do you want your yaya to be able to do?"
-              className="w-full px-4 h-12 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-[#FF5733] placeholder-gray-400"
-            />
-          </div>
-        </div>
-
-        <div>
-          <label className="text-gray-500 text-sm">Price Range:</label>
-          <div className="relative">
-            <input
-              type="text"
-              value={priceRange}
-              onChange={(e) => onPriceRangeChange(e.target.value)}
-              placeholder="How much is your budget for a yaya?"
-              className="w-full px-4 h-12 border border-gray-300 rounded-lg text-black focus:outline-none focus:ring-2 focus:ring-[#FF5733] placeholder-gray-400"
-            />
-          </div>
-        </div>
-
         <div>
           <label className="text-gray-500 text-sm">Additional Requirements:</label>
           {!showCustomFields ? (

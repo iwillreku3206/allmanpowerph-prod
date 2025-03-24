@@ -19,17 +19,30 @@ export default function Requirements() {
   const searchParams = useSearchParams();
 
   const [currentStep, setCurrentStep] = useState(1);
-  const [customFields, setCustomFields] = useState<CustomField[]>([]);
-  const [showCustomFields, setShowCustomFields] = useState(false);
+  const [customFields, setCustomFields] = useState<CustomField[]>([{
+    key: 'Skills',
+    value: ''
+  }, {
+    key: 'Price Range',
+    value: ''
+  }]);
+  const [showCustomFields, setShowCustomFields] = useState(true);
   const [email, setEmail] = useState('');
-  const [skills, setSkills] = useState('');
-  const [priceRange, setPriceRange] = useState('');
+  // Removed standalone skills state as it's now part of customFields
+  // Removed standalone priceRange state as it's now part of customFields
 
   const location = searchParams.get('location');
 
   useEffect(() => {
-    setSkills(searchParams.get('skills') || '');
-    setPriceRange(searchParams.get('priceRange') || '');
+    const skills = searchParams.get('skills') || '';
+    const priceRange = searchParams.get('priceRange') || '';
+    setCustomFields([{
+      key: 'Skills',
+      value: skills
+    }, {
+      key: 'Price Range',
+      value: priceRange
+    }]);
   }, [searchParams]);
 
   useEffect(() => {
@@ -71,9 +84,8 @@ export default function Requirements() {
       .map(field => `${field.key}:${field.value}`)
       .join(',');
     
-    // Here you would typically make an API call to save the email
-    // For now, we'll just redirect to matches page
-    router.push(`/matches?location=${encodeURIComponent(location)}&skills=${encodeURIComponent(skills)}&priceRange=${encodeURIComponent(priceRange)}&customFields=${encodeURIComponent(customFieldsParam)}&email=${encodeURIComponent(email)}`);
+    const skillsField = customFields.find(field => field.key === 'Skills');
+    const priceRangeField = customFields.find(field => field.key === 'Price Range');
   };
 
   return (
@@ -123,16 +135,12 @@ export default function Requirements() {
             <div className="flex flex-col gap-4">
               {currentStep === 1 ? (
                 <CustomFieldsForm
-                  skills={skills}
-                  priceRange={priceRange}
                   customFields={customFields}
                   showCustomFields={showCustomFields}
                   onCustomFieldChange={handleCustomFieldChange}
                   onAddCustomField={addCustomField}
                   onRemoveCustomField={removeCustomField}
                   onShowCustomFields={setShowCustomFields}
-                  onSkillsChange={setSkills}
-                  onPriceRangeChange={setPriceRange}
                   onBack={handleBack}
                   onProceed={handleProceed}
                 />
