@@ -70,6 +70,12 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    fontFamily: {
+      'logofont': [ 'Skranji', 'sans-serif' ],
+      'headerfont': [ 'SF Pro Display', 'sans-serif' ],
+      'bodyfont': [ 'Open Sans', 'sans-serif' ],
+      'inputfont': [ 'JetBrains Mono', 'monospace' ],
+    },
   },
   plugins: [require("tailwindcss-animate")],
 } satisfies Config;
