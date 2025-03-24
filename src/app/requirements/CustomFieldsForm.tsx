@@ -14,6 +14,7 @@ interface CustomFieldsFormProps {
   onShowCustomFields: (show: boolean) => void;
   onBack: () => void;
   onProceed: () => void;
+  error: string;
 }
 
 export default function CustomFieldsForm({
@@ -24,10 +25,12 @@ export default function CustomFieldsForm({
   onRemoveCustomField,
   onShowCustomFields,
   onBack,
-  onProceed
+  onProceed,
+  error
 }: CustomFieldsFormProps) {
   return (
     <div className="bg-white rounded-xl p-8 w-[450px] shadow-2xl">
+      {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <div className="flex flex-col gap-2">
         <div>
           <label className="text-gray-500 text-sm">Additional Requirements:</label>

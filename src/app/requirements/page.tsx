@@ -19,6 +19,7 @@ function RequirementsContent() {
   const searchParams = useSearchParams();
 
   const [currentStep, setCurrentStep] = useState(1);
+  const [error, setError] = useState('');
   const [customFields, setCustomFields] = useState<CustomField[]>([{
     key: 'Skills',
     value: ''
@@ -28,6 +29,7 @@ function RequirementsContent() {
   }]);
   const [showCustomFields, setShowCustomFields] = useState(true);
   const [email, setEmail] = useState('');
+
   // Removed standalone skills state as it's now part of customFields
   // Removed standalone priceRange state as it's now part of customFields
 
@@ -78,14 +80,46 @@ function RequirementsContent() {
     setCurrentStep(2);
   };
 
-  const handleFinish = () => {
-    const customFieldsParam = customFields
-      .filter(field => field.key.trim() && field.value.trim())
-      .map(field => `${field.key}:${field.value}`)
-      .join(',');
-    
-    const skillsField = customFields.find(field => field.key === 'Skills');
-    const priceRangeField = customFields.find(field => field.key === 'Price Range');
+  const handleFinish = async () => {
+    setError('');
+    if (!email.trim()) {
+      setError('Please enter your email address');
+      return;
+    }
+
+    // Validate all custom fields
+    const emptyFields = customFields
+      .filter(field => field.key.trim() && !field.value.trim())
+      .map(field => field.key);
+
+    if (emptyFields.length > 0) {
+      setError(`Please fill in the following fields: ${emptyFields.join(', ')}`);
+      setCurrentStep(1)
+      return;
+    }
+
+    const response = await fetch('/api/v0/searches', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        location,
+        email,
+        fields: customFields
+      })
+    })
+    const resBody = await response.json()
+
+    if (resBody.status !== 200) {
+      if (String(resBody.error).includes('Location')) {
+        setCurrentStep(1)
+      }
+      setError(resBody.error)
+      if (String(resBody.error) === '') {
+        setError('Unknown error occurred')
+      }
+    } else {
+      router.push('/thankyou')
+    }
   };
 
   return (
@@ -143,6 +177,7 @@ function RequirementsContent() {
                   onShowCustomFields={setShowCustomFields}
                   onBack={handleBack}
                   onProceed={handleProceed}
+                  error={error}
                 />
               ) : (
                 <ContactForm
@@ -150,6 +185,7 @@ function RequirementsContent() {
                   onEmailChange={setEmail}
                   onBack={handleBack}
                   onFinish={handleFinish}
+                  error={error}
                 />
               )}
               <ContactInfo />

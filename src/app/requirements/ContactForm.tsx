@@ -3,16 +3,19 @@ interface ContactFormProps {
   onEmailChange: (email: string) => void;
   onBack: () => void;
   onFinish: () => void;
+  error: string;
 }
 
 export default function ContactForm({
   email,
   onEmailChange,
   onBack,
-  onFinish
+  onFinish,
+  error
 }: ContactFormProps) {
   return (
     <div className="bg-white rounded-xl p-8 w-[450px] shadow-2xl">
+      {error && <div className="mb-4 text-red-500 text-sm">{error}</div>}
       <div className="flex flex-col gap-6">
         <p className="text-gray-600">
           We'll send you an email containing a list of possible candidates that fit your requirements within the next few days. Tell us where to send the email!
