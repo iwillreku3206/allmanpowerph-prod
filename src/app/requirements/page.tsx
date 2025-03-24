@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import ProgressBar from './ProgressBar';
@@ -14,7 +14,7 @@ type CustomField = {
   value: string;
 };
 
-export default function Requirements() {
+function RequirementsContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
 
@@ -158,5 +158,15 @@ export default function Requirements() {
         </div>
       </div>
     </main>
+  );
+}
+
+export default function Requirements() {
+  return (
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center">
+      <div className="text-white">Loading...</div>
+    </div>}>
+      <RequirementsContent />
+    </Suspense>
   );
 }
