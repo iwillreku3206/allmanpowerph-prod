@@ -15,6 +15,9 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        'size': 'width, height'
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -70,8 +73,17 @@ const config = {
         "accordion-up": "accordion-up 0.2s ease-out",
       },
     },
+    fontFamily: {
+      'logofont': [ 'Skranji', 'sans-serif' ],
+      'headerfont': [ 'SF Pro Display', 'sans-serif' ],
+      'bodyfont': [ 'Open Sans', 'sans-serif' ],
+      'inputfont': [ 'JetBrains Mono', 'monospace' ],
+    },
+    
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-motion")
+  ],
 } satisfies Config;
 
 export default config;
