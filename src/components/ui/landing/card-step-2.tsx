@@ -60,7 +60,7 @@ export function CardStep2({ nextStep, prevStep }: {
 			prevStep={ prevStep }>
 
 			{ quals.filter(qual => key(qual) !== 'location').map(qual => 
-				(<div className="flex flex-row space-x-2 mb-2 motion-preset-pop">
+				(<div className="flex flex-row space-x-2 mb-2 motion-preset-pop motion-duration-200">
 					<div className="w-full">
 						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) }
 							onChange={ (e) => updateKey(qual, e.target.value) }/>

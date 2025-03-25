@@ -81,6 +81,8 @@
   .text-header-2 { @apply lg:text-3xl text-xl font-headerfont font-black tracking-tight text-primary-foreground }
   .text-primary-header-1 { @apply lg:text-5xl sm:text-4xl text-3xl font-headerfont font-black tracking-tight text-primary }
   .text-primary-header-2 { @apply lg:text-3xl text-xl font-headerfont font-black tracking-tight text-primary }
+  .text-white-header-1 { @apply lg:text-5xl sm:text-4xl text-3xl font-headerfont font-black tracking-tight text-white }
+  .text-white-header-2 { @apply lg:text-3xl text-xl font-headerfont font-black tracking-tight text-white }
 
   .text-body { @apply font-bodyfont font-normal text-primary-foreground }
   .text-form { @apply font-inputfont font-normal text-primary-foreground }
