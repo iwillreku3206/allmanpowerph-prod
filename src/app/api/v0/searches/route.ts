@@ -2,6 +2,8 @@ import { dbPool } from "@/lib/db";
 import { z } from "zod";
 import crypto from 'crypto'
 import argon2 from 'argon2'
+import { sendEmail } from "@/utils/email";
+import NewSearchEmail, { SearchEmailProps } from "./email";
 
 const newSearchValidator = z.object({
   location: z.string({ required_error: 'Location is required' }).nonempty({ message: 'Location is required' }),
@@ -35,6 +37,18 @@ export async function POST(request: Request) {
 
   const id = q.rows[0].id
   console.log(`TODO// Email ${parsed.data.email} the following: link: ${id}, password: ${password}`)
+
+  await sendEmail<SearchEmailProps>({
+    to: parsed.data.email,
+    component: NewSearchEmail,
+    from: 'KasambaHunt',
+    plaintextFn: (props) => `Please check this link in a few days: ${props.url}. Your password is ${props.password}`,
+    props: {
+      url: `https://kasambahunt.vercel.app/asdf/${id}`,
+      password
+    },
+    subject: 'KasambaHunt subject'
+  })
 
   return Response.json({ status: 200 }, { status: 200 })
 }
