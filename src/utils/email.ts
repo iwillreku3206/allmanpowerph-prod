@@ -1,3 +1,4 @@
+import { SITE_TITLE } from '@/lib/constants';
 import { createTransport } from 'nodemailer';
 import React from 'react'
 
@@ -28,11 +29,13 @@ export async function sendEmail<T extends {}>(options: EmailOptions<T>) {
   const html = renderToStaticMarkup(React.createElement(component, props))
   const plaintext = plaintextFn(props)
 
-  await transporter.sendMail({
+  const mail = await transporter.sendMail({
     to,
-    from,
+    from: { name: SITE_TITLE, address: String(process.env.SMTP_USER) },
+    sender: { name: SITE_TITLE, address: String(process.env.SMTP_USER) },
     subject,
     text: plaintext,
     html
   })
+  console.log(mail.response)
 }

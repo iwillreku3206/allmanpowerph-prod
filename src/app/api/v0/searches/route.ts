@@ -42,7 +42,7 @@ export async function POST(request: Request) {
     to: parsed.data.email,
     component: NewSearchEmail,
     from: 'KasambaHunt',
-    plaintextFn: (props) => `Please check this link in a few days: ${props.url}. Your password is ${props.password}`,
+    plaintextFn: (props) => `Please check this link in a few days for an update regarding your search: ${props.url}. Your password is ${props.password}`,
     props: {
       url: `https://kasambahunt.vercel.app/asdf/${id}`,
       password
