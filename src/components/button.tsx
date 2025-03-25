@@ -1,10 +1,10 @@
 import { cn } from "@/lib/utils";
 import { MouseEventHandler } from "react";
 
-export function Button({ className = '', text = '',onClick = () => {}, ...props }: {
+export function Button({ className = '', onClick = () => {}, children, ...props }: {
 	className?: string,
-	text?: string,
-	onClick?: MouseEventHandler
+	onClick?: MouseEventHandler,
+	children?: React.ReactNode,
 }) {
 
 	// Base class of button
@@ -18,6 +18,6 @@ export function Button({ className = '', text = '',onClick = () => {}, ...props 
 			onClick={ onClick }
 			{ ...props }
 		>
-			{ text }
+			{ children }
 		</button>)
 }

@@ -3,7 +3,11 @@ import { createContext } from "react";
 export const createFormContext = () => {
 
 	// Default context
-	const formData: any = {};
+	type Qual = { [key: string]: string | undefined };
+	const formData: any = {
+		'price range': '8000-15000',
+		'skills': 'cooking, cleaning',
+	};
 
 	// Returns value of that field
 	const getField = (field: string) => {
@@ -12,20 +16,33 @@ export const createFormContext = () => {
 
 	// Updater for form data
 	const setField = (field: string, value: string) => {
-		console.log(field, value)
 		formData[field] = value;
 	}
 
+	// Rename field
+	const renameField = (field: string, newname: string) => {
+		formData[newname] = formData[field]
+		delete formData[field];
+	}
+
+	// Remove existing field
+	const removeField = (field: string) => {
+		delete formData[field]
+	}
+
 	// Gets serialized data, to send to server when done
-	const getJSON = () => {
-		return JSON.stringify(formData);
+	const getAll = (): Qual[] => {
+		return Object.keys(formData)
+			.map(key => ({ [key]: formData[key] }));
 	}
 	
 	// Create new context + its data
 	return {
 		getField,
 		setField,
-		getJSON,
+		getAll,
+		renameField,
+		removeField,
 	}
 }
 

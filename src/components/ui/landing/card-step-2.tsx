@@ -1,58 +1,95 @@
-import { useState } from "react"
-import { SITE_DESCRIPTION } from '@/lib/constants';
-import { Button } from '@/components/button';
 import { Input } from '@/components/input';
-import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
+import { useContext, useState } from 'react';
+import { FormContext } from '@/components/contexts/form-data';
+import { CardStep } from './card-step';
+import { Button } from '@/components/button';
 
-export function CardStep2() {
+export function CardStep2({ nextStep, prevStep }: {
+	nextStep: Function,
+	prevStep: Function,
+}) {
 
-	const animationClass = 'motion-translate-y-in-[10%] motion-opacity-in-0 motion-delay-200';
-	const [ showLocationInput, setShowLocationInput ] = useState(false);
+	// Updating actual form data of root component context
+	const { setField, renameField, removeField, getAll } = useContext(FormContext);
+	
+	// Utils for state
+	type Qual = { [key: string]: string | undefined };
+	const key = (qual: Qual) => Object.keys(qual)[0];
+	const val = (qual: Qual) => Object.values(qual)[0];
 
-	// ! move into a context
-  const [location, setLocation] = useState('');
+	// Updates a single qual key
+	const updateKey = (qual: Qual, newKey: string): Qual[] => {
+		const newquals = quals.map(q => 
+			key(q) === key(qual) ? ({ [newKey]: val(q) }) : q)
 
-	// ! move later
-	const router = useRouter();
+		renameField(key(qual), newKey);
+		setQuals(newquals);
+		return newquals;
+	}
 
-	const handleNext = () => {
-    if (location.trim()) {
-      router.push(`/requirements?location=${encodeURIComponent(location)}`);
-    }
-  };
+	// Updates a single qual val
+	const updateVal = (qual: Qual, newVal: string): Qual[] => {
+		const newquals = quals.map(q => 
+			key(q) === key(qual) ? ({ [key(q)]: newVal }) : q)
+		
+		setField(key(qual), newVal)
+		setQuals(newquals);
+		return newquals;
+	}
+
+	// Add a new qual if none are blank
+	const addQual = () => {
+		if (!quals.filter(q => key(q) === '').length)
+			setQuals([ ...quals, { '': '' } ])
+	}
+
+	// Remove quality
+	const removeQual = (qual: Qual) => {
+		setQuals(quals.filter(q => key(q) !== key(qual)))
+		removeField(key(qual))
+	}
+
+	// Local state
+	const [ quals, setQuals ]: [ quals: Qual[], setQuals: Function ] = useState(getAll());
 
 	return (
-		<div className={ cn(animationClass, " bg-white rounded-md p-10 lg:w-[600px]") }>
-			<h2 className="text-header-1 mb-8 leading-[1.15]">
-				Looking for a <span className="text-primary">yaya</span>?
-				<br />
-				We got you covered!
-			</h2>
-			<p className="text-body mb-6">{SITE_DESCRIPTION}</p>
-			
-			{!showLocationInput ? (
-				<Button 
-					className="bg-primary text-body w-full" 
-					onClick={ () => setShowLocationInput(true) } 
-					text="Get Started!" />
-			) : (
-				<div>
-					<h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
-					<div className="mb-4">
-						<Input
-							className="w-full"
-							placeholder="Location Address"
-							value={ location }
-							onChange={ (e) => setLocation(e.target.value) }
-						/>
+		<CardStep 
+			title="What qualities do you want in your yaya?"
+			description="Tell us more about your ideal yaya. The more info you give us, the better our search results will be!"
+			nextStep={ nextStep }
+			prevStep={ prevStep }>
+
+			{ quals.filter(qual => key(qual) !== 'location').map(qual => 
+				(<div className="flex flex-row space-x-2 mb-2 motion-preset-pop">
+					<div className="w-full">
+						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) }
+							onChange={ (e) => updateKey(qual, e.target.value) }/>
 					</div>
-					<Button 
-						className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150" 
-						onClick={ () => handleNext() }
-						text="Next"/>
-				</div>
-			)}
-		</div>
+					<span className="text-header-2 opacity-50">=</span>
+					<div className="w-full">
+						<Input className="w-full" placeholder="Enter value" value={ val(qual) }
+							onChange={ (e) => updateVal(qual, e.target.value) }/>
+					</div>
+					<button className='btn px-3'>
+						<img className="h-12 object-contain hover:motion-preset-stretch-md" 
+							src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s" 
+							alt="delete" 
+							onClick={ () => removeQual(qual) } />
+					</button>
+				</div>)) 
+			}
+
+
+			{/* Create new qual */}
+			<div className="w-full flex flex-row justify-end">	
+				<button className='btn'>
+					<img className="h-10 object-contain hover:motion-rotate-in-6" 
+						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfn7uj7dTALaziP49MuhdLbetpeqAatqjRGA&s" 
+						alt="delete" 
+						onClick={ () => addQual() } />
+				</button>
+			</div>
+			<br></br>
+		</CardStep>
 	)
 }
