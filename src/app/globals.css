@@ -75,9 +75,10 @@
 }
 
 @layer components {
-  .text-header-1 { @apply text-5xl font-headerfont font-black tracking-tight text-primary-foreground }
-  .text-header-2 { @apply text-3xl font-headerfont font-black tracking-tight text-primary-foreground }
-  .text-header-3 { @apply text-xl font-headerfont font-black tracking-tight text-primary-foreground }
+  .text-logo { @apply lg:text-9xl sm:text-7xl text-5xl font-logofont text-primary }
+
+  .text-header-1 { @apply lg:text-5xl sm:text-4xl text-3xl font-headerfont font-black tracking-tight text-primary-foreground }
+  .text-header-2 { @apply lg:text-3xl text-xl font-headerfont font-black tracking-tight text-primary-foreground }
 
   .text-body { @apply font-bodyfont font-normal text-primary-foreground }
   .text-form { @apply font-inputfont font-normal text-primary-foreground }

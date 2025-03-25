@@ -15,6 +15,9 @@ const config = {
       },
     },
     extend: {
+      transitionProperty: {
+        'size': 'width, height'
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -76,8 +79,11 @@ const config = {
       'bodyfont': [ 'Open Sans', 'sans-serif' ],
       'inputfont': [ 'JetBrains Mono', 'monospace' ],
     },
+    
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+    require("tailwindcss-motion")
+  ],
 } satisfies Config;
 
 export default config;
