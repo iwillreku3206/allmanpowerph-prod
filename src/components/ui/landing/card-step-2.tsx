@@ -13,44 +13,42 @@ export function CardStep2({ nextStep, prevStep }: {
 	const { setField, renameField, removeField, getAll } = useContext(FormContext);
 	
 	// Utils for state
-	type Qual = { [key: string]: string | undefined };
+	type Qual = { 
+		key: string,
+		value: string,
+	 };
 	const key = (qual: Qual) => qual.key;
 	const val = (qual: Qual) => qual.value;
 
 	// Updates a single qual key
 	const updateKey = (qual: Qual, newKey: string): Qual[] => {
-		const newquals = quals.map(q => 
-			key(q) === key(qual) ? ({ [newKey]: val(q) }) : q)
-
 		renameField(key(qual) ?? '', newKey);
-		setQuals(newquals);
-		return newquals;
+		setQuals(getAll());
+		return getAll();
 	}
 
 	// Updates a single qual val
-	const updateVal = (qual: Qual, newVal: string): Qual[] => {
-		const newquals = quals.map(q => 
-			key(q) === key(qual) ? ({ [key(q)]: newVal }) : q)
-		
+	const updateVal = (qual: Qual, newVal: string): Qual[] => {		
 		setField(key(qual), newVal)
-		setQuals(newquals);
-		return newquals;
+		setQuals(getAll());
+		return getAll();
 	}
 
 	// Add a new qual if none are blank
 	const addQual = () => {
 		if (!quals.filter(q => key(q) === '').length)
-			setQuals([ ...quals, { '': '' } ])
+			setField('', '')
+		setQuals(getAll())
 	}
 
 	// Remove quality
 	const removeQual = (qual: Qual) => {
-		setQuals(quals.filter(q => key(q) !== key(qual)))
 		removeField(key(qual))
+		setQuals(getAll())
 	}
 
 	// Handle next
-	const handleNext = (value) => {
+	const handleNext = () => {
 		nextStep()
 	}
 

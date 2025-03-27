@@ -59,6 +59,7 @@ export function CardStep3({ nextStep, prevStep }: {
 				// Fail
 				} else {
 					setError('Something went wrong. Please try again.');
+					setLoading(false);
 				}
 			})
 	}
