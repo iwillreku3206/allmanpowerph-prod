@@ -14,7 +14,7 @@ export function CardStep1({ nextStep, prevStep, step }: {
 	// Show the first field
 	const { getField, setField, getAll } = useContext(FormContext);
 	const [ showLocationInput, setShowLocationInput ] = useState(false);
-	const [ location, setLocation ] = useState(getField('location'));
+	const [ location, setLocation ] = useState(getField('location') ?? '');
 	const [ error, setError ] = useState('');
 
 	// Update state
