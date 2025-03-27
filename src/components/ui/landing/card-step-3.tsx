@@ -15,10 +15,11 @@ export function CardStep3({ nextStep, prevStep }: {
 	const router = useRouter();
 	const [ error, setError ] = useState('');
 	const [ email, setEmail ] = useState('');
+	const [ loading, setLoading ] = useState(false);
 	const { getField, getAll } = useContext(FormContext);
 
 	// Handle form submission
-	const handleChange = (value) => {
+	const handleChange = (value: string) => {
 		setError('');
 		setEmail(value);
 
@@ -29,6 +30,14 @@ export function CardStep3({ nextStep, prevStep }: {
 
 	// Form submission
 	const handleSubmit = async () => {
+		
+		// Don't double send
+		if (loading)
+			return;
+
+		setLoading(true);
+
+		// POST submission
 		await fetch('api/v0/searches', {
 			method: 'POST',
 			headers: {
@@ -40,8 +49,18 @@ export function CardStep3({ nextStep, prevStep }: {
 				fields: getAll().filter(f => f.key !== 'location')
 			})
 		})
+			.then(r => r.json())
+			.then(({ status }) => {
 
-		router.push('/thankyou')
+				// Success
+				if (status.toString() === '200') {
+					router.push('/thankyou')
+
+				// Fail
+				} else {
+					setError('Something went wrong. Please try again.');
+				}
+			})
 	}
 
 	// Validate email
@@ -56,6 +75,7 @@ export function CardStep3({ nextStep, prevStep }: {
 		<CardStep 
 			title="Tell us how to talk to you" 
 			description="You're almost done! Just tell us how to contact you and we'll send you a list of candidates within the next few days."
+			nextStep={ nextStep } prevStep={ prevStep }
 			nav={ false }>
 
 			<div className="mb-4">
@@ -69,8 +89,10 @@ export function CardStep3({ nextStep, prevStep }: {
 					onChange={ (e) => handleChange(e.target.value) }
 				/>
 			</div>
-			<Button className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150" 
-				onClick={ () => handleSubmit() }>Submit</Button>
+			<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150" disabled={ loading }
+				onClick={ () => handleSubmit() }>
+				{ !loading ? 'Submit' : (<img className="w-6 h-6" src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="loading"></img>) }
+			</Button>
 		</CardStep>
 	)
 }
