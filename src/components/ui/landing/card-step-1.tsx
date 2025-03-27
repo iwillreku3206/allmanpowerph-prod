@@ -15,6 +15,21 @@ export function CardStep1({ nextStep, prevStep, step }: {
 	const { getField, setField, getAll } = useContext(FormContext);
 	const [ showLocationInput, setShowLocationInput ] = useState(false);
 	const [ location, setLocation ] = useState(getField('location'));
+	const [ error, setError ] = useState('');
+
+	// Update state
+	const handleChange = (value) => {
+		setLocation(value)
+		setField('location', value);
+	}
+
+	// Handles when next button pressed
+	const handleNext = () => {
+		setError('')
+		if (!location || location === '')
+			return setError('Location is required.')
+		return nextStep()
+	}
 
 	return (
 		<CardStep 
@@ -37,10 +52,14 @@ export function CardStep1({ nextStep, prevStep, step }: {
 				: (<>
 					<h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
 					<div className="mb-4">
+						<div className="text-red-500 font-bodyfont mb-4">
+							{ error }
+						</div>
 						<Input className="w-full" placeholder="Location Address" value={ location }
-							onChange={ (e) => setField('location', e.target.value) }/>
+							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
+							onChange={ (e) => handleChange(e.target.value) }/>
 						<Button className="bg-primary text-body w-full mt-4"
-							onClick={ () => nextStep() }>
+							onClick={ () => handleNext() }>
 								Next
 						</Button>
 					</div></>)

@@ -74,7 +74,7 @@ const config = {
       },
     },
     fontFamily: {
-      'logofont': [ 'Skranji', 'sans-serif' ],
+      'logofont': [ 'Suez One', 'sans-serif' ],
       'headerfont': [ 'SF Pro Display', 'sans-serif' ],
       'bodyfont': [ 'Open Sans', 'sans-serif' ],
       'inputfont': [ 'JetBrains Mono', 'monospace' ],

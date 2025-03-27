@@ -3,37 +3,67 @@ import { createContext } from "react";
 export const createFormContext = () => {
 
 	// Default context
-	type Qual = { [key: string]: string | undefined };
-	const formData: any = {
-		'price range': '8000-15000',
-		'skills': 'cooking, cleaning',
-	};
+	type Qual = { 
+		key: string, 
+		value: string 
+	}
+
+	let formData: any = [
+		{
+			key: 'price range',
+			value: '8000-15000'
+		}, {
+			key: 'skills',
+			value: 'cooking, cleaning',
+		}
+	];
 
 	// Returns value of that field
 	const getField = (field: string) => {
-		return formData[field];
+		return formData.filter((f: Qual) => f.key === field)[0]?.value;
 	}
 
 	// Updater for form data
 	const setField = (field: string, value: string) => {
-		formData[field] = value;
+
+		// Remove existing field
+		const newFormData = formData.filter((f: Qual) => f.key !== field);
+		
+		// Push new value for field
+		newFormData.push({
+			key: field,
+			value: value
+		});
+
+		// Update form data
+		formData = newFormData
 	}
 
 	// Rename field
 	const renameField = (field: string, newname: string) => {
-		formData[newname] = formData[field]
-		delete formData[field];
+		
+		// Remove existing field
+		const oldFieldValue = getField(field);
+		const newFormData = formData.filter((f: Qual) => f.key !== field);
+
+		// Push new field and new value
+		newFormData.push({
+			key: newname,
+			value: oldFieldValue,
+		})
+
+		// Update form data
+		formData = newFormData
 	}
 
 	// Remove existing field
 	const removeField = (field: string) => {
-		delete formData[field]
+		formData = formData.filter((f: Qual) => f.key !== field)
 	}
 
 	// Gets serialized data, to send to server when done
 	const getAll = (): Qual[] => {
-		return Object.keys(formData)
-			.map(key => ({ [key]: formData[key] }));
+		return formData;
 	}
 	
 	// Create new context + its data

@@ -14,15 +14,15 @@ export function CardStep2({ nextStep, prevStep }: {
 	
 	// Utils for state
 	type Qual = { [key: string]: string | undefined };
-	const key = (qual: Qual) => Object.keys(qual)[0];
-	const val = (qual: Qual) => Object.values(qual)[0];
+	const key = (qual: Qual) => qual.key;
+	const val = (qual: Qual) => qual.value;
 
 	// Updates a single qual key
 	const updateKey = (qual: Qual, newKey: string): Qual[] => {
 		const newquals = quals.map(q => 
 			key(q) === key(qual) ? ({ [newKey]: val(q) }) : q)
 
-		renameField(key(qual), newKey);
+		renameField(key(qual) ?? '', newKey);
 		setQuals(newquals);
 		return newquals;
 	}
@@ -49,6 +49,11 @@ export function CardStep2({ nextStep, prevStep }: {
 		removeField(key(qual))
 	}
 
+	// Handle next
+	const handleNext = (value) => {
+		nextStep()
+	}
+
 	// Local state
 	const [ quals, setQuals ]: [ quals: Qual[], setQuals: Function ] = useState(getAll());
 
@@ -63,11 +68,13 @@ export function CardStep2({ nextStep, prevStep }: {
 				(<div className="flex flex-row space-x-2 mb-2 motion-preset-pop motion-duration-200">
 					<div className="w-full">
 						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) }
+							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
 							onChange={ (e) => updateKey(qual, e.target.value) }/>
 					</div>
 					<span className="text-header-2 opacity-50">=</span>
 					<div className="w-full">
 						<Input className="w-full" placeholder="Enter value" value={ val(qual) }
+							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
 							onChange={ (e) => updateVal(qual, e.target.value) }/>
 					</div>
 					<button className='btn px-3'>
