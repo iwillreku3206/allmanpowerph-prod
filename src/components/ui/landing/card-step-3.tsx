@@ -1,10 +1,11 @@
-import { useState } from "react"
+import { useContext, useState } from "react"
 import { SITE_DESCRIPTION } from '@/lib/constants';
 import { Button } from '@/components/button';
 import { Input } from '@/components/input';
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CardStep } from "./card-step";
+import { FormContext } from "@/components/contexts/form-data";
 
 export function CardStep3({ nextStep, prevStep }: {
 	nextStep: Function,
@@ -14,6 +15,7 @@ export function CardStep3({ nextStep, prevStep }: {
 	const router = useRouter();
 	const [ error, setError ] = useState('');
 	const [ email, setEmail ] = useState('');
+	const { getField, getAll } = useContext(FormContext);
 
 	// Handle form submission
 	const handleChange = (value) => {
@@ -26,7 +28,19 @@ export function CardStep3({ nextStep, prevStep }: {
 	}
 
 	// Form submission
-	const handleSubmit = () => {
+	const handleSubmit = async () => {
+		await fetch('api/v0/searches', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				location: getField('location'),
+				email: email,
+				fields: getAll().filter(f => f.key !== 'location')
+			})
+		})
+
 		router.push('/thankyou')
 	}
 
