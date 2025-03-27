@@ -84,15 +84,15 @@ export function CardStep2({ nextStep, prevStep }: {
 				</div>)) 
 			}
 
-
 			{/* Create new qual */}
 			<div className="w-full flex flex-row justify-end">	
 				<button className='btn'>
-					<img className="h-10 object-contain hover:motion-rotate-in-6" 
-						src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSfn7uj7dTALaziP49MuhdLbetpeqAatqjRGA&s" 
-						alt="delete" 
-						onClick={ () => addQual() } />
 				</button>
+				<Button className="bg-white border-solid border-[rgba(0, 0, 0, 0.5)] border-2 flex justify-center shadow-none hover:brightness-90" onClick={ () => addQual() }>
+					<img className="h-4 object-contain hover:motion-rotate-in-6" 
+						src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png" 
+						alt="add-field" />
+				</Button>
 			</div>
 			<br></br>
 		</CardStep>
