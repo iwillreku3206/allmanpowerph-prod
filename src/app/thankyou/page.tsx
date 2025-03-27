@@ -12,8 +12,12 @@ export default function ThankYou() {
       <Title />
 
       {/* Thank you message */}
-      <div className="text-center mb-12">
+      <div className="text-center mb-10">
         <h2 className="text-white-header-1 mb-4">Thank you for using<br />our service!</h2>
+        <Link href="/" target="_blank" className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity">Go back home.</Link>
+        <br />
+        <br />
+        <br />
         <p className="text-gray-400">Like our service? Tell others about us!</p>
       </div>
 

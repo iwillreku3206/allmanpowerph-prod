@@ -11,7 +11,7 @@ export default function NotFound() {
       <div className="text-center mb-12">
         <h2 className="text-white-header-1 mb-4">404 - Not Found</h2>
 				<br />
-				<Link href="/" target="_blank" className="hover:opacity-90 transition-opacity">Go back home.</Link>
+				<Link href="/" target="_blank" className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity">Go back home.</Link>
       </div>
 
       {/* Contact info */}

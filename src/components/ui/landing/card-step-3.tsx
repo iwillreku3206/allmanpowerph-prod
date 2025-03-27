@@ -32,9 +32,10 @@ export function CardStep3({ nextStep, prevStep }: {
 	const handleSubmit = async () => {
 		
 		// Don't double send
-		if (loading)
+		if (loading || !validateEmail(email))
 			return;
 
+		// Loading
 		setLoading(true);
 
 		// POST submission
@@ -66,9 +67,16 @@ export function CardStep3({ nextStep, prevStep }: {
 
 	// Validate email
 	const validateEmail = (email: string) => {
+		
+		// Email regex
 		if (!String(email).toLowerCase()
 			.match(/^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|.(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/))
 			return false;
+		
+		// No input
+		if (!email || email === '')
+			return false;
+
 		return true;
 	}
 
@@ -97,7 +105,7 @@ export function CardStep3({ nextStep, prevStep }: {
 					Go back
 				</Button>
 
-				<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+				<Button className={ cn("bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150", loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer") }
 					onClick={ () => handleSubmit() }>
 					{ !loading ? 'Submit' : (<img className="w-6 h-6" src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="loading"></img>) }
 				</Button>
