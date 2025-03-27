@@ -14,7 +14,7 @@ export function Button({ className = '', onClick = () => {}, children, ...props 
 
 	return (
 		<button 
-			className={ cn(className, baseClass, animationClass) } 
+			className={ cn(baseClass, animationClass, className) } 
 			onClick={ onClick }
 			{ ...props }
 		>
