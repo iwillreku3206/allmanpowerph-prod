@@ -16,7 +16,7 @@ export function CardStep2({ nextStep, prevStep }: {
 	type Qual = { 
 		key: string,
 		value: string,
-	 };
+	};
 	const key = (qual: Qual) => qual.key;
 	const val = (qual: Qual) => qual.value;
 
