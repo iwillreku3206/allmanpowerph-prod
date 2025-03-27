@@ -26,7 +26,6 @@ export default function Home() {
     <FormContext.Provider value={ formContext }>
       <main className="min-h-screen relative bg-primary-foreground">
         <Background />
-        { step > 1 ? (<ProgressBar step={ step } totalSteps={ totalSteps } />) : (<></>) }
         
         <div className="relative z-20 container mx-auto px-4 flex flex-col min-h-screen">
           <div className="flex flex-col items-center lg:items-end justify-center flex-1 py-8">

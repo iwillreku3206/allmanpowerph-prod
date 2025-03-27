@@ -102,7 +102,7 @@ export function CardStep3({ nextStep, prevStep }: {
 			<div className="w-full flex flex-row space-x-4">
 				<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
 					onClick={ () => prevStep() }>
-					Go back
+					Back
 				</Button>
 
 				<Button className={ cn("bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150", loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer") }
