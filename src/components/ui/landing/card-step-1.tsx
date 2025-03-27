@@ -13,7 +13,6 @@ export function CardStep1({ nextStep, prevStep, step }: {
 
 	// Show the first field
 	const { getField, setField, getAll } = useContext(FormContext);
-	const [ showLocationInput, setShowLocationInput ] = useState(false);
 	const [ location, setLocation ] = useState(getField('location') ?? '');
 	const [ error, setError ] = useState('');
 
@@ -38,31 +37,19 @@ export function CardStep1({ nextStep, prevStep, step }: {
 			nextStep={ nextStep } 
 			prevStep={ prevStep }
 			nav={ false }
-			first>
-			
-			{!showLocationInput && step === 0 
-
-				// Hide location input at get started (step 0)
-				? (<Button className="bg-primary text-body w-full"
-					onClick={ () => (nextStep(), setShowLocationInput(true)) }>
-						Get Started!
-					</Button>) 
-
-				// Show location input after pressing button, never to return again
-				: (<>
-					<h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
-					<div className="mb-4">
-						<div className="text-red-500 font-bodyfont mb-4">
-							{ error }
-						</div>
-						<Input className="w-full" placeholder="Location Address" value={ location }
-							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
-							onChange={ (e) => handleChange(e.target.value) }/>
-						<Button className="bg-primary text-body w-full mt-4"
-							onClick={ () => handleNext() }>
-								Next
-						</Button>
-					</div></>)
-			}
+			first>			
+			<h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
+			<div className="mb-4">
+				<div className="text-red-500 font-bodyfont mb-4">
+					{ error }
+				</div>
+				<Input className="w-full" placeholder="Location Address" value={ location }
+					onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
+					onChange={ (e) => handleChange(e.target.value) }/>
+				<Button className="bg-primary text-body w-full mt-4"
+					onClick={ () => handleNext() }>
+						Next
+				</Button>
+			</div>
 		</CardStep>)
 }

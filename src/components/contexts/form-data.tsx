@@ -10,8 +10,8 @@ export const createFormContext = () => {
 
 	let formData: any = [
 		{
-			key: 'price range',
-			value: '8000-15000'
+			key: 'monthly salary range',
+			value: 'Php 8000 - Php 15000'
 		}, {
 			key: 'skills',
 			value: 'cooking, cleaning',

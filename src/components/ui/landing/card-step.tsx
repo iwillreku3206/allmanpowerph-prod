@@ -31,7 +31,7 @@ export function CardStep({ title = '', description = '', first = false, nav = tr
 				{ !first && nav &&
 					<Button className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150" 
 						onClick={ () => prevStep() }>
-						Prev
+						Go back
 					</Button> 
 				}
 				{ nav && 

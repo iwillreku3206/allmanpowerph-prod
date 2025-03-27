@@ -90,10 +90,18 @@ export function CardStep3({ nextStep, prevStep }: {
 					onChange={ (e) => handleChange(e.target.value) }
 				/>
 			</div>
-			<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150" disabled={ loading }
-				onClick={ () => handleSubmit() }>
-				{ !loading ? 'Submit' : (<img className="w-6 h-6" src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="loading"></img>) }
-			</Button>
+
+			<div className="w-full flex flex-row space-x-4">
+				<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+					onClick={ () => prevStep() }>
+					Go back
+				</Button>
+
+				<Button className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+					onClick={ () => handleSubmit() }>
+					{ !loading ? 'Submit' : (<img className="w-6 h-6" src="https://global.discourse-cdn.com/sitepoint/original/3X/e/3/e352b26bbfa8b233050087d6cb32667da3ff809c.gif" alt="loading"></img>) }
+				</Button>
+			</div>
 		</CardStep>
 	)
 }
