@@ -62,16 +62,16 @@ export function CardStep2({ nextStep, prevStep }: {
 			nextStep={ nextStep }
 			prevStep={ prevStep }>
 
-			{ quals.filter(qual => key(qual) !== 'location').map(qual => 
-				(<div className="flex flex-row space-x-2 mb-2 motion-preset-pop motion-duration-200">
+			{ quals.filter(qual => key(qual) !== 'location').map((qual, i) => 
+				(<div key={ i } className="flex flex-row space-x-2 mb-2 motion-preset-pop motion-duration-200">
 					<div className="w-full">
-						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) }
+						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) ?? '' }
 							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
 							onChange={ (e) => updateKey(qual, e.target.value) }/>
 					</div>
 					<span className="text-header-2 opacity-50">=</span>
 					<div className="w-full">
-						<Input className="w-full" placeholder="Enter value" value={ val(qual) }
+						<Input className="w-full" placeholder="Enter value" value={ val(qual) ?? '' }
 							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
 							onChange={ (e) => updateVal(qual, e.target.value) }/>
 					</div>
