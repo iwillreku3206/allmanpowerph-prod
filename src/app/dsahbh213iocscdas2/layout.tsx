@@ -30,5 +30,8 @@ export default async function Layout({
     redirect("/error");
   }
 
-  return <div>{children}</div>;
+  return (<div>
+    
+    { children }
+  </div>);
 }

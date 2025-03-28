@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/button";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
@@ -12,24 +13,30 @@ export default function Sidebar({
   const router = useRouter();
 
   return (
-    <div className="fixed left-0 top-0 h-full w-64 bg-primary text-white flex flex-col p-4 border-r border-gray-700">
-      <h2 className="text-xl font-bold mb-6">Admin Panel</h2>
+    <div className="fixed left-0 top-0 h-full w-80 bg-primary text-white flex flex-col p-4">
+      <h2 className="text-header-1 my-6">Admin Panel</h2>
 
       {/* Candidate Assignment Button */}
-      <button
+      <Button
+        className="mb-4 px-4 py-3 bg-white text-black hover:bg-gray-200 transition rounded"
         onClick={() => router.push("/dsahbh213iocscdas2/ysdsaygfiagfafas")}
-        className="mb-4 px-4 py-2 bg-white text-black hover:bg-gray-200 transition rounded"
       >
         Candidate Assignment
-      </button>
+      </Button>
+      <Button
+        className="mb-4 px-4 py-3 bg-white text-black hover:bg-gray-200 transition rounded"
+        onClick={() => router.push("/dsahbh213iocscdas2/resume-upload")}
+      >
+        Resume Upload
+      </Button>
 
       {/* Sign Out Button */}
-      <button
+      <Button
         onClick={() => signOut({ callbackUrl: "/login" })}
         className="mt-auto px-4 py-2 bg-white text-black hover:bg-gray-200 transition rounded"
       >
         Sign Out
-      </button>
+      </Button>
     </div>
   );
 }
