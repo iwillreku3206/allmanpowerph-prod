@@ -1,7 +1,5 @@
 import { NextResponse } from "next/server";
 import { dbPool } from "@/lib/db";
-import { getServerSession } from "next-auth";
-import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 import { secureAdminHandler } from "@/lib/adminAuth"; // Adjust path if needed
 
 export async function GET(req: Request) {

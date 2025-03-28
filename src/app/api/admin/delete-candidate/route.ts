@@ -1,8 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { dbPool } from "@/lib/db";
 import { secureAdminHandler } from "@/lib/adminAuth";
 
-export async function DELETE(req) {
+export async function DELETE(req: NextRequest) {
     return secureAdminHandler(req, async () => {
         try {
             const url = new URL(req.url);

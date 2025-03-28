@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as AWS from '@aws-sdk/client-s3';
-import { dbPool } from "@/lib/db"; 
+import { dbPool } from "@/lib/db";
 
 export async function POST(req: NextRequest) {
 
   // Get form data
   const formData = await req.formData();
-  const fileName  = formData.get('fileName');
+  const fileName = formData.get('fileName');
   const fileData = formData.get('fileData');
   const name = formData.get('name');
   const agencyId = formData.get('agencyId');
@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
   }
 
   // Check if valid agency
-  const result = await dbPool.query('SELECT id,name FROM agencies WHERE id = $1', [ agencyId ]);
+  const result = await dbPool.query('SELECT id,name FROM agencies WHERE id = $1', [agencyId]);
   if (!result.rowCount)
     return NextResponse.json({
       error: 'Invalid Agency ID.'
@@ -37,23 +37,23 @@ export async function POST(req: NextRequest) {
 
   // Upload object
   const response = await client.send(new AWS.PutObjectCommand({
-    Key: fileName,
-    Body: await fileData.arrayBuffer(),
-    ContentType: fileData.type,
+    Key: fileName as string,
+    Body: new Uint8Array(await (fileData as File).arrayBuffer()),
+    ContentType: (fileData as File).type as string,
     Bucket: 'resume-bucket',
   }))
 
   // resumeURL
-  const resumeURL = 'https://rovhuynfesqymtohtjye.supabase.co/storage/v1/object/public/resume-bucket//' + encodeURI(fileName);
+  const resumeURL = 'https://rovhuynfesqymtohtjye.supabase.co/storage/v1/object/public/resume-bucket//' + encodeURI(fileName as string);
 
   // Write entry to db
   await dbPool.query(
     `INSERT INTO candidates (agency_id, name, fields, resume_url)
      VALUES ($1, $2, $3, $4) 
-    `, 
-    [ agencyId, name, {}, resumeURL ]
+    `,
+    [agencyId, name, {}, resumeURL]
   );
-  
+
   return NextResponse.json({
     etag: response.ETag,
     error: !response.ETag
