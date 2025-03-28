@@ -40,7 +40,12 @@ export function ResumeTable({ className = '', columns = [], resumes = [], ...pro
 }) {
 
 	// Base class
+	const resumesPerPage = 7;
+	const maxPage = Math.floor(resumes.length / resumesPerPage);
+	const [ currentPage, setCurrentPage ] = useState(0);
 	const [ selectedResumes, setSelectedResumes ] = useState([] as Resume[]);
+	const startResume = (currentPage) * resumesPerPage;
+	const endResume = (currentPage + 1) * resumesPerPage;
 
 	// Handle clicks
 	const handleClick = (resume: Resume) => {
@@ -66,15 +71,22 @@ export function ResumeTable({ className = '', columns = [], resumes = [], ...pro
 					</tr>
 				</thead>
 				<tbody>
-					{resumes.map((resume) => resumeMapper(resume, () => handleClick(resume), selectedResumes.includes(resume)))}
+					{ 
+						resumes
+							.slice(startResume, endResume)
+							.map((resume) => resumeMapper(resume, () => handleClick(resume), selectedResumes.includes(resume))) 
+					}
 				</tbody>
 			</table>
 			<div className="flex flex-col justify-between items-center mt-4">
 				<div className="flex flex-row justify-center">
-					<ChevronLeft className="w-5 h-5" /> 
-						<div className="ml-1"></div> 1 / 15 	
-						<div className="ml-1"></div>
-					<ChevronRight className="w-5 h-5" />
+					<Button className="" onClick={ () => { setCurrentPage(Math.max(currentPage - 1, 0)) } }>
+						<ChevronLeft className="w-5 h-5" /> 
+					</Button>
+					<div className="flex flex-col justify-center items-center">{ currentPage + 1 }/{ maxPage + 1 }</div> 	
+					<Button className="" onClick={ () => { setCurrentPage(Math.min(currentPage + 1, maxPage)) } }>
+						<ChevronRight className="w-5 h-5" />
+					</Button>
 				</div>
 				<br />
 				<Button className="bg-primary">View Selected</Button>
