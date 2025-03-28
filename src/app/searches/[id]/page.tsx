@@ -25,7 +25,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     redirect('/404')
   }
 
-  let searchSession: QueryResult<SearchSession>|undefined = undefined;
+  let searchSession: QueryResult<SearchSession> | undefined = undefined;
 
   try {
     const cookie = await cookies()
