@@ -1,54 +1,54 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import Sidebar from "../components/Sidebar";
 import { Button } from "@/components/button";
 import { Select } from "@/components/select";
 import { Input } from "@/components/input";
 
 export default function SearchCandidates() {
-  const [ page, setPage ] = useState(1);
-  const [ error, setError ] = useState('');
-  const [ loading, setLoading ] = useState(false);
-  const [ uploading, setUploading ] = useState(false);
-  const [ agencies, setAgencies ] = useState([]);
-  
-  // Form data sht
-  const [ file, setFile ] = useState(null);
-  const [ name, setName ] = useState('');
-  const [ agencyId, setAgencyId ] = useState('');
+  const [page, setPage] = useState(1);
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const [agencies, setAgencies] = useState([]);
 
-  const handleFileChange = async () => {
+  // Form data sht
+  const [file, setFile] = useState<{ fileName: string, fileData: File | null } | null>(null);
+  const [name, setName] = useState('');
+  const [agencyId, setAgencyId] = useState('');
+
+  const handleFileChange = async (e: ChangeEvent<HTMLInputElement>) => {
 
     // Show open file picker
     setLoading(true);
-    const selection = await window.showOpenFilePicker();
-    const fileName = selection.length ? selection[0].name : '';
-    const fileData = selection.length ? await selection[0].getFile() : null;
+    const selection = e.target.files
+    const fileName = selection?.length ? selection[0].name : '';
+    const fileData = selection?.length ? selection[0] : null;
 
     // Get file selected
     setFile({ fileName, fileData });
     setLoading(false);
   };
 
-  const handleNameChange = (e) => {
+  const handleNameChange = (e: ChangeEvent<HTMLInputElement>) => {
     setName(e.target.value);
   }
 
-  const handleAgencyIdChange = (e) => {
+  const handleAgencyIdChange = (e: ChangeEvent<HTMLSelectElement>) => {
     console.log(e)
     setAgencyId(e.target.value)
   }
 
   const handleUpload = async () => {
-    
+
     // No file selected
-    if (!file) 
+    if (!file)
       return setError('Please select a file first.');
 
     // Wait for process to finish
     if (loading || uploading)
-      return; 
+      return;
 
     // Uploading in progress
     setUploading(true);
@@ -56,15 +56,15 @@ export default function SearchCandidates() {
     // Create the form data
     const formData = new FormData();
     formData.append('fileName', file.fileName);
-    formData.append('fileData', file.fileData);
+    formData.append('fileData', file.fileData as File);
     formData.append('name', name);
     formData.append('agencyId', agencyId);
 
     // const { data, error } = await 
-    const { error } = await fetch('/api/admin/create-candidate', {
+    const { error } = await (await fetch('/api/admin/create-candidate', {
       method: 'POST',
       body: formData
-    });
+    })).json();
 
     // Done
     setUploading(false);
@@ -74,7 +74,7 @@ export default function SearchCandidates() {
       setError(error);
       alert("Upload failed!");
 
-    // Upload success
+      // Upload success
     } else {
       alert("File uploaded successfully!");
     }
@@ -101,32 +101,28 @@ export default function SearchCandidates() {
           <div className="p-4 border rounded-md w-1/2">
             <h1 className="text-header-2">Candidate Information Form</h1>
             <br />
-            Select an agency: 
+            Select an agency:
 
             <br />
-            <Select className="w-full" data={ agencies } onInput={ handleAgencyIdChange }></Select>
+            <Select className="w-full" data={agencies} onInput={handleAgencyIdChange}></Select>
             <br />
 
             <br />
             Enter full candidate name:
-            <Input className="w-full" onChange={ handleNameChange }></Input>
+            <Input className="w-full" onChange={handleNameChange}></Input>
             <br />
 
             <br />
             Select candidate resume file:
-            <Button 
-              className="bg-blue-500 text-white p-3 rounded mt-2"
-              onClick={ handleFileChange }> 
-              { file?.fileName ?? 'Browse file.' }
-            </Button>
+            <input type="file" onChange={handleFileChange} />
 
             <br />
-            <div className="text-red-500">{ error }</div>
+            <div className="text-red-500">{error}</div>
             <br />
             <Button
-              onClick={ handleUpload }
+              onClick={handleUpload}
               className="bg-blue-500 text-white p-3 rounded mt-2">
-              { uploading ? "Uploading..." : loading ? "Reading file..." : "Upload" }
+              {uploading ? "Uploading..." : loading ? "Reading file..." : "Upload"}
             </Button>
           </div>
         </div>

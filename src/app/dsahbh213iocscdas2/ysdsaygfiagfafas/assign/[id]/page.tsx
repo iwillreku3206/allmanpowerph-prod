@@ -31,7 +31,7 @@ export default function AssignApplicants() {
           const userData = data.applicant[0];
 
           // Extract key-value pairs from the fields column
-          const keyValuePairs = userData.fields.reduce((acc, { key, value }) => {
+          const keyValuePairs = userData.fields.reduce((acc: any, { key, value }: any) => {
             acc[key] = value;
             return acc;
           }, {});
@@ -85,38 +85,38 @@ export default function AssignApplicants() {
 
   const handleDelete = async (id) => {
     try {
-        const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
-            method: "DELETE",
-        });
+      const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
+        method: "DELETE",
+      });
 
-        // Check if response is empty
-        const text = await res.text();
-        const data = text ? JSON.parse(text) : {};
+      // Check if response is empty
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : {};
 
-        if (res.ok && data.success) {
-            setConnection(connection.filter(candidate => candidate.id !== id));
-        } else {
-            console.error("Failed to delete candidate:", data.error || "Unknown error");
-        }
+      if (res.ok && data.success) {
+        setConnection(connection.filter(candidate => candidate.id !== id));
+      } else {
+        console.error("Failed to delete candidate:", data.error || "Unknown error");
+      }
     } catch (error) {
-        console.error("Error deleting candidate:", error);
+      console.error("Error deleting candidate:", error);
     }
-};
+  };
 
 
   // Modal form submission handling
   const handleSubmit = async (e) => {
     e.preventDefault();
     setIsLoadingModal(true); // Set loading state to true during submission
-  
+
     console.log("Assigning");
-  
+
     try {
       const candidateData = {
         ...newCandidateData,
         assignedCandidateId: newCandidateData.assignedCandidate, // Add assigned candidate ID
       };
-  
+
       // POST request to API with search_id and candidate data
       const res = await fetch(`/api/admin/assign-candidate?search_id=${search_id}`, {
         method: "POST",
@@ -125,11 +125,11 @@ export default function AssignApplicants() {
         },
         body: JSON.stringify(candidateData),
       });
-  
+
       const data = await res.json();
       if (data.success) {
         console.log("New candidate added!", data);
-  
+
         // Refetch connections data
         const res2 = await fetch(`/api/admin/get-connections?user_id=${search_id}`);
         const data2 = await res2.json();
@@ -144,7 +144,7 @@ export default function AssignApplicants() {
       setIsModalOpen(false); // Close modal after submission
     }
   };
-  
+
 
 
   return (
