@@ -6,15 +6,17 @@ import { dbPool } from "@/lib/db";
 export async function secureAdminHandler(req: Request, handler: Function) {
   const session = await getServerSession(authOptions);
 
+
   if (!session?.user?.email) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   try {
     const result = await dbPool.query(
-      "SELECT is_authorized FROM next_auth.users WHERE email = $1",
+      "SELECT * FROM next_auth.users WHERE email = $1",
       [session.user.email]
     );
+
 
     if (result.rowCount === 0 || !result.rows[0].is_authorized) {
       return NextResponse.json({ error: "Forbidden" }, { status: 403 });

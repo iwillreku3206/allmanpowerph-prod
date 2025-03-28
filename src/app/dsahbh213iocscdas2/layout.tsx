@@ -9,7 +9,6 @@ export default async function Layout({
   children: React.ReactNode;
 }) {
   const session = await getServerSession(authOptions);
-  console.log("Session:", session);
 
   if (!session?.user?.email) {
     redirect("/login");
@@ -21,7 +20,6 @@ export default async function Layout({
       [session.user.email]
     );
 
-    console.log("Database result:", result);
 
     if (result.rowCount === 0 || !result.rows[0].is_authorized) {
       console.log("Unauthorized");

@@ -1,27 +1,18 @@
 import { NextResponse } from "next/server";
 import { dbPool } from "@/lib/db";
+import { secureAdminHandler } from "@/lib/adminAuth";
 
 export async function GET(req) {
-  const url = new URL(req.url);
-  const page = parseInt(url.searchParams.get("page") || "1", 10);
-  const limit = 10; // 10 results per page
-  const offset = (page - 1) * limit;
+  return secureAdminHandler(req, async () => {
+    try {
+      const result = await dbPool.query(
+        "SELECT id, email, location, fields FROM searches ORDER BY id DESC LIMIT 10"
+      );
 
-  try {
-    const result = await dbPool.query(
-      "SELECT * FROM searches ORDER BY id LIMIT $1 OFFSET $2",
-      [limit, offset]
-    );
-
-    const totalCountRes = await dbPool.query("SELECT COUNT(*) FROM searches");
-    const totalCount = parseInt(totalCountRes.rows[0].count, 10);
-    const totalPages = Math.ceil(totalCount / limit);
-
-    return NextResponse.json({
-      searches: result.rows,
-      totalPages,
-    });
-  } catch (error) {
-    return NextResponse.json({ error: "Database error" }, { status: 500 });
-  }
+      return NextResponse.json({ searches: result.rows }, { status: 200 });
+    } catch (error) {
+      console.error("Database error:", error);
+      return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+    }
+  });
 }
