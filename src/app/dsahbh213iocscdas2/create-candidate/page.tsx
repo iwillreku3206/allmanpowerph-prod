@@ -3,13 +3,20 @@
 import { useState, useEffect } from "react";
 import Sidebar from "../components/Sidebar";
 import { Button } from "@/components/button";
+import { Select } from "@/components/select";
+import { Input } from "@/components/input";
 
 export default function SearchCandidates() {
   const [ page, setPage ] = useState(1);
-  const [ file, setFile ] = useState(null);
   const [ error, setError ] = useState('');
   const [ loading, setLoading ] = useState(false);
   const [ uploading, setUploading ] = useState(false);
+  const [ agencies, setAgencies ] = useState([]);
+  
+  // Form data sht
+  const [ file, setFile ] = useState(null);
+  const [ name, setName ] = useState('');
+  const [ agencyId, setAgencyId ] = useState('');
 
   const handleFileChange = async () => {
 
@@ -23,6 +30,15 @@ export default function SearchCandidates() {
     setFile({ fileName, fileData });
     setLoading(false);
   };
+
+  const handleNameChange = (e) => {
+    setName(e.target.value);
+  }
+
+  const handleAgencyIdChange = (e) => {
+    console.log(e)
+    setAgencyId(e.target.value)
+  }
 
   const handleUpload = async () => {
     
@@ -40,11 +56,12 @@ export default function SearchCandidates() {
     // Create the form data
     const formData = new FormData();
     formData.append('fileName', file.fileName);
-    formData.append('fileData', file.fileData)
+    formData.append('fileData', file.fileData);
+    formData.append('name', name);
+    formData.append('agencyId', agencyId);
 
     // const { data, error } = await 
-    // ! todo, find api for uploading to s3 bucket
-    const { error } = await fetch('/api/admin/upload-resume', {
+    const { error } = await fetch('/api/admin/create-candidate', {
       method: 'POST',
       body: formData
     });
@@ -63,6 +80,13 @@ export default function SearchCandidates() {
     }
   };
 
+  // Get agencies
+  useEffect(() => {
+    fetch('/api/admin/get-agencies')
+      .then(r => r.json())
+      .then(({ agencies }) => (setAgencies(agencies), agencies))
+  }, [])
+
   return (
     <div className="flex min-h-screen">
       {/* Sidebar */}
@@ -73,17 +97,29 @@ export default function SearchCandidates() {
         <h1 className="text-header-2">Resume Upload</h1>
         <br />
 
-        <div className="flex justify-center items-center h-64">
+        <div className="flex justify-center items-center">
           <div className="p-4 border rounded-md w-1/2">
+            <h1 className="text-header-2">Candidate Information Form</h1>
+            <br />
+            Select an agency: 
+
+            <br />
+            <Select className="w-full" data={ agencies } onInput={ handleAgencyIdChange }></Select>
+            <br />
+
+            <br />
+            Enter full candidate name:
+            <Input className="w-full" onChange={ handleNameChange }></Input>
+            <br />
+
+            <br />
+            Select candidate resume file:
             <Button 
               className="bg-blue-500 text-white p-3 rounded mt-2"
               onClick={ handleFileChange }> 
-              Choose file.
+              { file?.fileName ?? 'Browse file.' }
             </Button>
-            <div className="text-primary-foreground font-inputfont flex flex-row justify-center py-4">
-              Selected: <br />
-              { file?.fileName ?? 'none' }
-            </div>
+
             <br />
             <div className="text-red-500">{ error }</div>
             <br />

@@ -1,12 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
 import * as AWS from '@aws-sdk/client-s3';
-import { createHash } from "crypto";
+import { dbPool } from "@/lib/db"; 
 
 export async function POST(req: NextRequest) {
 
-  // Filename and filedata
+  // Get form data
   const formData = await req.formData();
-  const [ fileName, fileData ]  = [ formData.get('fileName'), formData.get('fileData') ];
+  const fileName  = formData.get('fileName');
+  const fileData = formData.get('fileData');
+  const name = formData.get('name');
+  const agencyId = formData.get('agencyId');
 
   // S3 client
   // @ts-ignore
@@ -21,9 +24,16 @@ export async function POST(req: NextRequest) {
   })
 
   // Missing fields
-  if (!fileName || !fileData) {
+  if (!fileName || !fileData || !name || !agencyId) {
     return NextResponse.json({ error: "Missing fields." }, { status: 400 });
   }
+
+  // Check if valid agency
+  const result = await dbPool.query('SELECT id,name FROM agencies WHERE id = $1', [ agencyId ]);
+  if (!result.rowCount)
+    return NextResponse.json({
+      error: 'Invalid Agency ID.'
+    })
 
   // Upload object
   const response = await client.send(new AWS.PutObjectCommand({
@@ -32,6 +42,17 @@ export async function POST(req: NextRequest) {
     ContentType: fileData.type,
     Bucket: 'resume-bucket',
   }))
+
+  // resumeURL
+  const resumeURL = 'https://rovhuynfesqymtohtjye.supabase.co/storage/v1/object/public/resume-bucket//' + encodeURI(fileName);
+
+  // Write entry to db
+  await dbPool.query(
+    `INSERT INTO candidates (agency_id, name, fields, resume_url)
+     VALUES ($1, $2, $3, $4) 
+    `, 
+    [ agencyId, name, {}, resumeURL ]
+  );
   
   return NextResponse.json({
     etag: response.ETag,

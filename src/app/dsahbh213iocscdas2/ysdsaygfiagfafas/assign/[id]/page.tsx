@@ -153,7 +153,7 @@ export default function AssignApplicants() {
         <Sidebar />
       </div>
 
-      <div className="flex-1 ml-64 p-6">
+      <div className="flex-1 ml-80 p-6">
         <h1 className="text-2xl font-bold mb-6">
           Assign Candidates for {user.length > 0 ? user[0].email : "N/A"}
         </h1>
