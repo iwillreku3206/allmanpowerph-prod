@@ -5,7 +5,8 @@ import { Search } from "@/types/search";
 import { redirect } from "next/navigation";
 import { QueryResult, QueryResultRow } from "pg";
 import argon2 from 'argon2'
-
+import { cookies } from "next/headers";
+import crypto from 'crypto'
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const urlParams = await params
@@ -28,8 +29,17 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     const password = formData.get("password")
 
     const pwOk = await argon2.verify(searchQuery.rows[0].password_hash, password?.toString() || '')
-    if (!pwOk)
+    if (!pwOk) {
       redirect(`/searches/${urlParams.id}?error=invalidcredentials`)
+    }
+
+    const sessionKey = crypto.randomBytes(32).toString('hex')
+
+    await dbPool.query("INSERT INTO search_sessions(search, session_token, expires)", [urlParams.id, sessionKey, new Date(new Date().getTime() + 1000 * 60 * 60 * 244)])
+
+      ; (await cookies()).set(`session-search-${urlParams.id}`, sessionKey, {
+        maxAge: 24 * 60
+      })
     redirect(`/searches/${urlParams.id}/protected`)
   }
   return (
