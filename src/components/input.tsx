@@ -1,12 +1,14 @@
 import { cn } from "@/lib/utils"
-import { FormEventHandler } from "react"
+import { FormEventHandler, KeyboardEventHandler } from "react"
 
-export function Input({ className = '', type = 'text', placeholder = '', name = '', onChange = () => {}, ...props }: {
+export function Input({ className = '', type = 'text', placeholder = '', name = '', onChange = () => { }, ...props }: {
   className?: string,
   name?: string,
   type?: string,
   placeholder?: string,
+  value?: string
   onChange?: FormEventHandler
+  onKeyDown?: KeyboardEventHandler
 }) {
 
   // Base class
@@ -14,13 +16,13 @@ export function Input({ className = '', type = 'text', placeholder = '', name = 
 
   return (
     <input
-      className={ cn(baseClass, className) }
-      name={ name }
-      type={ type }
-      placeholder={ placeholder }
-      onChange={ onChange }
-      { ...props }
+      className={cn(baseClass, className)}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      onChange={onChange}
+      {...props}
     >
-      
+
     </input>)
 }

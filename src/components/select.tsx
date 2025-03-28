@@ -1,4 +1,5 @@
 import { cn } from "@/lib/utils";
+import { FormEventHandler } from "react";
 
 export function Select({ className = '', data = [], onInput = () => {}, ...props }: {
 	className?: string,

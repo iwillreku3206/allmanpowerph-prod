@@ -67,13 +67,13 @@ export function CardStep2({ nextStep, prevStep }: {
 					<div className="w-full">
 						<Input className="w-full" placeholder="Enter qualification" value={ key(qual) ?? '' }
 							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
-							onChange={ (e) => updateKey(qual, e.target.value) }/>
+							onChange={ (e) => updateKey(qual, (e.target as any).value) }/>
 					</div>
 					<span className="text-header-2 opacity-50">=</span>
 					<div className="w-full">
 						<Input className="w-full" placeholder="Enter value" value={ val(qual) ?? '' }
 							onKeyDown={ (e) => e.key === 'Enter' ? handleNext() : null }
-							onChange={ (e) => updateVal(qual, e.target.value) }/>
+							onChange={ (e) => updateVal(qual, (e.target as any).value) }/>
 					</div>
 					<button className='btn px-3'>
 						<img className="h-12 object-contain hover:motion-preset-stretch-md" 

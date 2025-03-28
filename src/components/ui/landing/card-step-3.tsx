@@ -95,7 +95,7 @@ export function CardStep3({ nextStep, prevStep }: {
 					className="w-full"
 					placeholder="Email"
 					onKeyDown={ (e) => e.key === 'Enter' ? handleSubmit() : null }
-					onChange={ (e) => handleChange(e.target.value) }
+					onChange={ (e) => handleChange((e.target as any).value) }
 				/>
 			</div>
 
