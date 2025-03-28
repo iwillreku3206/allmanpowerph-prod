@@ -3,11 +3,14 @@
 import { dbPool } from "@/lib/db";
 import { Search } from "@/types/search";
 import { redirect } from "next/navigation";
-import { QueryResult, QueryResultRow } from "pg";
+import { QueryResult } from "pg";
 import argon2 from 'argon2'
 import { cookies } from "next/headers";
 import crypto from 'crypto'
 import { SearchSession } from "@/types/searchSession";
+import { InputServer } from "@/components/inputServer";
+import { Title } from "@/components/ui/title";
+import { ButtonServer } from "@/components/buttonServer";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const urlParams = await params
@@ -25,7 +28,7 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     redirect('/404')
   }
 
-  let searchSession: QueryResult<SearchSession>|undefined = undefined;
+  let searchSession: QueryResult<SearchSession> | undefined = undefined;
 
   try {
     const cookie = await cookies()
@@ -62,10 +65,21 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     redirect(`/searches/${urlParams.id}/protected`)
   }
   return (
-    <main className="bg-[#101419]">
-      <form action={auth}>
-        <input type="password" name="password" id="password" /><button type="submit">submit</button>
+    <main className="min-h-screen bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-4">
+      {/* Logo */}
+      <Title />
+
+      <form action={auth} className="flex flex-col gap-4 items-center w-full">
+        <InputServer type="password" name="password" className='md:w-[400px]  w-full' placeholder='Enter password' />
+        <ButtonServer className="bg-primary md:w-[360px]  w-full" type="submit">Submit</ButtonServer>
       </form>
+      <br />
+
+      {/* Contact info */}
+      <div className="text-center text-sm text-gray-400">
+        Questions or concerns? Call us at:<br />
+        <span className="font-medium text-white">09620900909</span>
+      </div>
     </main>
   )
 }
