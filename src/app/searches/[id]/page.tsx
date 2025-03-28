@@ -25,7 +25,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     redirect('/404')
   }
 
-<<<<<<< HEAD
   let searchSession: QueryResult<SearchSession>|undefined = undefined;
 
   try {
@@ -42,14 +41,11 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
     redirect(`/searches/${urlParams.id}/protected`)
   }
 
-=======
->>>>>>> c2e21d3 (work on searches page)
   async function auth(formData: FormData) {
     "use server"
     const password = formData.get("password")
 
     const pwOk = await argon2.verify(searchQuery.rows[0].password_hash, password?.toString() || '')
-<<<<<<< HEAD
     if (!pwOk) {
       redirect(`/searches/${urlParams.id}?error=invalidcredentials`)
     }
@@ -63,10 +59,6 @@ export default async function Page({ params }: { params: Promise<{ id: string }>
         httpOnly: true,
         secure: true
       })
-=======
-    if (!pwOk)
-      redirect(`/searches/${urlParams.id}?error=invalidcredentials`)
->>>>>>> c2e21d3 (work on searches page)
     redirect(`/searches/${urlParams.id}/protected`)
   }
   return (
