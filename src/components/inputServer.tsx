@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils"
 import { FormEventHandler } from "react"
 
-export function Input({ className = '', type = 'text', placeholder = '', name = '', onChange = () => {}, ...props }: {
+export function InputServer({ className = '', type = 'text', placeholder = '', name = '', ...props }: {
   className?: string,
   name?: string,
   type?: string,
@@ -14,13 +14,12 @@ export function Input({ className = '', type = 'text', placeholder = '', name = 
 
   return (
     <input
-      className={ cn(baseClass, className) }
-      name={ name }
-      type={ type }
-      placeholder={ placeholder }
-      onChange={ onChange }
-      { ...props }
+      className={cn(baseClass, className)}
+      name={name}
+      type={type}
+      placeholder={placeholder}
+      {...props}
     >
-      
+
     </input>)
 }
