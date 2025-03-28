@@ -3,36 +3,55 @@ import { FormEventHandler, useState } from "react"
 import { Button } from "./button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-const candidates = [
-  { name: "M***** J*** D****", location: "Matandang Balara, Quezon City", skills: "cooking, rearing", bestMatch: true },
-  { name: "B*** R*** O****", location: "Matandang Balara, Quezon City", skills: "cooking, cleaning" },
-  { name: "Y**** E*** S****", location: "Loyola Heights, Quezon City", skills: "cleaning, rearing" },
-  { name: "H** A****** H****", location: "Tandang Sora, Quezon City", skills: "cooking, dishwashing" },
-  { name: "S*** S***** S********", location: "Matandang Balara, Quezon City", skills: "rearing, tutoring" },
-  { name: "C**** A** T**", location: "Tandang Sora, Quezon City", skills: "cleaning, laundry" },
-];
+// The interface of each resume
+interface Resume {
+	name: string,
+	monthlySalary: number,
+	agencyFee: number,
+	resume: string,
+	[key: string]: number | string | string[],
+}
 
-export function Table({ className = '', columns = [], rows = [], rowMapper = () => { (<td></td>) }, ...props }: {
+/**
+ * Converts each resume into a formatted table row element.
+ */
+const resumeMapper = (resume: Resume, onClick: Function, checked: boolean = false) => {
+	return (
+		<tr 
+			key={ JSON.stringify(resume) }
+			className={ cn('hover:bg-gray-800 cursor-pointer', resume.bestMatch ? 'bg-green-200 text-black' : 'text-gray-300') }
+			onClick={ onClick }>
+
+			<td className="pl-6 px-4 py-3 flex items-center gap-4 text-primary-foreground">
+				<input type="checkbox" checked={ checked } readOnly className="form-checkbox" />
+				{ resume.name }
+			</td>
+			<td className="pr-8 text-primary-foreground">{ resume.location }</td>
+			<td className="pr-8 text-primary-foreground">{ resume.skills } { resume.bestMatch && <span className="text-green-600 font-semibold">(Best Match)</span> }</td>
+		</tr>)
+}
+
+export function ResumeTable({ className = '', columns = [], resumes = [], ...props }: {
 	className?: string,
 	columns?: string[],
-	rows?: string[][],
+	resumes?: Resume[],
 	rowMapper?: Function,
 	onChange?: FormEventHandler
 }) {
 
 	// Base class
-	const [ selected, setSelected ] = useState([]);
+	const [ selectedResumes, setSelectedResumes ] = useState([] as Resume[]);
 
 	// Handle clicks
-	const handleClick = (candidate) => {
+	const handleClick = (resume: Resume) => {
 
 		// Add if not there
-		if (!selected.includes(candidate))
-			setSelected([ ...selected, candidate ])
+		if (!selectedResumes.includes(resume))
+			setSelectedResumes([ ...selectedResumes, resume ])
 
 		// Remove if there
 		else
-			setSelected(selected.filter(c => c !== candidate))
+			setSelectedResumes(selectedResumes.filter(c => c !== resume))
 	}
 
 	// The table
@@ -47,22 +66,13 @@ export function Table({ className = '', columns = [], rows = [], rowMapper = () 
 					</tr>
 				</thead>
 				<tbody>
-					{candidates.map((candidate, index) => (
-						<tr key={ index } className={ `${candidate.bestMatch ? "bg-green-200 text-black" : "text-gray-300"} hover:bg-gray-800 cursor-pointer` } onClick={ () => handleClick(candidate) }>
-							<td className="pl-6 px-4 py-3 flex items-center gap-4">
-								<input type="checkbox" checked={ selected.includes(candidate) } readOnly className="form-checkbox" />
-								{ candidate.name }
-							</td>
-							<td className="pr-8">{ candidate.location }</td>
-							<td className="pr-8">{ candidate.skills } { candidate.bestMatch && <span className="text-green-600 font-semibold">(Best Match)</span> }</td>
-						</tr>
-					))}
+					{resumes.map((resume) => resumeMapper(resume, () => handleClick(resume), selectedResumes.includes(resume)))}
 				</tbody>
 			</table>
 			<div className="flex flex-col justify-between items-center mt-4">
 				<div className="flex flex-row justify-center">
 					<ChevronLeft className="w-5 h-5" /> 
-						<div className="ml-1"></div> 1 / 15 
+						<div className="ml-1"></div> 1 / 15 	
 						<div className="ml-1"></div>
 					<ChevronRight className="w-5 h-5" />
 				</div>
