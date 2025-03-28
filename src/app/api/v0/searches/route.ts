@@ -23,8 +23,10 @@ export async function POST(request: Request) {
   const password = crypto.randomBytes(32).toString('hex')
   const hashed = await argon2.hash(password)
 
-  if (!parsed.success)
+  if (!parsed.success) {
+    console.error(parsed.error)
     return Response.json({ status: 400, error: parsed.error.issues.map(issue => issue.message).join('\n') }, { status: 400 })
+  }
 
   const q = await dbPool.query<{ id: string }>(
     `INSERT INTO searches(location, fields, email, password_hash) 
