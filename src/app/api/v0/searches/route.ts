@@ -10,7 +10,7 @@ const newSearchValidator = z.object({
   fields: z.array(z.object({
     key: z.string().nonempty({ message: "Field name cannot be empty" }),
     value: z.string().nonempty({ message: "Field value cannot be empty" })
-  })).min(1, { message: "At least one field is required" }),
+  })),
   email: z.string().email({ message: "Invalid email" })
 })
 
