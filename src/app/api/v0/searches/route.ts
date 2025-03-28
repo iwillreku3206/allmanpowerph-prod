@@ -49,7 +49,7 @@ export async function POST(request: Request) {
       url: `${process.env.NEXT_BASE_URL}/searches/${id}`,
       password
     },
-    subject: 'KasambaHunt subject'
+    subject: 'AllMaidsPH candidate search request'
   })
 
   return Response.json({ status: 200 }, { status: 200 })

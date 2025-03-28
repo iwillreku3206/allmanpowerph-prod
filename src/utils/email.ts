@@ -13,10 +13,18 @@ interface EmailOptions<T extends {}> {
 
 const smtpPort = parseInt(process.env.SMTP_PORT || 'NaN') || 465
 
+//const transporter = createTransport({
+//  host: process.env.SMTP_HOST || 'smtp.gmail.com',
+//  port: smtpPort,
+//  secure: smtpPort === 465,
+//  auth: {
+//    user: process.env.SMTP_USER,
+//    pass: process.env.SMTP_PASSWORD,
+//  },
+//});
+
 const transporter = createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port: smtpPort,
-  secure: smtpPort === 465,
+  service: 'gmail',
   auth: {
     user: process.env.SMTP_USER,
     pass: process.env.SMTP_PASSWORD,
