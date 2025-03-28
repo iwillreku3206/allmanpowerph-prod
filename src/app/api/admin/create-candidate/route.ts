@@ -44,7 +44,7 @@ export async function POST(req: NextRequest) {
   }))
 
   // resumeURL
-  const resumeURL = 'https://rovhuynfesqymtohtjye.supabase.co/storage/v1/object/public/resume-bucket//' + encodeURI(fileName as string);
+  const resumeURL = process.env.S3_PUBLIC_BUCKET || 'https://rovhuynfesqymtohtjye.supabase.co/storage/v1/object/public/resume-bucket//' + encodeURI(fileName as string);
 
   // Write entry to db
   await dbPool.query(
