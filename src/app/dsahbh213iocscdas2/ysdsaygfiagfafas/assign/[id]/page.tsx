@@ -1,12 +1,12 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEventHandler, FormEvent, ChangeEventHandler } from "react";
 import { useRouter, useParams } from "next/navigation";
 import Sidebar from "@/app/dsahbh213iocscdas2/components/Sidebar";
 
 export default function AssignApplicants() {
   const router = useRouter();
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState<any[]>([]);
   const [connection, setConnection] = useState([]);
   const [loading, setLoading] = useState(true);
   const { id: search_id } = useParams();
@@ -56,34 +56,33 @@ export default function AssignApplicants() {
 
   // Fetch assigned candidates when modal opens
   useEffect(() => {
-    if (isModalOpen && search_id) {
-      async function fetchAssignedCandidates() {
-        setIsLoadingModal(true); // Set loading state to true
-        try {
-          const res = await fetch(`/api/admin/get-assigned-candidates`);
-          const data = await res.json();
-          setAssignedCandidates(data.assignedCandidates || []);
-        } catch (error) {
-          console.error("Failed to fetch assigned candidates:", error);
-        } finally {
-          setIsLoadingModal(false); // Set loading state to false after fetching
-        }
+    async function fetchAssignedCandidates() {
+      setIsLoadingModal(true); // Set loading state to true
+      try {
+        const res = await fetch(`/api/admin/get-assigned-candidates`);
+        const data = await res.json();
+        setAssignedCandidates(data.assignedCandidates || []);
+      } catch (error) {
+        console.error("Failed to fetch assigned candidates:", error);
+      } finally {
+        setIsLoadingModal(false); // Set loading state to false after fetching
       }
-
+    }
+    if (isModalOpen && search_id) {
       fetchAssignedCandidates();
     }
   }, [isModalOpen, search_id]);
 
   // Handle form field change for new candidate data
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
+  const handleInputChange = (e: ChangeEvent) => {
+    const { name, value } = (e as any).target;
     setNewCandidateData({
       ...newCandidateData,
       [name]: value,
     });
   };
 
-  const handleDelete = async (id) => {
+  const handleDelete = async (id: string) => {
     try {
       const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
         method: "DELETE",
@@ -94,7 +93,7 @@ export default function AssignApplicants() {
       const data = text ? JSON.parse(text) : {};
 
       if (res.ok && data.success) {
-        setConnection(connection.filter(candidate => candidate.id !== id));
+        setConnection(connection.filter((candidate: any) => candidate.id !== id));
       } else {
         console.error("Failed to delete candidate:", data.error || "Unknown error");
       }
@@ -105,7 +104,7 @@ export default function AssignApplicants() {
 
 
   // Modal form submission handling
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setIsLoadingModal(true); // Set loading state to true during submission
 
@@ -114,7 +113,7 @@ export default function AssignApplicants() {
     try {
       const candidateData = {
         ...newCandidateData,
-        assignedCandidateId: newCandidateData.assignedCandidate, // Add assigned candidate ID
+        assignedCandidateId: (newCandidateData as any).assignedCandidate, // Add assigned candidate ID
       };
 
       // POST request to API with search_id and candidate data
@@ -155,7 +154,7 @@ export default function AssignApplicants() {
 
       <div className="flex-1 ml-80 p-6">
         <h1 className="text-2xl font-bold mb-6">
-          Assign Candidates for {user.length > 0 ? user[0].email : "N/A"}
+          Assign Candidates for {user.length > 0 ? (user[0] as any).email : "N/A"}
         </h1>
 
         {loading ? (
@@ -178,15 +177,15 @@ export default function AssignApplicants() {
                     <th className="py-2 px-4 border-b text-left">ID</th>
                     {/* Dynamically extract column names from setConnection */}
                     {connection.length > 0 &&
-                      Object.keys(connection[0].fields).map((key, index) => (
+                      Object.keys((connection[0] as any).fields).map((key, index) => (
                         <th key={index} className="py-2 px-4 border-b text-left">{key}</th>
                       ))}
                   </tr>
                 </thead>
                 <tbody>
                   {connection.length > 0 ? (
-                    connection.map((candidate) => (
-                      <tr key={candidate.id}>
+                    connection.map((candidate: any) => (
+                      <tr key={(candidate as any).id}>
                         <td className="py-2 px-4 border-b">{candidate.id}</td>
                         {/* Extract field values dynamically */}
                         {Object.keys(candidate.fields).map((key, index) => (
@@ -237,7 +236,7 @@ export default function AssignApplicants() {
                     required
                   >
                     <option value="">Select a candidate</option>
-                    {assignedCandidates.map((candidate) => (
+                    {assignedCandidates.map((candidate: any) => (
                       <option key={candidate.id} value={candidate.id}>
                         {candidate.name}
                       </option>
@@ -245,13 +244,13 @@ export default function AssignApplicants() {
                   </select>
                 </div>
 
-                {user.length > 0 && user[0].fields.map((field, index) => (
+                {user.length > 0 && user[0].fields.map((field: { key: string, value: string }, index: number) => (
                   <div key={index} className="mb-4">
                     <label className="block text-sm font-medium text-gray-700">{field.key} ({field.value})</label>
                     <input
                       type="text"
                       name={field.key}
-                      value={newCandidateData[field.key] || ""}
+                      value={(newCandidateData as any)[field.key] || ""}
                       onChange={handleInputChange}
                       className="mt-1 p-2 w-full border rounded"
                       required
