@@ -25,9 +25,9 @@ export default function Sidebar({
       </Button>
       <Button
         className="mb-4 px-4 py-3 bg-white text-black hover:bg-gray-200 transition rounded"
-        onClick={() => router.push("/dsahbh213iocscdas2/resume-upload")}
+        onClick={() => router.push("/dsahbh213iocscdas2/create-candidate")}
       >
-        Resume Upload
+        Register Candidate
       </Button>
 
       {/* Sign Out Button */}
