@@ -16,12 +16,12 @@ export async function GET(req: Request) {
     try {
       // Fetch the records based on user_id
       const currentResult = await dbPool.query(
-        "SELECT id,email,fields FROM searches WHERE id = $1",
+        "SELECT * FROM connections WHERE user_id = $1",
         [user_id]
       );
 
       return NextResponse.json({
-        applicant: currentResult.rows,
+        connections: currentResult.rows,
       });
     } catch (error) {
       console.error("Error fetching applicant:", error);

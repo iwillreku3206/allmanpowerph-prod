@@ -10,7 +10,6 @@ export async function GET(req: Request) {
         "SELECT * FROM candidates"
       );
 
-      console.log(assignedCandidates.rows);
 
       if (assignedCandidates.rows.length === 0) {
         return NextResponse.json({ message: "No candidates assigned." }, { status: 404 });
