@@ -4,7 +4,6 @@ import { Button } from "./button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
 
-
 /**
  * Converts each resume into a formatted table row element.
  */
@@ -43,6 +42,7 @@ export function ResumeTable(
     removeSelected,
     addSelected,
     handleSubmit,
+    disableSubmit,
     firstLoadDone,
     maxPage,
     id,
@@ -58,6 +58,7 @@ export function ResumeTable(
       firstLoadDone: boolean,
       removeSelected: (item: string) => void,
       addSelected: (item: string) => void,
+      disableSubmit: boolean,
       handleSubmit: () => void,
       id: string
     }) {
@@ -111,7 +112,7 @@ export function ResumeTable(
           </Button>
         </div>
         <br />
-        <Button className="bg-primary" onClick={handleSubmit}>Setup Interview with Selected</Button>
+        <Button className="bg-primary" onClick={handleSubmit} disabled={disableSubmit}>Setup Interview with Selected</Button>
       </div>
       <br />
     </div>

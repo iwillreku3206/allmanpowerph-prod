@@ -26,6 +26,7 @@ export default function Page() {
   const [count, setCount] = useState(10)
   const [selected, setSelected] = useState<string[]>([])
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [disableSubmit, setDisableSubmit] = useState(false)
   const dialogRef = useRef<HTMLDialogElement>(null)
 
   const id = urlParams.id?.toString()
@@ -56,6 +57,7 @@ export default function Page() {
   }, [dialogOpen])
 
   async function handleContactSubmission() {
+    setDisableSubmit(true)
     await fetch('/api/v0/searches/candidate-interview-requests', {
       method: "POST",
       headers: {
@@ -66,6 +68,7 @@ export default function Page() {
         candidates: selected
       }),
     })
+    setDisableSubmit(false)
     setDialogOpen(true)
   }
 
@@ -74,14 +77,14 @@ export default function Page() {
       {/* Logo */}
       <Title />
 
-      <ResumeTable data={data} id={id as string} selected={selected} page={page} maxPage={Math.ceil(totalCount / count)} firstLoadDone={firstLoadDone} count={count} setPage={handleSetPage} setCount={handleSetCount} removeSelected={handleRemove} addSelected={handleAdd} handleSubmit={handleContactSubmission} />
+      <ResumeTable data={data} id={id as string} selected={selected} page={page} maxPage={Math.ceil(totalCount / count)} firstLoadDone={firstLoadDone} count={count} setPage={handleSetPage} setCount={handleSetCount} removeSelected={handleRemove} addSelected={handleAdd} handleSubmit={handleContactSubmission} disableSubmit={disableSubmit} />
 
       <dialog ref={dialogRef} className="p-8 rounded-lg max-h-[400px] h-screen">
         <div className="flex flex-col h-full">
           <h1 className="font-bold text-2xl mb-4">Thank you!</h1>
           <hr />
           <p>Thank you for using our service! We will contact you regarding the details of the agency with your preferred candidates</p>
-          <Button className="bg-primary mt-auto" onClick={() => setDialogOpen(false)}>Close</Button>
+          <Button className="bg-primary mt-auto" onClick={() => router.push('/')}>Go Home</Button>
         </div>
       </dialog>
 

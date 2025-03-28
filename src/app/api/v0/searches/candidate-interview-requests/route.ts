@@ -19,12 +19,13 @@ function genDollarSignStr(values: number, count: number) {
   for (let i = 0; i < count; i++) {
     out += '('
     for (let j = 0; j < values; j++) {
-      out += ('$' + j + 1)
+      out += '$' + ((values*i)+(j + 1))
       if (j != values - 1) out += ','
     }
     out += ')'
     if (i != count - 1) out += ','
   }
+  return out
 }
 
 
@@ -57,7 +58,8 @@ export async function POST(request: NextRequest) {
     candidates.push(c)
     candidates.push(req.data.search)
   })
-  await dbPool.query<DbQueryResponse>(insertQuery, candidates)
+  console.log({ insertQuery, candidates })
+  await dbPool.query(insertQuery, candidates)
 
   return Response.json({ message: 'success' })
 }

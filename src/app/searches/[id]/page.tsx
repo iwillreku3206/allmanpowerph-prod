@@ -3,7 +3,7 @@
 import { dbPool } from "@/lib/db";
 import { Search } from "@/types/search";
 import { redirect } from "next/navigation";
-import { QueryResult } from "pg";
+import { QueryResult, QueryResultRow } from "pg";
 import argon2 from 'argon2'
 import { cookies } from "next/headers";
 import crypto from 'crypto'
