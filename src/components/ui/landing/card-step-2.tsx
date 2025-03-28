@@ -16,7 +16,7 @@ export function CardStep2({ nextStep, prevStep }: {
 	type Qual = { 
 		key: string,
 		value: string,
-	 };
+	};
 	const key = (qual: Qual) => qual.key;
 	const val = (qual: Qual) => qual.value;
 
@@ -83,12 +83,11 @@ export function CardStep2({ nextStep, prevStep }: {
 					</button>
 				</div>)) 
 			}
+			<br />
 
 			{/* Create new qual */}
-			<div className="w-full flex flex-row justify-end">	
-				<button className='btn'>
-				</button>
-				<Button className="bg-white border-solid border-[rgba(0, 0, 0, 0.5)] border-2 flex justify-center shadow-none hover:brightness-90" onClick={ () => addQual() }>
+			<div className="w-full flex flex-row justify-end shadow-none">	
+				<Button className="bg-white flex justify-center shadow-none hover:brightness-95 mr-12 border-2 border-[rgba(0, 0, 0, 0.5)]" onClick={ () => addQual() }>
 					<img className="h-4 object-contain hover:motion-rotate-in-6" 
 						src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png" 
 						alt="add-field" />

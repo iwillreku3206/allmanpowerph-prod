@@ -15,7 +15,7 @@ export function CardStep({ title = '', description = '', first = false, nav = tr
 }) {
 
 	// Classes
-	const baseClass = 'bg-white rounded-md p-10 lg:w-[600px]';
+	const baseClass = 'bg-white rounded-md p-10 lg:w-[640px]';
 	const animationClass = 'motion-translate-y-in-[10%] motion-opacity-in-0 motion-delay-200';
 
 	return (
@@ -31,7 +31,7 @@ export function CardStep({ title = '', description = '', first = false, nav = tr
 				{ !first && nav &&
 					<Button className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150" 
 						onClick={ () => prevStep() }>
-						Go back
+						Back
 					</Button> 
 				}
 				{ nav && 
