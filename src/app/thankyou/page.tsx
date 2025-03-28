@@ -64,7 +64,7 @@ export default function ThankYou() {
       {/* Contact info */}
       <div className="text-center text-sm text-gray-400">
         Questions or concerns? Call us at:<br />
-        <span className="font-medium text-white">09620900909</span>
+        <span className="font-medium text-white">09270251730</span>
       </div>
     </main>
   );
