@@ -2,7 +2,16 @@
 
 import { Title } from '@/components/ui/title';
 import { Input } from '@/components/input';
-import { Table } from '@/components/table';
+import { ResumeTable } from '@/components/table';
+
+const candidates = [
+  { name: "M***** J*** D****", location: "Matandang Balara, Quezon City", skills: "cooking, rearing", bestMatch: true },
+  { name: "B*** R*** O****", location: "Matandang Balara, Quezon City", skills: "cooking, cleaning" },
+  { name: "Y**** E*** S****", location: "Loyola Heights, Quezon City", skills: "cleaning, rearing" },
+  { name: "H** A****** H****", location: "Tandang Sora, Quezon City", skills: "cooking, dishwashing" },
+  { name: "S*** S***** S********", location: "Matandang Balara, Quezon City", skills: "rearing, tutoring" },
+  { name: "C**** A** T**", location: "Tandang Sora, Quezon City", skills: "cleaning, laundry" },
+];
 
 export default function Dummy() {
 	return (
@@ -10,9 +19,9 @@ export default function Dummy() {
 			{/* Logo */}
 			<Title />
 
-			<Table columns={ [ 'one', 'two', 'three' ] }>
+			<ResumeTable resumes={ candidates } columns={ [ 'one', 'two', 'three' ] }>
 				
-			</Table>
+			</ResumeTable>
 
 			{/* Contact info */}
 			<div className="text-center text-sm text-gray-400">
