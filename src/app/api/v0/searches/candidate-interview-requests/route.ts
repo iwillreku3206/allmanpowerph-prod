@@ -18,17 +18,28 @@ export interface DbQueryResponse {
 
 const requestValidator = z.object({
   search: z.string().uuid(),
-  count: z.enum(["10", "20", "50"]).pipe(z.coerce.number()),
-  page: z.number().positive()
+  candidates: z.array(z.string().uuid()),
+  availability: z.string()
 })
 
-export async function GET(request: NextRequest) {
+//! TODO: move this to utils at some point
+function genDollarSignStr(values: number, count: number) {
+  let out = ""
+  for (let i = 0; i < count; i++) {
+    out += '('
+    for (let j = 0; j < values; j++) {
+      out += ('$' + j + 1)
+      if (j != values - 1) out += ','
+    }
+    out += ')'
+    if (i != count - 1) out += ','
+  }
+}
+
+
+export async function POST(request: NextRequest) {
   // validate inputs
-  const req = await requestValidator.safeParseAsync({
-    search: request.nextUrl.searchParams.get('search'),
-    page: parseInt(request.nextUrl.searchParams.get('page') || 'NaN'),
-    count: request.nextUrl.searchParams.get('count'),
-  })
+  const req = await requestValidator.safeParseAsync(await request.json())
 
   if (!req.success) {
     return Response.json({ error: 'Invalid request', reason: req.error.format() }, { status: 400 })
@@ -46,26 +57,22 @@ export async function GET(request: NextRequest) {
     return Response.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const dataQuery = `
-    SELECT  c.id AS id,
-            c.name AS name,
-            sc.fields AS fields,
-            c.resume_url AS resume_url,
-            false AS requested_interview,
-            s.fields AS search_fields
-    FROM    connections sc
-    JOIN    candidates c
-        ON  sc.candidate_id = c.id
-    JOIN    searches s
-        ON  s.id = sc.user_id
-        AND s.id = $1
-    LIMIT  $2
-    OFFSET $3
+  const insertQuery1 = `
+    INSERT INTO candidate_interview_requests(search_id, availability) VALUES ($1, $2) RETURNING id
   `
 
-  const dbRes = await dbPool.query<DbQueryResponse>(dataQuery, [req.data.search, req.data.count, req.data.count * (req.data.page - 1)])
+  const dbRes1 = await dbPool.query<{ id: string }>(insertQuery1, [req.data.search, req.data.availability])
 
-  const count = await dbPool.query<{ count: number }>(`SELECT COUNT(*) AS count FROM connections sc WHERE sc.user_id = $1`, [req.data.search])
+  const insertQuery2 = `
+    INSERT INTO candidate_interview_request_interviewees(candidate_id, request_id) VALUES ${genDollarSignStr(2, req.data.candidates.length)}
+  `
 
-  return Response.json({ data: dbRes.rows, totalCount: count.rows[0].count })
+  const candidates: string[] = []
+  req.data.candidates.forEach(c => {
+    candidates.push(c)
+    candidates.push(dbRes1.rows[0].id)
+  })
+  await dbPool.query<DbQueryResponse>(insertQuery2, candidates)
+
+  return Response.json({ message: 'success' })
 }

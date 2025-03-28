@@ -10,22 +10,24 @@ import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
  */
 const resumeMapper = (resume: DbQueryResponse, onClick: FormEventHandler, checked: boolean = false) => {
   const bestMatch = false
-  console.log(resume)
   return (
     <tr
       key={JSON.stringify(resume.id)}
-      className={cn('hover:bg-gray-800 cursor-pointer', bestMatch ? 'bg-green-200 text-black' : 'text-gray-300')}
+      className={cn('hover:bg-gray-200 cursor-pointer', bestMatch ? 'bg-green-200 text-black' : 'text-gray-300')}
       onClick={onClick}>
-
-      <td className="pl-6 px-4 py-3 flex items-center gap-4 text-primary-foreground">
+      <td className="pl-6 px-4 py-3 text-primary-foreground">
         <input type="checkbox" checked={checked} readOnly className="form-checkbox" />
+      </td>
+      <td className="pl-6 px-4 py-3 text-primary-foreground">
         {resume.name}
       </td>
       {
         resume.search_fields.map(field =>
-          <td className="pr-8 text-primary-foreground">{resume.fields[field.key] || ''}</td>)
+          <td className="px-6 py-3 text-primary-foreground" key={field.key}>{resume.fields[field.key] || ''}</td>)
       }
-      <td><Button className="bg-primary">download resume</Button></td>
+      <td className="px-6 py-3"><a className="text-primary-foreground z-[999]" href={resume.resume_url} target="_blank">
+        <img src="/download.svg" className="w-4 h-4" />
+      </a></td>
 
     </tr >)
 }
@@ -40,6 +42,8 @@ export function ResumeTable(
     setCount,
     removeSelected,
     addSelected,
+    firstLoadDone,
+    maxPage,
     id,
     ...props }: {
       data: [DbQueryResponse[], string[]],
@@ -49,6 +53,8 @@ export function ResumeTable(
       count: number,
       setPage: (page: number) => void,
       setCount: (page: number) => void,
+      maxPage: number,
+      firstLoadDone: boolean,
       removeSelected: (item: string) => void,
       addSelected: (item: string) => void,
       id: string
@@ -65,8 +71,11 @@ export function ResumeTable(
       removeSelected(resume.id)
   }
 
-  if (resumes.length == 0)
-    return (<div>No candidates found yet. Please wait for a few days and check back again</div>)
+  if (resumes.length == 0 && !firstLoadDone)
+    return (<div>Loading candidates...</div>)
+
+  if (resumes.length == 0 && firstLoadDone)
+    return (<div>We are currently in the process of looking for candidates... We will get back to you in the next few days</div>)
 
   // The table
   return (
@@ -74,11 +83,12 @@ export function ResumeTable(
       <table className="w-full rounded-md bg-white font-bodyfont border-collapse">
         <thead>
           <tr key="HEADER" className="text-left text-gray-400 border-b border-gray-700">
-            <th className="px-6 py-3">Name</th>
+            <th className="px-6 py-3 text-left"></th>
+            <th className="px-6 py-3 text-left">Name</th>
             {
-              resumes[0].search_fields.map(f => <th key={`fieldheader-${f.key}`} className="px-6 py-3">{f.key}</th>)
+              resumes[0].search_fields.map(f => <th key={`fieldheader-${f.key}`} className="px-6 py-3 text-left">{f.key}</th>)
             }
-            <th>Resume</th>
+            <th className="px-6 py-3 text-left">Resume</th>
           </tr>
         </thead>
         <tbody>
@@ -90,16 +100,16 @@ export function ResumeTable(
       </table>
       <div className="flex flex-col justify-between items-center mt-4">
         <div className="flex flex-row justify-center">
-          <Button className="" onClick={() => { setPage(Math.max(page - 1, 0)) }}>
+          <Button className="" onClick={() => { setPage(Math.max(page - 1, 1)) }}>
             <ChevronLeft className="w-5 h-5" />
           </Button>
-          <div className="flex flex-col justify-center items-center">{page + 1}/{1}</div>
-          <Button className="" onClick={() => { setPage(Math.min(page + 1, 1)) }}>
+          <div className="flex flex-col justify-center items-center">{page}/{maxPage}</div>
+          <Button className="" onClick={() => { setPage(Math.min(page + 1, maxPage)) }}>
             <ChevronRight className="w-5 h-5" />
           </Button>
         </div>
         <br />
-        <Button className="bg-primary">View Selected</Button>
+        <Button className="bg-primary">Setup Interview with Selected</Button>
       </div>
       <br />
     </div>
