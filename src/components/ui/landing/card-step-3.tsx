@@ -51,7 +51,7 @@ export function CardStep3({ nextStep, prevStep }: {
 			})
 		})
 			.then(r => r.json())
-			.then(({ status }) => {
+			.then(({ status, error }) => {
 
 				// Success
 				if (status.toString() === '200') {
@@ -59,7 +59,7 @@ export function CardStep3({ nextStep, prevStep }: {
 
 				// Fail
 				} else {
-					setError('Something went wrong. Please try again.');
+					setError(error);
 					setLoading(false);
 				}
 			})
