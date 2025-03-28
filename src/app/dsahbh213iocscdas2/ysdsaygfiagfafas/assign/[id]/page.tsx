@@ -1,32 +1,41 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useRouter } from "next/navigation";
-import { useParams } from "next/navigation";
+import { useRouter, useParams } from "next/navigation";
 import Sidebar from "@/app/dsahbh213iocscdas2/components/Sidebar";
 
 export default function AssignCandidates() {
   const router = useRouter();
-  const { search_id } = useParams();
+  const { id: search_id } = useParams();
   const [candidates, setCandidates] = useState([]);
   const [selectedCandidates, setSelectedCandidates] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    async function fetchCandidates() {
+    async function fetchData() {
       try {
-        const res = await fetch(`/api/admin/get-candidates`);
-        const data = await res.json();
-        setCandidates(data.candidates);
+        // Fetch all candidates
+        const candidatesRes = await fetch(`/api/admin/get-candidates`);
+        const candidatesData = await candidatesRes.json();
+
+        // Fetch assigned candidates from the connections table
+        const assignedRes = await fetch(`/api/admin/get-assigned-candidates?search_id=${search_id}`);
+        const assignedData = await assignedRes.json();
+        
+        const assignedIds = assignedData.assignedCandidates.map(c => c.candidate_id);
+
+        setCandidates(candidatesData.candidates);
+        setSelectedCandidates(assignedIds); // ✅ Pre-check assigned candidates
+
       } catch (error) {
-        console.error("Failed to fetch candidates:", error);
+        console.error("Error fetching data:", error);
       } finally {
         setLoading(false);
       }
     }
 
-    fetchCandidates();
-  }, []);
+    fetchData();
+  }, [search_id]);
 
   const handleCheckboxChange = (candidateId) => {
     setSelectedCandidates((prev) =>
@@ -37,26 +46,40 @@ export default function AssignCandidates() {
   };
 
   const handleSubmit = async () => {
-    await fetch(`/api/admin/assign-candidates`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ search_id, candidates: selectedCandidates }),
-    });
+    if (selectedCandidates.length === 0) {
+      alert("Please select at least one candidate.");
+      return;
+    }
 
-    alert("Candidates assigned successfully!");
-    router.push("/");
+    try {
+      const res = await fetch(`/api/admin/get-candidates`, { 
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ search_id, candidates: selectedCandidates }),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to assign candidates");
+      }
+
+      alert("Candidates assigned successfully!");
+      router.push("/dsahbh213iocscdas2/ysdsaygfiagfafas"); 
+    } catch (error) {
+      console.error("Error assigning candidates:", error);
+      alert("An error occurred while assigning candidates.");
+    }
   };
 
   return (
     <div className="flex min-h-screen">
-      {/* Sidebar (fixed width) */}
+      {/* Sidebar */}
       <div className="w-64 fixed inset-y-0 left-0 bg-gray-800 text-white">
         <Sidebar />
       </div>
 
-      {/* Main Content (pushed to the right of the sidebar) */}
+      {/* Main Content */}
       <div className="flex-1 ml-64 p-6">
-        <h1 className="text-2xl font-bold mb-6">Assign Candidates to Search {search_id}</h1>
+        <h1 className="text-2xl font-bold mb-6">Assign Candidates to User: {search_id}</h1>
 
         {loading ? (
           <div className="flex justify-center items-center h-40">
@@ -81,7 +104,7 @@ export default function AssignCandidates() {
                       <td className="p-3 border text-center">
                         <input
                           type="checkbox"
-                          checked={selectedCandidates.includes(candidate.id)}
+                          checked={selectedCandidates.includes(candidate.id)} // ✅ Pre-check assigned
                           onChange={() => handleCheckboxChange(candidate.id)}
                           className="w-4 h-4"
                         />

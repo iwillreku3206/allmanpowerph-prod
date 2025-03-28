@@ -31,3 +31,52 @@ export async function GET(req: Request) {
     }
   });
 }
+export async function POST(req: Request) {
+    return secureAdminHandler(req, async () => {
+      try {
+        const { search_id, candidates } = await req.json();
+  
+        console.log("Received:", { search_id, candidates });
+  
+        if (!search_id || !Array.isArray(candidates)) {
+          return NextResponse.json({ error: "Invalid input" }, { status: 400 });
+        }
+  
+        // Fetch currently assigned candidates
+        const currentResult = await dbPool.query(
+          "SELECT candidate_id FROM connections WHERE search_id = $1",
+          [search_id]
+        );
+        const currentCandidates = currentResult.rows.map(row => row.candidate_id);
+  
+        // Determine candidates to add (new selections) and remove (unchecked)
+        const toAdd = candidates.filter(id => !currentCandidates.includes(id));
+        const toRemove = currentCandidates.filter(id => !candidates.includes(id));
+  
+        console.log("To Add:", toAdd);
+        console.log("To Remove:", toRemove);
+  
+        // Insert new candidates (preventing duplicates)
+        if (toAdd.length > 0) {
+          const values = toAdd.map(id => `('${id}', '${search_id}')`).join(",");
+          await dbPool.query(
+            `INSERT INTO connections (candidate_id, search_id) VALUES ${values} ON CONFLICT DO NOTHING`
+          );
+        }
+  
+        // Remove unchecked candidates
+        if (toRemove.length > 0) {
+          await dbPool.query(
+            `DELETE FROM connections WHERE search_id = $1 AND candidate_id = ANY($2)`,
+            [search_id, toRemove]
+          );
+        }
+  
+        return NextResponse.json({ message: "Candidates updated successfully" }, { status: 200 });
+  
+      } catch (error) {
+        console.error("Database error:", error);
+        return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
+      }
+    });
+  }
