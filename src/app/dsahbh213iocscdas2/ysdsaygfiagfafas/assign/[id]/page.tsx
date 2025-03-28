@@ -84,21 +84,25 @@ export default function AssignApplicants() {
   };
 
   const handleDelete = async (id) => {
-    // try {
-    //   const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
-    //     method: "DELETE",
-    //   });
-    //   const data = await res.json();
-    //   if (data.success) {
-    //     setConnection(connection.filter(candidate => candidate.id !== id));
-    //   } else {
-    //     console.error("Failed to delete candidate", data.error);
-    //   }
-    // } catch (error) {
-    //   console.error("Error deleting candidate:", error);
-    // }
-    console.log(id)
-  };
+    try {
+        const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
+            method: "DELETE",
+        });
+
+        // Check if response is empty
+        const text = await res.text();
+        const data = text ? JSON.parse(text) : {};
+
+        if (res.ok && data.success) {
+            setConnection(connection.filter(candidate => candidate.id !== id));
+        } else {
+            console.error("Failed to delete candidate:", data.error || "Unknown error");
+        }
+    } catch (error) {
+        console.error("Error deleting candidate:", error);
+    }
+};
+
 
   // Modal form submission handling
   const handleSubmit = async (e) => {
