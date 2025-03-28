@@ -44,7 +44,7 @@ export async function POST(request: Request) {
     from: 'KasambaHunt',
     plaintextFn: (props) => `Please check this link in a few days for an update regarding your search: ${props.url}. Your password is ${props.password}`,
     props: {
-      url: `https://kasambahunt.vercel.app/asdf/${id}`,
+      url: `${process.env.NEXT_BASE_URL}/searches/${id}`,
       password
     },
     subject: 'KasambaHunt subject'
