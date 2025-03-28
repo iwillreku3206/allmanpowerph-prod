@@ -17,13 +17,13 @@ export default function ThankYou() {
         <Link href="/" target="_blank" className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity">Go back home.</Link>
         <br />
         <br />
-        <br />
-        <p className="text-gray-400">Like our service? Tell others about us!</p>
+        {/* <br />
+        <p className="text-gray-400">Like our service? Tell others about us!</p> */}
       </div>
 
       {/* Social media links */}
       <div className="flex gap-4 mb-16">
-        <Link href="https://facebook.com" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
+        {/* <Link href="#" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
           <Image
             src="/facebook.svg"
             alt="Facebook"
@@ -32,7 +32,7 @@ export default function ThankYou() {
             className="w-6 h-6"
           />
         </Link>
-        <Link href="https://twitter.com" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
+        <Link href="#" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
           <Image
             src="/twitter.svg"
             alt="Twitter"
@@ -41,7 +41,7 @@ export default function ThankYou() {
             className="w-6 h-6"
           />
         </Link>
-        <Link href="https://m.me" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
+        <Link href="#" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
           <Image
             src="/messenger.svg"
             alt="Messenger"
@@ -50,7 +50,7 @@ export default function ThankYou() {
             className="w-6 h-6"
           />
         </Link>
-        <Link href="https://tiktok.com" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
+        <Link href="#" target="_blank" className="bg-white p-4 rounded-lg hover:opacity-90 transition-opacity">
           <Image
             src="/tiktok.svg"
             alt="TikTok"
@@ -58,7 +58,7 @@ export default function ThankYou() {
             height={24}
             className="w-6 h-6"
           />
-        </Link>
+        </Link> */}
       </div>
 
       {/* Contact info */}
