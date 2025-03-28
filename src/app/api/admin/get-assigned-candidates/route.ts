@@ -4,18 +4,17 @@ import { secureAdminHandler } from "@/lib/adminAuth";
 
 export async function GET(req: Request) {
   return secureAdminHandler(req, async () => {
-    const url = new URL(req.url);
-    const search_id = url.searchParams.get("search_id");
-
-    if (!search_id) {
-      return NextResponse.json({ error: "Missing search_id" }, { status: 400 });
-    }
-
     try {
+      // Query to fetch all candidates
       const assignedCandidates = await dbPool.query(
-        "SELECT candidate_id FROM connections WHERE search_id = $1",
-        [search_id]
+        "SELECT * FROM candidates"
       );
+
+      console.log(assignedCandidates.rows);
+
+      if (assignedCandidates.rows.length === 0) {
+        return NextResponse.json({ message: "No candidates assigned." }, { status: 404 });
+      }
 
       return NextResponse.json({ assignedCandidates: assignedCandidates.rows });
     } catch (error) {
