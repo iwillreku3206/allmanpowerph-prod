@@ -3,7 +3,12 @@
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 
-export default function AdminPage() {
+interface SidebarProps {
+  candidateAssignmentPath?: string;
+}
+
+export default function Sidebar({
+}: SidebarProps) {
   const router = useRouter();
 
   return (
