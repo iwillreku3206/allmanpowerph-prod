@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
 import { MouseEventHandler } from "react";
 
-export function Button({ className = '', onClick = () => {}, children, ...props }: {
+export function Button({ className = '', onClick = () => {}, children, type, ...props }: {
 	className?: string,
+  type?: "button" | "submit" | "reset",
 	onClick?: MouseEventHandler,
 	children?: React.ReactNode,
 }) {
@@ -16,6 +17,7 @@ export function Button({ className = '', onClick = () => {}, children, ...props 
 		<button 
 			className={ cn(baseClass, animationClass, className) } 
 			onClick={ onClick }
+      type={type}
 			{ ...props }
 		>
 			{ children }

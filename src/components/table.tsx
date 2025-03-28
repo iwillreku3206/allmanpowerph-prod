@@ -42,6 +42,7 @@ export function ResumeTable(
     setCount,
     removeSelected,
     addSelected,
+    handleSubmit,
     firstLoadDone,
     maxPage,
     id,
@@ -57,6 +58,7 @@ export function ResumeTable(
       firstLoadDone: boolean,
       removeSelected: (item: string) => void,
       addSelected: (item: string) => void,
+      handleSubmit: () => void,
       id: string
     }) {
   const resumes = data[0]
@@ -109,7 +111,7 @@ export function ResumeTable(
           </Button>
         </div>
         <br />
-        <Button className="bg-primary">Setup Interview with Selected</Button>
+        <Button className="bg-primary" onClick={handleSubmit}>Setup Interview with Selected</Button>
       </div>
       <br />
     </div>

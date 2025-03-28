@@ -1,10 +1,11 @@
 'use client'
 
 import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
+import { Button } from "@/components/button";
 import { ResumeTable } from "@/components/table";
 import { Title } from "@/components/ui/title";
 import { useParams, useRouter } from "next/navigation";
-import { Suspense, use, useEffect, useState } from "react";
+import { createRef, Suspense, use, useEffect, useRef, useState } from "react";
 
 async function getData(search: string, page: number, count: number): Promise<[DbQueryResponse[], string[], number]> {
   const res = await fetch(`/api/v0/searches/candidates?search=${search}&page=${page}&count=${count}`)
@@ -24,6 +25,8 @@ export default function Page() {
   const [firstLoadDone, setFirstLoadDone] = useState(false)
   const [count, setCount] = useState(10)
   const [selected, setSelected] = useState<string[]>([])
+  const [dialogOpen, setDialogOpen] = useState(false)
+  const dialogRef = useRef<HTMLDialogElement>(null)
 
   const id = urlParams.id?.toString()
   if (!id)
@@ -45,15 +48,42 @@ export default function Page() {
   const handleSetPage = (page: number) => { setPage(page) }
 
   useEffect(() => {
-    console.log(selected)
-  }, [selected])
+    if (dialogRef.current?.open && !dialogOpen) {
+      dialogRef.current?.close()
+    } else if (!dialogRef.current?.open && dialogOpen) {
+      dialogRef.current?.showModal()
+    }
+  }, [dialogOpen])
+
+  async function handleContactSubmission() {
+    await fetch('/api/v0/searches/candidate-interview-requests', {
+      method: "POST",
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        search: id as string,
+        candidates: selected
+      }),
+    })
+    setDialogOpen(true)
+  }
 
   return (
     <main className="min-h-screen bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-4">
       {/* Logo */}
       <Title />
 
-      <ResumeTable data={data} id={id as string} selected={selected} page={page} maxPage={Math.ceil(totalCount / count)} firstLoadDone={firstLoadDone} count={count} setPage={handleSetPage} setCount={handleSetCount} removeSelected={handleRemove} addSelected={handleAdd} />
+      <ResumeTable data={data} id={id as string} selected={selected} page={page} maxPage={Math.ceil(totalCount / count)} firstLoadDone={firstLoadDone} count={count} setPage={handleSetPage} setCount={handleSetCount} removeSelected={handleRemove} addSelected={handleAdd} handleSubmit={handleContactSubmission} />
+
+      <dialog ref={dialogRef} className="p-8 rounded-lg max-h-[400px] h-screen">
+        <div className="flex flex-col h-full">
+          <h1 className="font-bold text-2xl mb-4">Thank you!</h1>
+          <hr />
+          <p>Thank you for using our service! We will contact you regarding the details of the agency with your preferred candidates</p>
+          <Button className="bg-primary mt-auto" onClick={() => setDialogOpen(false)}>Close</Button>
+        </div>
+      </dialog>
 
       {/* Contact info */}
       <div className="text-center text-sm text-gray-400">
