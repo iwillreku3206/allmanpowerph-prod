@@ -1,10 +1,12 @@
 export interface SearchEmailProps {
-  url: string;
+  base: string;
+  id: string;
   password: string;
 }
 
 export default function NewSearchEmail(props: SearchEmailProps) {
-  const { url, password } = props;
+  const { base, id, password } = props;
+
   return (
     <html>
       <head>
@@ -354,7 +356,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
         />
       </head>
       <body className="">
-        <table
+      <table
           role="presentation"
           border="0"
           cellpadding="0"
@@ -374,9 +376,9 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                 >
                   <tr>
                     <td className="align-center" width="100%">
-                      <a href="allmaidsph.com">
+                      <a href={base}>
                         <img
-                          src="https://www.allmaidsph.com/favicon.ico"
+                          src={`${base}/favicon.ico`}
                           height="40"
                           alt="All Maids PH"
                         />
@@ -433,7 +435,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                                           <td>
                                             {" "}
                                             <a
-                                              href={`https://allmaidsph.com/${url}/${password}`}
+                                              href={`${base}/searches/${id}/${password}`}
                                               target="_blank"
                                             >
                                               View List of Candidates

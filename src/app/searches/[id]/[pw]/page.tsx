@@ -88,14 +88,12 @@ export default async function Page({
 
       <form action={auth} className="flex flex-col gap-4 items-center w-full">
         <InputServer
-          type="password"
           name="password"
           value={urlParams.pw}
-          className="md:w-[400px]  w-full"
-          placeholder="Enter password"
+          className="md:w-[400px] w-full hidden"
         />
         <ButtonServer className="bg-primary md:w-[360px]  w-full" type="submit">
-          Submit
+          Open
         </ButtonServer>
       </form>
       <br />
@@ -104,7 +102,7 @@ export default async function Page({
       <div className="text-center text-sm text-gray-400">
         Questions or concerns? Call us at:
         <br />
-        <span className="font-medium text-white">09620900909</span>
+        <span className="font-medium text-white">09270251730</span>
       </div>
     </main>
   );
