@@ -1,6 +1,13 @@
 "use client";
 
-import { useState, useEffect, ChangeEvent, FormEventHandler, FormEvent, ChangeEventHandler } from "react";
+import {
+  useState,
+  useEffect,
+  ChangeEvent,
+  FormEventHandler,
+  FormEvent,
+  ChangeEventHandler,
+} from "react";
 import { useRouter, useParams } from "next/navigation";
 import Sidebar from "@/app/dsahbh213iocscdas2/components/Sidebar";
 
@@ -20,28 +27,35 @@ export default function AssignApplicants() {
   useEffect(() => {
     async function fetchUser() {
       try {
-        const res = await fetch(`/api/admin/get-applicant?user_id=${search_id}`);
-        const res2 = await fetch(`/api/admin/get-connections?user_id=${search_id}`);
+        const res = await fetch(
+          `/api/admin/get-applicant?user_id=${search_id}`
+        );
+        const res2 = await fetch(
+          `/api/admin/get-connections?user_id=${search_id}`
+        );
         const data = await res.json();
         const data2 = await res2.json();
         setUser(data.applicant);
-        setConnection(data2.connections)
+        setConnection(data2.connections);
 
         if (data.applicant && data.applicant.length > 0) {
           const userData = data.applicant[0];
 
           // Extract key-value pairs from the fields column
-          const keyValuePairs = userData.fields.reduce((acc: any, { key, value }: any) => {
-            acc[key] = value;
-            return acc;
-          }, {});
+          const keyValuePairs = userData.fields.reduce(
+            (acc: any, { key, value }: any) => {
+              acc[key] = value;
+              return acc;
+            },
+            {}
+          );
 
           // Store the key-value pairs in the state
           setKvp(keyValuePairs);
           console.log(keyValuePairs); // Log the extracted key-value pairs
         }
 
-        console.log("hello", data2.connections)
+        console.log("hello", data2.connections);
       } catch (error) {
         console.error("Failed to fetch user:", error);
       } finally {
@@ -84,24 +98,31 @@ export default function AssignApplicants() {
 
   const handleDelete = async (id: string) => {
     try {
-      const res = await fetch(`/api/admin/delete-candidate?candidate_id=${id}`, {
-        method: "DELETE",
-      });
+      const res = await fetch(
+        `/api/admin/delete-candidate?candidate_id=${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       // Check if response is empty
       const text = await res.text();
       const data = text ? JSON.parse(text) : {};
 
       if (res.ok && data.success) {
-        setConnection(connection.filter((candidate: any) => candidate.id !== id));
+        setConnection(
+          connection.filter((candidate: any) => candidate.id !== id)
+        );
       } else {
-        console.error("Failed to delete candidate:", data.error || "Unknown error");
+        console.error(
+          "Failed to delete candidate:",
+          data.error || "Unknown error"
+        );
       }
     } catch (error) {
       console.error("Error deleting candidate:", error);
     }
   };
-
 
   // Modal form submission handling
   const handleSubmit = async (e: FormEvent) => {
@@ -117,20 +138,25 @@ export default function AssignApplicants() {
       };
 
       // POST request to API with search_id and candidate data
-      const res = await fetch(`/api/admin/assign-candidate?search_id=${search_id}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(candidateData),
-      });
+      const res = await fetch(
+        `/api/admin/assign-candidate?search_id=${search_id}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(candidateData),
+        }
+      );
 
       const data = await res.json();
       if (data.success) {
         console.log("New candidate added!", data);
 
         // Refetch connections data
-        const res2 = await fetch(`/api/admin/get-connections?user_id=${search_id}`);
+        const res2 = await fetch(
+          `/api/admin/get-connections?user_id=${search_id}`
+        );
         const data2 = await res2.json();
         setConnection(data2.connections);
       } else {
@@ -144,8 +170,6 @@ export default function AssignApplicants() {
     }
   };
 
-
-
   return (
     <div className="flex min-h-screen">
       <div className="w-64 fixed inset-y-0 left-0 bg-gray-800 text-white">
@@ -154,7 +178,8 @@ export default function AssignApplicants() {
 
       <div className="flex-1 ml-80 p-6">
         <h1 className="text-2xl font-bold mb-6">
-          Assign Candidates for {user.length > 0 ? (user[0] as any).email : "N/A"}
+          Assign Candidates for{" "}
+          {user.length > 0 ? (user[0] as any).email : "N/A"}
         </h1>
 
         {loading ? (
@@ -177,9 +202,16 @@ export default function AssignApplicants() {
                     <th className="py-2 px-4 border-b text-left">ID</th>
                     {/* Dynamically extract column names from setConnection */}
                     {connection.length > 0 &&
-                      Object.keys((connection[0] as any).fields).map((key, index) => (
-                        <th key={index} className="py-2 px-4 border-b text-left">{key}</th>
-                      ))}
+                      Object.keys((connection[0] as any).fields).map(
+                        (key, index) => (
+                          <th
+                            key={index}
+                            className="py-2 px-4 border-b text-left"
+                          >
+                            {key}
+                          </th>
+                        )
+                      )}
                   </tr>
                 </thead>
                 <tbody>
@@ -189,7 +221,9 @@ export default function AssignApplicants() {
                         <td className="py-2 px-4 border-b">{candidate.id}</td>
                         {/* Extract field values dynamically */}
                         {Object.keys(candidate.fields).map((key, index) => (
-                          <td key={index} className="py-2 px-4 border-b">{candidate.fields[key]}</td>
+                          <td key={index} className="py-2 px-4 border-b">
+                            {candidate.fields[key]}
+                          </td>
                         ))}
                         <td className="py-2 px-4 border-b">
                           <button
@@ -211,7 +245,6 @@ export default function AssignApplicants() {
                 </tbody>
               </table>
             </div>
-
           </div>
         )}
       </div>
@@ -228,7 +261,9 @@ export default function AssignApplicants() {
             ) : (
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-gray-700">Assigned Candidates</label>
+                  <label className="block text-sm font-medium text-gray-700">
+                    Assigned Candidates
+                  </label>
                   <select
                     name="assignedCandidate"
                     onChange={handleInputChange}
@@ -244,20 +279,24 @@ export default function AssignApplicants() {
                   </select>
                 </div>
 
-                {user.length > 0 && user[0].fields.map((field: { key: string, value: string }, index: number) => (
-                  <div key={index} className="mb-4">
-                    <label className="block text-sm font-medium text-gray-700">{field.key} ({field.value})</label>
-                    <input
-                      type="text"
-                      name={field.key}
-                      value={(newCandidateData as any)[field.key] || ""}
-                      onChange={handleInputChange}
-                      className="mt-1 p-2 w-full border rounded"
-                      required
-                    />
-                  </div>
-                ))}
-
+                {user.length > 0 &&
+                  user[0].fields.map(
+                    (field: { key: string; value: string }, index: number) => (
+                      <div key={index} className="mb-4">
+                        <label className="block text-sm font-medium text-gray-700">
+                          {field.key} ({field.value})
+                        </label>
+                        <input
+                          type="text"
+                          name={field.key}
+                          value={(newCandidateData as any)[field.key] || ""}
+                          onChange={handleInputChange}
+                          className="mt-1 p-2 w-full border rounded"
+                          required
+                        />
+                      </div>
+                    )
+                  )}
 
                 <div className="flex justify-end">
                   <button

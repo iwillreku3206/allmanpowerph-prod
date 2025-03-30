@@ -356,7 +356,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
         />
       </head>
       <body className="">
-      <table
+        <table
           role="presentation"
           border="0"
           cellpadding="0"

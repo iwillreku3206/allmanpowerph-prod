@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { SITE_TITLE } from '@/lib/constants';
-import { Title } from '@/components/ui/title';
+import Image from "next/image";
+import Link from "next/link";
+import { SITE_TITLE } from "@/lib/constants";
+import { Title } from "@/components/ui/title";
 
 export default function ThankYou() {
   return (
@@ -13,8 +13,18 @@ export default function ThankYou() {
 
       {/* Thank you message */}
       <div className="text-center mb-10">
-        <h2 className="text-white-header-1 mb-4">Thank you for using<br />our service!</h2>
-        <Link href="/" target="_blank" className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity">Go back home.</Link>
+        <h2 className="text-white-header-1 mb-4">
+          Thank you for using
+          <br />
+          our service!
+        </h2>
+        <Link
+          href="/"
+          target="_blank"
+          className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity"
+        >
+          Go back home.
+        </Link>
         <br />
         <br />
         {/* <br />
@@ -63,7 +73,8 @@ export default function ThankYou() {
 
       {/* Contact info */}
       <div className="text-center text-sm text-gray-400">
-        Questions or concerns? Call us at:<br />
+        Questions or concerns? Call us at:
+        <br />
         <span className="font-medium text-white">09270251730</span>
       </div>
     </main>

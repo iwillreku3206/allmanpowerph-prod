@@ -64,10 +64,16 @@ export default function SearchCandidates() {
                         <td className="border p-3">{search.id}</td>
                         <td className="border p-3">{search.email}</td>
                         <td className="border p-3">{search.location}</td>
-                        <td className="border p-3">{JSON.stringify(search.fields)}</td>
+                        <td className="border p-3">
+                          {JSON.stringify(search.fields)}
+                        </td>
                         <td className="border p-3">
                           <button
-                            onClick={() => router.push(`/dsahbh213iocscdas2/ysdsaygfiagfafas/assign/${search.id}`)}
+                            onClick={() =>
+                              router.push(
+                                `/dsahbh213iocscdas2/ysdsaygfiagfafas/assign/${search.id}`
+                              )
+                            }
                             className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
                           >
                             Assign Candidate
@@ -96,10 +102,14 @@ export default function SearchCandidates() {
                 Previous
               </button>
 
-              <span className="px-4 py-2">Page {page} of {totalPages}</span>
+              <span className="px-4 py-2">
+                Page {page} of {totalPages}
+              </span>
 
               <button
-                onClick={() => setPage((prev) => Math.min(prev + 1, totalPages))}
+                onClick={() =>
+                  setPage((prev) => Math.min(prev + 1, totalPages))
+                }
                 disabled={page === totalPages}
                 className="px-4 py-2 bg-gray-300 rounded disabled:opacity-50"
               >

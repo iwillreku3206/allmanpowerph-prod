@@ -8,8 +8,7 @@ interface SidebarProps {
   candidateAssignmentPath?: string;
 }
 
-export default function Sidebar({
-}: SidebarProps) {
+export default function Sidebar({}: SidebarProps) {
   const router = useRouter();
 
   return (
