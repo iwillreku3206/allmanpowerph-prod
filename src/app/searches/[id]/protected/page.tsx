@@ -121,9 +121,9 @@ export default function Page() {
           </p>
           <Button
             className="bg-primary mt-auto"
-            onClick={() => router.push("/")}
+            onClick={() => dialogRef.current?.close()}
           >
-            Go Home
+            Close.
           </Button>
         </div>
       </dialog>
