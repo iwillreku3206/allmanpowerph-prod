@@ -16,10 +16,10 @@ export async function POST(req: NextRequest) {
   const client = new AWS.S3({
     forcePathStyle: true,
     region: 'ap-southeast-1',
-    endpoint: process.env.NEXT_PUBLIC_S3_ENDPOINT,
+    endpoint: process.env.S3_ENDPOINT,
     credentials: {
-      accessKeyId: process.env.NEXT_PUBLIC_S3_ACCESS_KEY,
-      secretAccessKey: process.env.NEXT_PUBLIC_S3_SECRET_KEY,
+      accessKeyId: process.env.S3_ACCESS_KEY,
+      secretAccessKey: process.env.S3_SECRET_KEY,
     }
   })
 

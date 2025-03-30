@@ -31,7 +31,11 @@ export default function Sidebar({}: SidebarProps) {
 
       {/* Sign Out Button */}
       <Button
-        onClick={() => signOut({ callbackUrl: "/login" })}
+        onClick={() =>
+          signOut({
+            callbackUrl: "/" + process.env.NEXT_PUBLIC_ADMIN_LOGIN_URL,
+          })
+        }
         className="mt-auto px-4 py-2 bg-white text-black hover:bg-gray-200 transition rounded"
       >
         Sign Out

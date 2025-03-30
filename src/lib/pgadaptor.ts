@@ -233,7 +233,7 @@ import type {
           ...session,
         }
         const sql = `
-          UPDATE sessions set
+          UPDATE next_auth.sessions set
           expires = $2
           where "sessionToken" = $1
           `

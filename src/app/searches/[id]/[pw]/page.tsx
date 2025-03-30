@@ -47,7 +47,9 @@ export default async function Page({
   } catch (e) {}
 
   if (searchSession && searchSession?.rowCount === 1) {
-    redirect(`https://allmaidsph.com/searches/${urlParams.id}/protected`);
+    redirect(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/searches/${urlParams.id}/protected`
+    );
   }
 
   async function auth(formData: FormData) {
@@ -60,7 +62,7 @@ export default async function Page({
     );
     if (!pwOk) {
       redirect(
-        `https://allmaidsph.com/searches/${urlParams.id}?error=invalidcredentials`
+        `${process.env.NEXT_PUBLIC_BASE_URL}/searches/${urlParams.id}?error=invalidcredentials`
       );
     }
 
@@ -79,7 +81,9 @@ export default async function Page({
       httpOnly: true,
       secure: true,
     });
-    redirect(`https://allmaidsph.com/searches/${urlParams.id}/protected`);
+    redirect(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/searches/${urlParams.id}/protected`
+    );
   }
   return (
     <main className="min-h-screen bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-4">

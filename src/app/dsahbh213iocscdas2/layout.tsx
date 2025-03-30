@@ -10,8 +10,10 @@ export default async function Layout({
 }) {
   const session = await getServerSession(authOptions);
 
+  console.log(session);
+
   if (!session?.user?.email) {
-    redirect("/login");
+    redirect("/" + process.env.NEXT_PUBLIC_ADMIN_LOGIN_URL);
   }
 
   try {
@@ -19,7 +21,6 @@ export default async function Layout({
       "SELECT is_authorized FROM next_auth.users WHERE email = $1",
       [session.user.email]
     );
-
 
     if (result.rowCount === 0 || !result.rows[0].is_authorized) {
       console.log("Unauthorized");
@@ -30,8 +31,5 @@ export default async function Layout({
     redirect("/error");
   }
 
-  return (<div>
-    
-    { children }
-  </div>);
+  return <div>{children}</div>;
 }
