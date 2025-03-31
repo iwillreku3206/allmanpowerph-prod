@@ -66,7 +66,7 @@ export function CardStep2({
       prevStep={prevStep}
     >
       {quals
-        .filter((qual) => key(qual) !== "location")
+        .filter((qual) => key(qual) !== "location" && key(qual) !== "__type__")
         .map((qual, i) => (
           <div
             key={i}

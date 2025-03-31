@@ -8,7 +8,7 @@ export const createFormContext = () => {
     value: string
   }
 
-  let formData: any = [
+  let formData: Qual[] = [
     {
       key: 'Monthly Salary Range',
       value: 'Php 8000 - Php 15000'

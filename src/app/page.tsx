@@ -11,6 +11,7 @@ import {
 } from "@/components/contexts/form-data";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { ProgressIndicator } from "@/components/ui/progress-indicator";
+import { CardStep0 } from "@/components/ui/landing/card-step-0";
 import { CardStep2 } from "@/components/ui/landing/card-step-2";
 import { CardStep3 } from "@/components/ui/landing/card-step-3";
 import Head from "next/head";
@@ -18,14 +19,16 @@ import Head from "next/head";
 export default function Home() {
   // State of the landing page
   const [formContext, setFormContext] = useState(createFormContext());
-  const [step, setStep] = useState(1);
-  const totalSteps = 3;
+  const [step, setStep] = useState(0);
+  const totalSteps = 4;
 
   // Step updaters
   function nextStep() {
+    console.log('next')
     setStep(Math.min(step + 1, totalSteps));
   }
   function prevStep() {
+    console.log('prev')
     setStep(Math.max(step - 1, 0));
   }
 
@@ -43,8 +46,8 @@ export default function Home() {
               {/* Title with step indicator below */}
               <Title />
               <div className="w-full">
-                {step > 1 ? (
-                  <ProgressIndicator step={step} totalSteps={totalSteps} />
+                {step >= 0 ? (
+                  <ProgressIndicator step={step + 1} totalSteps={totalSteps} />
                 ) : (
                   <></>
                 )}
@@ -53,6 +56,14 @@ export default function Home() {
               {/* Show each of the cards */}
               {(() => {
                 switch (step) {
+                  case 0:
+                    return (
+                      <CardStep0
+                        nextStep={nextStep}
+                        prevStep={prevStep}
+                        step={step}
+                      />
+                    );
                   case 1:
                     return (
                       <CardStep1
