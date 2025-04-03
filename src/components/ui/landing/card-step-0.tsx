@@ -25,7 +25,7 @@ export function CardStep0({
   const handleSet = (value: HelperType) => () => {
     console.log(value)
     setType(value);
-    setField("__CareType__", value);
+    setField("_CareType", value);
     nextStep()
   };
 

@@ -32,9 +32,15 @@ export function CardStep1({
     return nextStep();
   };
 
+  const careTypes = {
+    'child': 'Childcare',
+    'general': 'Household Help',
+    'elderly': 'Elderly Care'
+  }
+
   return (
     <CardStep
-      title="Looking for a yaya?<br> We got you covered"
+      title={`Looking for ${careTypes[getField('_CareType') as keyof typeof careTypes]}?<br> We got you covered`}
       description={SITE_DESCRIPTION}
       nextStep={nextStep}
       prevStep={prevStep}

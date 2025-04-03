@@ -58,15 +58,21 @@ export function CardStep2({
   const [quals, setQuals]: [quals: Qual[], setQuals: Function] =
     useState(getAll());
 
+  const careTypes = {
+    'child': 'childcare helper',
+    'general': 'household helper',
+    'elderly': 'elderly caregiver'
+  }
+
   return (
     <CardStep
-      title="What qualities do you want in your yaya?"
-      description="Tell us more about your ideal yaya. The more info you give us, the better our search results will be!"
+      title={`What qualities do you want in your ${careTypes[quals.find(x => x.key == "_CareType")?.value as keyof typeof careTypes || 'general']}?`}
+      description={`Tell us more about your ideal ${careTypes[quals.find(x => x.key == "_CareType")?.value as keyof typeof careTypes || 'general']}. The more info you give us, the better our search results will be!`}
       nextStep={nextStep}
       prevStep={prevStep}
     >
       {quals
-        .filter((qual) => key(qual) !== "location" && key(qual) !== "__CareType__")
+        .filter((qual) => key(qual) !== "location" && key(qual) !== "_CareType")
         .map((qual, i) => (
           <div
             key={i}

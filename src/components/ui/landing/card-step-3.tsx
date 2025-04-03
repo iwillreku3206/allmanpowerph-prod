@@ -46,9 +46,9 @@ export function CardStep3({
       },
       body: JSON.stringify({
         location: getField("location"),
-        careType: getField("__CareType__"),
+        careType: getField("_CareType"),
         email: email,
-        fields: getAll().filter((f) => f.key !== "location" && f.key !== "__CareType__"),
+        fields: getAll().filter((f) => f.key !== "location" && f.key !== "_CareType"),
       }),
     })
       .then((r) => r.json())
