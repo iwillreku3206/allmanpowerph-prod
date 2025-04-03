@@ -25,20 +25,20 @@ export function CardStep0({
   const handleSet = (value: HelperType) => () => {
     console.log(value)
     setType(value);
-    setField("__type__", value);
+    setField("__CareType__", value);
     nextStep()
   };
 
   return (
     <CardStep
-      title="Looking for a yaya?<br> We got you covered"
+      title="Need domestic help?<br> We got you covered!"
       description={SITE_DESCRIPTION}
       nextStep={nextStep}
       prevStep={prevStep}
       nav={false}
       first
     >
-      <h3 className="text-header-2 mb-4">To start, what kind of yaya do you want?</h3>
+      <h3 className="text-header-2 mb-4">To start, what kind of help do you want?</h3>
       <div className="mb-4">
         <div className="text-red-500 font-bodyfont mb-4">{error}</div>
         <div className="flex flex-row gap-2">
@@ -54,7 +54,7 @@ export function CardStep0({
             onClick={handleSet("general")}
           >
             <img src="/general.svg" className="w-12 h-12" />
-            General Care
+            Household Help
           </Button>
           <Button
             className="bg-primary px-4 text-body w-full mt-4 text-white flex flex-col justify-center items-center gap-2"

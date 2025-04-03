@@ -14,6 +14,7 @@ export interface DbQueryResponse {
   resume_url: string,
   requested_interview: boolean
   search_fields: { key: string, value: string }[]
+  care_type: string
 }
 
 const requestValidator = z.object({
@@ -52,7 +53,8 @@ export async function GET(request: NextRequest) {
             sc.fields AS fields,
             c.resume_url AS resume_url,
             false AS requested_interview,
-            s.fields AS search_fields
+            s.fields AS search_fields,
+            s.care_type AS care_type
     FROM    connections sc
     JOIN    candidates c
         ON  sc.candidate_id = c.id

@@ -38,8 +38,7 @@ export function CardStep1({
       description={SITE_DESCRIPTION}
       nextStep={nextStep}
       prevStep={prevStep}
-      nav={false}
-      first
+      nav={true}
     >
       <h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
       <div className="mb-4">
@@ -51,12 +50,6 @@ export function CardStep1({
           onKeyDown={(e) => (e.key === "Enter" ? handleNext() : null)}
           onChange={(e) => handleChange((e.target as any).value)}
         />
-        <Button
-          className="bg-primary text-body w-full mt-4"
-          onClick={() => handleNext()}
-        >
-          Next
-        </Button>
       </div>
     </CardStep>
   );

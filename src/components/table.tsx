@@ -31,20 +31,21 @@ const resumeMapper = (
         />
       </td>
       <td className="pl-6 px-4 py-3 text-primary-foreground">{resume.name}</td>
-      <div className="md:block hidden">
-        {resume.search_fields.map((field) => (
-          <td className="px-6 py-3 text-primary-foreground" key={field.key}>
-            {resume.fields[field.key] || ""}
-          </td>
-        ))}
-      </div>
+      {resume.search_fields.map((field) => (
+        <td className="px-6 py-3 text-primary-foreground md:table-cell hidden" key={field.key}>
+          {resume.fields[field.key] || ""}
+        </td>
+      ))}
+      <td className="px-6 py-3 text-primary-foreground">
+        {resume.care_type}
+      </td>
       <td className="px-6 py-3">
         <a
           className="text-primary-foreground z-[999]"
           href={resume.resume_url}
           target="_blank"
         >
-          <img src="/download.svg" className="w-4 h-4" />
+          <img src="/download.svg" className="pointer w-4 h-4" />
         </a>
       </td>
     </tr>
@@ -114,16 +115,15 @@ export function ResumeTable({
           >
             <th className="px-6 py-3 text-left"></th>
             <th className="px-6 py-3 text-left">Name</th>
-            <div className="md:block hidden">
-              {resumes[0].search_fields.map((f) => (
-                <th
-                  key={`fieldheader-${f.key}`}
-                  className="px-6 py-3 text-left"
-                >
-                  {f.key}
-                </th>
-              ))}
-            </div>
+            {resumes[0].search_fields.map((f) => (
+              <th
+                key={`fieldheader-${f.key}`}
+                className="px-6 py-3 text-left md:table-cell hidden"
+              >
+                {f.key}
+              </th>
+            ))}
+            <th className="px-6 py-3 text-left">Care Type</th>
             <th className="px-6 py-3 text-left">Resume</th>
           </tr>
         </thead>

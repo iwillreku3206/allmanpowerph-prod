@@ -11,7 +11,8 @@ const newSearchValidator = z.object({
     key: z.string().nonempty({ message: "Field name cannot be empty" }),
     value: z.string().nonempty({ message: "Field value cannot be empty" })
   })),
-  email: z.string().email({ message: "Invalid email" })
+  email: z.string().email({ message: "Invalid email" }),
+  careType: z.string()
 })
 
 export async function POST(request: Request) {
@@ -29,10 +30,10 @@ export async function POST(request: Request) {
   }
 
   const q = await dbPool.query<{ id: string }>(
-    `INSERT INTO searches(location, fields, email, password_hash) 
-                  VALUES ($1, $2, $3, $4)
+    `INSERT INTO searches(location, fields, email, password_hash, care_type) 
+                  VALUES ($1, $2, $3, $4, $5)
             RETURNING id`,
-    [parsed.data.location, JSON.stringify(parsed.data.fields), parsed.data.email, hashed]
+    [parsed.data.location, JSON.stringify(parsed.data.fields), parsed.data.email, hashed, parsed.data.careType]
   )
   if (q.rowCount !== 1)
     return Response.json({ status: 500, error: 'Unknown database error' }, { status: 500 })
