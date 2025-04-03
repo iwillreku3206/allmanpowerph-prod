@@ -45,7 +45,7 @@ export async function POST(request: Request) {
     to: parsed.data.email,
     component: NewSearchEmail,
     from: 'KasambaHunt',
-    plaintextFn: (props) => `Please check this link in a few days for an update regarding your search: ${props.url}. Your password is ${props.password}`,
+    plaintextFn: (props) => `Please check this link in a few days for an update regarding your search: https://${props.base}/searches/${props.id}/${props.password}. Your password is ${props.password}`,
     props: {
       base: process.env.NEXT_PUBLIC_BASE_URL as string,
       id,

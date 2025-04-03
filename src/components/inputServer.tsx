@@ -6,6 +6,7 @@ export function InputServer({
   type = "text",
   placeholder = "",
   name = "",
+  value,
   ...props
 }: {
   className?: string;
@@ -13,6 +14,7 @@ export function InputServer({
   type?: string;
   placeholder?: string;
   onChange?: FormEventHandler;
+    value?: string;
 }) {
   // Base class
   const baseClass =
@@ -24,6 +26,7 @@ export function InputServer({
       name={name}
       type={type}
       placeholder={placeholder}
+      value={value}
       {...props}
     ></input>
   );
