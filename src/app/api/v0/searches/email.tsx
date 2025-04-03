@@ -358,9 +358,9 @@ export default function NewSearchEmail(props: SearchEmailProps) {
       <body className="">
         <table
           role="presentation"
-          border="0"
-          cellpadding="0"
-          cellspacing="0"
+          border={0}
+          cellPadding="0"
+          cellSpacing="0"
           className="body"
         >
           <tr>
@@ -369,9 +369,9 @@ export default function NewSearchEmail(props: SearchEmailProps) {
               <div className="header">
                 <table
                   role="presentation"
-                  border="0"
-                  cellpadding="0"
-                  cellspacing="0"
+                  border={0}
+                  cellPadding="0"
+                  cellSpacing="0"
                   width="100%"
                 >
                   <tr>
@@ -398,8 +398,8 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                       <table
                         role="presentation"
                         className="border-none"
-                        cellpadding="0"
-                        cellspacing="0"
+                        cellPadding="0"
+                        cellSpacing="0"
                       >
                         <tr>
                           <td>
@@ -416,10 +416,9 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                             </p>
                             <table
                               role="presentation"
-                              className="border-none"
-                              cellpadding="0"
-                              cellspacing="0"
-                              className="btn btn-primary"
+                              className="border-none btn btn-primary"
+                              cellPadding="0"
+                              cellSpacing="0"
                             >
                               <tbody>
                                 <tr>
@@ -427,8 +426,8 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                                     <table
                                       role="presentation"
                                       className="border-none"
-                                      cellpadding="0"
-                                      cellspacing="0"
+                                      cellPadding="0"
+                                      cellSpacing="0"
                                     >
                                       <tbody>
                                         <tr>
@@ -459,8 +458,8 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                   <table
                     role="presentation"
                     className="border-none "
-                    cellpadding="0"
-                    cellspacing="0"
+                    cellPadding="0"
+                    cellSpacing="0"
                   >
                     <tr>
                       <td className="content-block">
