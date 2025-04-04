@@ -2,9 +2,9 @@
 
 import { useState, useEffect, ChangeEvent } from "react";
 import Sidebar from "../components/Sidebar";
-import { Button } from "@/components/button";
-import { Select } from "@/components/select";
-import { Input } from "@/components/input";
+import { Button } from "@/components/form/button";
+import { Select } from "@/components/form/select";
+import { Input } from "@/components/form/input";
 
 export default function SearchCandidates() {
   const [page, setPage] = useState(1);

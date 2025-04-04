@@ -1,7 +1,7 @@
 import { useContext, useState } from "react";
 import { SITE_DESCRIPTION } from "@/lib/constants";
-import { Button } from "@/components/button";
-import { Input } from "@/components/input";
+import { Button } from "@/components/form/button";
+import { Input } from "@/components/form/input";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 import { CardStep } from "./card-step";

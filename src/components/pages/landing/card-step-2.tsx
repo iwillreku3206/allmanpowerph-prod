@@ -1,8 +1,8 @@
-import { Input } from "@/components/input";
+import { Input } from "@/components/form/input";
 import { useContext, useState } from "react";
 import { FormContext } from "@/components/contexts/form-data";
 import { CardStep } from "./card-step";
-import { Button } from "@/components/button";
+import { Button } from "@/components/form/button";
 
 export function CardStep2({
   nextStep,

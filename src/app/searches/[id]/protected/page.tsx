@@ -1,7 +1,7 @@
 "use client";
 
 import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
-import { Button } from "@/components/button";
+import { Button } from "@/components/form/button";
 import { ResumeTable } from "@/components/table";
 import { Title } from "@/components/ui/branding";
 import { useParams, useRouter } from "next/navigation";
