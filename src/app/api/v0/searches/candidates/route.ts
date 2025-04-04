@@ -4,7 +4,7 @@ import { cookies } from "next/headers";
 import { NextRequest } from "next/server";
 import { QueryResult } from "pg";
 import { z } from "zod";
-import {processResume} from "@/utils/resumeProcessor";  // Import the resume analyzer
+import { processResume } from "@/utils/resumeProcessor";  // Import the resume analyzer
 
 console.log('1')
 console.log("hello", processResume)
@@ -28,6 +28,14 @@ export async function GET(request: NextRequest) {
   if (!req.success) {
     return Response.json({ error: "Invalid request", reason: req.error.format() }, { status: 400 });
   }
+  
+  const dataQuery = `
+  SELECT count(*)
+  FROM candidates 
+`;
+
+  const countQuery = await dbPool.query(dataQuery);
+  const totalCount = countQuery.rows[0].count; // Get the total count of candidates
 
   let searchSession: QueryResult<SearchSession> | undefined = undefined;
   const cookie = await cookies();
@@ -50,18 +58,18 @@ export async function GET(request: NextRequest) {
   const required_fields: JSON = searchSession.rows[0].fields;
 
   // Function to fetch and process a batch of candidates
-  const processBatch = async (): Promise<any[]> => {
+  const processBatch = async (count: number = 0): Promise<any[]> => {
+    console.log("Processing batch:", count);
     // SQL query to fetch 10 candidates from the database
     const dataQuery = `
-      SELECT c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
+      SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
              c.care_type AS care_type, ag.agency_fee AS agency_fee
       FROM candidates c
       JOIN agencies ag ON c.agency_id = ag.id
-      LIMIT 10;
+      LIMIT 10
+      OFFSET ${count * 10} ROWS;
     `;
 
-    console.log("hasfhas")
-    
     // Fetch the data from the database
     const dbRes = await dbPool.query(dataQuery);
 
@@ -74,12 +82,15 @@ export async function GET(request: NextRequest) {
         const salaryRange = candidate.monthly_salary; 
         const requiredFields = JSON.stringify(required_fields); // Convert required fields to JSON
         
-
-        console.log("Analyzing resume for candidate:", candidateName, "with URL:", resumeUrl);
-        //Call resume_analyzer for analyzing the resume
         const result = await processResume(candidateName, resumeUrl, requiredFields, agencyFee, salaryRange);
+
+        console.log(`Result for candidate ${candidate.id}:`, result); // Log the result for debugging
+
+        // Log the candidate's ID and whether they are accepted or rejected
+        const status = result.includes("Yes") ? "Accepted" : "Rejected";
+        console.log(`Candidate ${candidate.id}: ${status}`);
         
-        //Only return valid candidates (those that are accepted)
+        // Only return valid candidates (those that are accepted)
         return result.includes("Yes") ? candidate : null;
       })
     );
@@ -91,8 +102,10 @@ export async function GET(request: NextRequest) {
   let validCandidates: any[] = [];
 
   // Keep reading the database until we get 10 valid candidates
-  while (validCandidates.length < 10) {
-    const batchResults = await processBatch();
+  let count = 0;
+  while (validCandidates.length < 10 && count * 10 < totalCount) {
+    const batchResults = await processBatch(count);
+    count++;
 
     // If no valid candidates were returned, break the loop
     if (batchResults.length === 0) {
