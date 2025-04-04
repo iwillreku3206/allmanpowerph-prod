@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { FormEventHandler, use, useState } from "react";
-import { Button } from "./button";
+import { Button } from "./form/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
 

@@ -1,20 +1,13 @@
-import { Geist } from "next/font/google";
+import { SITE_DESCRIPTION, SITE_TITLE } from "@/lib/constants";
 import "./globals.css";
 
-const defaultUrl = process.env.VERCEL_URL
-  ? `https://${process.env.VERCEL_URL}`
-  : "http://localhost:3000";
+const defaultUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
 export const metadata = {
   metadataBase: new URL(defaultUrl),
-  title: "",
-  description: "The fastest way to build apps with Next.js and Supabase",
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
 };
-
-const geistSans = Geist({
-  display: "swap",
-  subsets: ["latin"],
-});
 
 export default function RootLayout({
   children,
@@ -22,7 +15,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={geistSans.className} suppressHydrationWarning>
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-background text-foreground">{children}</body>
     </html>
   );

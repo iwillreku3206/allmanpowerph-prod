@@ -8,9 +8,9 @@ import argon2 from "argon2";
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import { SearchSession } from "@/types/searchSession";
-import { Input } from "@/components/input";
+import { Input } from "@/components/form/input";
 import { Title } from "@/components/ui/branding";
-import { Button } from "@/components/button";
+import { Button } from "@/components/form/button";
 
 export default async function Page({
   params,
