@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
 
 type ButtonProps = {
-  className: string;
-  children: React.ReactNode;
+  className?: string;
+  children?: React.ReactNode;
 } & React.ComponentProps<"button">;
 
 export function Button({ className = "", children, ...props }: ButtonProps) {

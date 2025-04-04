@@ -7,7 +7,7 @@ type Option = {
 };
 
 type SelectProps = {
-  className: string;
+  className?: string;
   options: Option[];
 } & React.ComponentProps<"select">;
 

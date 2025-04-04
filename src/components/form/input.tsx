@@ -1,7 +1,7 @@
 import { cn } from "@/lib/utils";
 
 type InputProps = {
-  className: string;
+  className?: string;
 } & React.ComponentProps<"input">;
 
 export function Input({ className = "", ...props }: InputProps) {
