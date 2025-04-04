@@ -95,12 +95,12 @@ export default function SearchCandidates() {
 
       {/* Main Content */}
       <div className="ml-80 p-8 w-full">
-        <h1 className="text-header-2">Resume Upload</h1>
+        <h1 className="texttype-header-2">Resume Upload</h1>
         <br />
 
         <div className="flex justify-center items-center">
           <div className="p-4 border rounded-md w-1/2">
-            <h1 className="text-header-2">Candidate Information Form</h1>
+            <h1 className="texttype-header-2">Candidate Information Form</h1>
             <br />
             Select an agency:
             <br />

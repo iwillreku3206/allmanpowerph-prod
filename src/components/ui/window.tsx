@@ -1,5 +1,5 @@
 export function WindowPadding({ children }: { children: React.ReactNode }) {
-  return <div className="container px-12 py-20">{children}</div>;
+  return <div className="px-32 py-20">{children}</div>;
 }
 
 export function WindowPage({ children }: { children?: React.ReactNode }) {

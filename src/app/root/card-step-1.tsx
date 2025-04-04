@@ -1,6 +1,4 @@
 import { useContext, useState } from "react";
-import { SITE_DESCRIPTION } from "@/lib/constants";
-import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { FormContext } from "@/components/contexts/form-data";
 import { CardStep } from "./card-step";
@@ -32,21 +30,21 @@ export function CardStep1({
     return nextStep();
   };
 
+  type careType = "child" | "general" | "elderly";
   const careTypes = {
-    child: "Childcare",
-    general: "Household Help",
-    elderly: "Elderly Care",
+    child: "childcare",
+    general: "household help",
+    elderly: "elderly care",
   };
 
   return (
     <CardStep
-      title={`Looking for ${careTypes[getField("_CareType") as keyof typeof careTypes]}?<br> We got you covered`}
-      description={SITE_DESCRIPTION}
+      title={`Tell us where you are!`}
+      description={`You selected ${careTypes[getField("_CareType") as careType]}. Help us narrow down your ideal candidate by telling us more about you!`}
       nextStep={nextStep}
       prevStep={prevStep}
       nav={true}
     >
-      <h3 className="text-header-2 mb-4">To start, tell us where you're at!</h3>
       <div className="mb-4">
         <div className="text-red-500 font-bodyfont mb-4">{error}</div>
         <Input

@@ -1,73 +1,74 @@
 import { createContext } from "react";
 
 export const createFormContext = () => {
-
   // Default context
   type Qual = {
-    key: string,
-    value: string
-  }
+    key: string;
+    value: string;
+  };
 
   let formData: Qual[] = [
     {
-      key: 'Monthly Salary Range',
-      value: 'Php 8000 - Php 15000'
-    }, {
-      key: 'Skills',
-      value: 'cooking, cleaning',
-    }, {
-      key: 'Agency Fee',
-      value: 'Php 10000 - Php 20000'
-    }
+      key: "Monthly Salary Range",
+      value: "Php 8000 - Php 15000",
+    },
+    {
+      key: "Years of Experience",
+      value: "2-3 years at least",
+    },
+    {
+      key: "Agency Fee",
+      value: "Php 10000 - Php 20000",
+    },
   ];
 
   // Returns value of that field
   const getField = (field: string) => {
     return formData.filter((f: Qual) => f.key === field)[0]?.value;
-  }
+  };
 
   // Updater for form data
   const setField = (field: string, value: string) => {
+    let i = 0;
 
-    // Remove existing field
-    const newFormData = formData.filter((f: Qual) => f.key !== field);
+    // Find field
+    for (i = 0; i < formData.length; i++) {
+      if (formData[i].key === field) break;
+    }
 
-    // Push new value for field
-    newFormData.push({
-      key: field,
-      value: value
-    });
+    // Modify found field
+    if (i < formData.length) formData[i].value = value;
+    else formData.push({ key: field, value: value });
 
-    // Update form data
-    formData = newFormData
-  }
+    // Force update
+    formData = [...formData];
+  };
 
   // Rename field
   const renameField = (field: string, newname: string) => {
+    let i;
 
-    // Remove existing field
-    const oldFieldValue = getField(field);
-    const newFormData = formData.filter((f: Qual) => f.key !== field);
+    for (i = 0; i < formData.length; i++) {
+      if (formData[i].key === field) break;
+    }
 
     // Push new field and new value
-    newFormData.push({
-      key: newname,
-      value: oldFieldValue,
-    })
+    if (i < formData.length) formData[i].key = newname;
+    else formData.push({ key: newname, value: "" });
 
-    // Update form data
-    formData = newFormData
-  }
+    // Force update
+    formData = [...formData];
+  };
 
   // Remove existing field
   const removeField = (field: string) => {
-    formData = formData.filter((f: Qual) => f.key !== field)
-  }
+    formData = formData.filter((f: Qual) => f.key !== field);
+  };
 
   // Gets serialized data, to send to server when done
   const getAll = (): Qual[] => {
     return formData;
-  }
+  };
 
   // Create new context + its data
   return {
@@ -76,7 +77,7 @@ export const createFormContext = () => {
     getAll,
     renameField,
     removeField,
-  }
-}
+  };
+};
 
 export const FormContext = createContext(createFormContext());

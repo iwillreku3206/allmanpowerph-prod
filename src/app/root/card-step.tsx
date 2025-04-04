@@ -22,7 +22,7 @@ export function CardStep({
   children: React.ReactNode;
 }) {
   // Classes
-  const baseClass = "bg-white rounded-md p-10 lg:w-[640px]";
+  const baseClass = "bg-transparent rounded-md lg:w-[640px]";
   const animationClass =
     "motion-translate-y-in-[10%] motion-opacity-in-0 motion-delay-200";
 
@@ -30,20 +30,25 @@ export function CardStep({
     <div className={cn(baseClass, animationClass)}>
       {/* Header and Description */}
       <h2
-        className="text-header-1 mb-8 leading-[1.15]"
+        className="texttype-header-1 text-white mb-2 leading-[1.15]"
         dangerouslySetInnerHTML={{ __html: title }}
       ></h2>
-      <p
-        className="text-body mb-6"
-        dangerouslySetInnerHTML={{ __html: description }}
-      ></p>
+      {description.length ? (
+        <p
+          className="texttype-body text-white opacity-75 mb-4"
+          dangerouslySetInnerHTML={{ __html: description }}
+        ></p>
+      ) : (
+        <></>
+      )}
       {children}
 
       {/* Navigation Buttons */}
+      <br />
       <div className="w-full flex flex-row space-x-4">
         {!first && nav && (
           <Button
-            className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+            className="bg-primary-foreground text-white w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
             onClick={() => prevStep()}
           >
             Back
@@ -51,7 +56,7 @@ export function CardStep({
         )}
         {nav && (
           <Button
-            className="bg-primary w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+            className="bg-accent w-full motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
             onClick={() => nextStep()}
           >
             Next

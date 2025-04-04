@@ -35,7 +35,7 @@ export default function SearchCandidates() {
 
       {/* Main Content */}
       <div className="ml-80 p-8 w-full">
-        <h1 className="text-header-2">Candidate Search Requests</h1>
+        <h1 className="texttype-header-2">Candidate Search Requests</h1>
         <br />
 
         {/* Loading Screen */}

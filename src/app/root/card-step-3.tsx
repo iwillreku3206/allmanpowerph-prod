@@ -1,5 +1,4 @@
 import { useContext, useState } from "react";
-import { SITE_DESCRIPTION } from "@/lib/constants";
 import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
 import { cn } from "@/lib/utils";
@@ -87,7 +86,7 @@ export function CardStep3({
 
   return (
     <CardStep
-      title="Tell us how to talk to you"
+      title="Tell us how to talk to you!"
       description="You're almost done! Just tell us how to contact you and we'll send you a list of candidates within the next few days."
       nextStep={nextStep}
       prevStep={prevStep}
@@ -105,7 +104,7 @@ export function CardStep3({
 
       <div className="w-full flex flex-row space-x-4">
         <Button
-          className="bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
+          className="bg-primary-foreground text-white w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150"
           onClick={() => prevStep()}
         >
           Back
@@ -113,7 +112,7 @@ export function CardStep3({
 
         <Button
           className={cn(
-            "bg-primary w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150",
+            "bg-accent w-full flex justify-center motion-translate-y-in-25 motion-ease-bounce motion-duration-150",
             loading ? "hover:cursor-not-allowed" : "hover:cursor-pointer"
           )}
           onClick={() => handleSubmit()}

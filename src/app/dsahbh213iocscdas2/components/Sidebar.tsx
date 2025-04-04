@@ -13,7 +13,7 @@ export default function Sidebar({}: SidebarProps) {
 
   return (
     <div className="fixed left-0 top-0 h-full w-80 bg-primary text-white flex flex-col p-4">
-      <h2 className="text-header-1 my-6">Admin Panel</h2>
+      <h2 className="texttype-header-1 my-6">Admin Panel</h2>
 
       {/* Candidate Assignment Button */}
       <Button

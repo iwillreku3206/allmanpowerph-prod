@@ -3,6 +3,8 @@ import { useContext, useState } from "react";
 import { FormContext } from "@/components/contexts/form-data";
 import { CardStep } from "./card-step";
 import { Button } from "@/components/form/button";
+import { Modal, useModal } from "@/components/ui/modal";
+import { Divider } from "@/components/ui/divider";
 
 export function CardStep2({
   nextStep,
@@ -14,6 +16,7 @@ export function CardStep2({
   // Updating actual form data of root component context
   const { setField, renameField, removeField, getAll } =
     useContext(FormContext);
+  const qualificationsModal = useModal("Edit Qualifications.");
 
   // Utils for state
   type Qual = {
@@ -65,64 +68,85 @@ export function CardStep2({
   };
 
   return (
-    <CardStep
-      title={`What qualities do you want in your ${careTypes[(quals.find((x) => x.key == "_CareType")?.value as keyof typeof careTypes) || "general"]}?`}
-      description={`Tell us more about your ideal ${careTypes[(quals.find((x) => x.key == "_CareType")?.value as keyof typeof careTypes) || "general"]}. The more info you give us, the better our search results will be!`}
-      nextStep={nextStep}
-      prevStep={prevStep}
-    >
-      {quals
-        .filter((qual) => key(qual) !== "location" && key(qual) !== "_CareType")
-        .map((qual, i) => (
-          <div
-            key={i}
-            className="flex flex-row space-x-2 mb-2 motion-preset-pop motion-duration-200"
-          >
-            <div className="w-full">
-              <Input
-                className="w-full"
-                placeholder="Enter qualification"
-                value={key(qual) ?? ""}
-                onKeyDown={(e) => (e.key === "Enter" ? handleNext() : null)}
-                onChange={(e) => updateKey(qual, (e.target as any).value)}
-              />
-            </div>
-            <span className="text-header-2 opacity-50">=</span>
-            <div className="w-full">
-              <Input
-                className="w-full"
-                placeholder="Enter value"
-                value={val(qual) ?? ""}
-                onKeyDown={(e) => (e.key === "Enter" ? handleNext() : null)}
-                onChange={(e) => updateVal(qual, (e.target as any).value)}
-              />
-            </div>
-            <button className="btn px-3">
-              <img
-                className="h-12 object-contain hover:motion-preset-stretch-md"
-                src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSgy6cH4pk8uBtQ-_MBHx5MtDO8ms62KxR0UQ&s"
-                alt="delete"
-                onClick={() => removeQual(qual)}
-              />
-            </button>
-          </div>
-        ))}
-      <br />
+    <>
+      <CardStep
+        title={`Tell us more about your ideal ${careTypes[(quals.find((x) => x.key == "_CareType")?.value as keyof typeof careTypes) || "general"]}!`}
+        description={``}
+        nextStep={nextStep}
+        prevStep={prevStep}
+      >
+        <div className="bg-accent rounded-sm flex flex-col texttype-form mt-4">
+          {quals
+            .filter(
+              (qual) => key(qual) !== "location" && key(qual) !== "_CareType"
+            )
+            .filter(
+              (qual) => key(qual).trim() !== "" && val(qual).trim() !== ""
+            )
+            .map((qual, i) => (
+              <div
+                key={i}
+                onClick={() => qualificationsModal.open()}
+                className="flex flex-row px-6 py-3 justify-between text-sm hover:text-white hover:bg-black hover:bg-opacity-20 hover:cursor-pointer transition-all duration-150"
+              >
+                <div>{qual.key}:</div>
+                <div className="">{qual.value}</div>
+              </div>
+            ))}
+        </div>
+        <br />
 
-      {/* Create new qual */}
-      <div className="w-full flex flex-row justify-end shadow-none">
+        {/* Create new qual */}
+        <div className="w-full flex flex-row justify-end shadow-none">
+          <Button
+            className="bg-transparent text-white flex justify-center shadow-none hover:bg-primary border-2 border-[rgba(0, 0, 0, 0.5)]"
+            onClick={() => qualificationsModal.open()}
+          >
+            Edit Qualifications
+          </Button>
+        </div>
+        <br />
+      </CardStep>
+      <Modal modal={qualificationsModal}>
+        <Divider />
+        <div className="flex flex-col space-y-2">
+          {quals
+            .filter(
+              (qual) => key(qual) !== "location" && key(qual) !== "_CareType"
+            )
+            .map((qual, i) => (
+              <div
+                key={i}
+                className="flex md:flex-row flex-col justify-between md:space-x-2 md:space-y-0 space-y-2 text-sm"
+              >
+                <Input
+                  value={qual.key}
+                  onChange={(e) => updateKey(qual, e.target.value)}
+                ></Input>
+                <Input
+                  value={qual.value}
+                  onChange={(e) => updateVal(qual, e.target.value)}
+                ></Input>
+                <Button
+                  className="bg-transparent shadow-none hover:bg-red-500 hover:bg-opacity-10 m-0 p-0 flex flex-row justify-center items-center md:pb-0 pb-4"
+                  onClick={() => removeQual(qual)}
+                >
+                  <img
+                    className="w-5 h-5 object-cover"
+                    src="https://static-00.iconduck.com/assets.00/remove-icon-2048x2048-ojgymcv1.png"
+                  ></img>
+                </Button>
+              </div>
+            ))}
+        </div>
+        <br />
         <Button
-          className="bg-white flex justify-center shadow-none hover:brightness-95 mr-12 border-2 border-[rgba(0, 0, 0, 0.5)]"
+          className="bg-transparent border-primary border-2 hover:bg-primary"
           onClick={() => addQual()}
         >
-          <img
-            className="h-4 object-contain hover:motion-rotate-in-6"
-            src="https://www.freepnglogos.com/uploads/plus-icon/file-plus-font-awesome-svg-wikimedia-commons-10.png"
-            alt="add-field"
-          />
+          Add Qualification
         </Button>
-      </div>
-      <br></br>
-    </CardStep>
+      </Modal>
+    </>
   );
 }

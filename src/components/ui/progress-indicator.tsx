@@ -8,7 +8,7 @@ export function ProgressIndicator({
   totalSteps: number;
 }) {
   const baseClass =
-    "w-full text-header-1 bg-transparent transition-all duration-300 opacity-70 text-primary-header-2 text-right pb-8";
+    "w-full texttype-header-1 bg-transparent transition-all duration-300 opacity-90 texttype-header-2 text-primary text-left";
   const animationClass = "motion-opacity-in-0 motion-translate-y-in-[10%]";
 
   return (

@@ -11,10 +11,12 @@ export function CardStep0({
   nextStep,
   prevStep,
   step,
+  moreInfoCallback,
 }: {
   nextStep: Function;
   prevStep: Function;
   step: number;
+  moreInfoCallback: Function;
 }) {
   // Show the first field
   const { getField, setField, getAll } = useContext(FormContext);
@@ -29,43 +31,46 @@ export function CardStep0({
     nextStep();
   };
 
+  const careTypes = [
+    { key: "child", name: "Child Care" },
+    { key: "general", name: "Household Help" },
+    { key: "elderly", name: "Elderly Care" },
+  ];
+
   return (
     <CardStep
-      title="Need domestic help?<br> We got you covered!"
-      description={SITE_DESCRIPTION}
+      title="Need domestic help? We got you covered!"
+      description={"To start, tell use what kind of help you're looking for."}
       nextStep={nextStep}
       prevStep={prevStep}
       nav={false}
       first
     >
-      <h3 className="text-header-2 mb-4">
-        To start, what kind of help do you want?
-      </h3>
       <div className="mb-4">
         <div className="text-red-500 font-bodyfont mb-4">{error}</div>
         <div className="flex flex-row gap-2">
-          <Button
-            className="bg-primary px-4 text-body w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
-            onClick={handleSet("child")}
-          >
-            <img src="/child.svg" className="w-12 h-12" />
-            Child Care
-          </Button>
-          <Button
-            className="bg-primary px-4 text-body w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
-            onClick={handleSet("general")}
-          >
-            <img src="/general.svg" className="w-12 h-12" />
-            Household Help
-          </Button>
-          <Button
-            className="bg-primary px-4 text-body w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
-            onClick={handleSet("elderly")}
-          >
-            <img src="/elderly.svg" className="w-12 h-12" />
-            Elderly Care
-          </Button>
+          {careTypes.map((careType, i) => (
+            <Button
+              key={i}
+              className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
+              onClick={handleSet(careType.key)}
+            >
+              <img src="/child.svg" className="w-12 h-12" />
+              {careType.name}
+            </Button>
+          ))}
         </div>
+        <br />
+        <br />
+        <br />
+        <Button
+          onClick={moreInfoCallback}
+          className="bg-transparent text-white rounded-none hover:bg-primary hover:text-black hover:rounded-sm border-l-2 border-r-2 hover:border-none shadow-none"
+        >
+          <p className="motion-preset-wobble-sm motion-delay-500">
+            Wait, tell me more!
+          </p>
+        </Button>
       </div>
     </CardStep>
   );
