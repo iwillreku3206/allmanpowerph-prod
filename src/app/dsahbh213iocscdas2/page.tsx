@@ -8,5 +8,5 @@ import Sidebar from "./components/Sidebar";
 export default function AdminPage() {
   const router = useRouter();
 
-  return (<Sidebar />);
+  return <Sidebar />;
 }

@@ -8,9 +8,9 @@ import argon2 from "argon2";
 import { cookies } from "next/headers";
 import crypto from "crypto";
 import { SearchSession } from "@/types/searchSession";
-import { InputServer } from "@/components/inputServer";
-import { Title } from "@/components/ui/title";
-import { ButtonServer } from "@/components/buttonServer";
+import { Input } from "@/components/input";
+import { Title } from "@/components/ui/branding";
+import { Button } from "@/components/button";
 
 export default async function Page({
   params,
@@ -91,14 +91,15 @@ export default async function Page({
       <Title />
 
       <form action={auth} className="flex flex-col gap-4 items-center w-full">
-        <InputServer
+        <Input
           name="password"
           value={urlParams.pw}
           className="md:w-[400px] w-full hidden"
+          readOnly={true}
         />
-        <ButtonServer className="bg-primary md:w-[360px]  w-full" type="submit">
+        <Button className="bg-primary md:w-[360px]  w-full" type="submit">
           Open
-        </ButtonServer>
+        </Button>
       </form>
       <br />
 

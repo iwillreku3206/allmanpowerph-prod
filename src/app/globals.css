@@ -75,7 +75,7 @@
 }
 
 @layer components {
-  .text-logo { @apply lg:text-9xl sm:text-7xl text-5xl font-logofont text-primary }
+  .text-logo { @apply lg:text-9xl sm:text-7xl text-5xl font-logofont text-primary tracking-tight }
 
   .text-header-1 { @apply lg:text-5xl sm:text-4xl text-3xl font-headerfont font-black tracking-tight text-primary-foreground }
   .text-header-2 { @apply lg:text-3xl text-xl font-headerfont font-black tracking-tight text-primary-foreground }

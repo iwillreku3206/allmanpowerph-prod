@@ -5,7 +5,7 @@ import { Input } from "@/components/input";
 import { FormContext } from "@/components/contexts/form-data";
 import { CardStep } from "./card-step";
 
-type HelperType = "elderly" | "child" | "general"
+type HelperType = "elderly" | "child" | "general";
 
 export function CardStep0({
   nextStep,
@@ -23,10 +23,10 @@ export function CardStep0({
 
   // Update state
   const handleSet = (value: HelperType) => () => {
-    console.log(value)
+    console.log(value);
     setType(value);
     setField("_CareType", value);
-    nextStep()
+    nextStep();
   };
 
   return (
@@ -38,7 +38,9 @@ export function CardStep0({
       nav={false}
       first
     >
-      <h3 className="text-header-2 mb-4">To start, what kind of help do you want?</h3>
+      <h3 className="text-header-2 mb-4">
+        To start, what kind of help do you want?
+      </h3>
       <div className="mb-4">
         <div className="text-red-500 font-bodyfont mb-4">{error}</div>
         <div className="flex flex-row gap-2">

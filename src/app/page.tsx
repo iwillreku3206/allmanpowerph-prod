@@ -1,20 +1,21 @@
 "use client";
 
 import { useState } from "react";
-import { Background } from "@/components/ui/background";
-import { Title } from "@/components/ui/title";
-import { Contact } from "../components/ui/contact";
-import { CardStep1 } from "@/components/ui/landing/card-step-1";
+import { Background } from "@/components/pages/landing/background";
+import { Title, Contact } from "@/components/ui/branding";
+import { CardStep1 } from "@/components/pages/landing/card-step-1";
 import {
   FormContext,
   createFormContext,
 } from "@/components/contexts/form-data";
-import { ProgressBar } from "@/components/ui/progress-bar";
 import { ProgressIndicator } from "@/components/ui/progress-indicator";
-import { CardStep0 } from "@/components/ui/landing/card-step-0";
-import { CardStep2 } from "@/components/ui/landing/card-step-2";
-import { CardStep3 } from "@/components/ui/landing/card-step-3";
+import { CardStep0 } from "@/components/pages/landing/card-step-0";
+import { CardStep2 } from "@/components/pages/landing/card-step-2";
+import { CardStep3 } from "@/components/pages/landing/card-step-3";
 import Head from "next/head";
+import { RenderSwitch } from "@/components/utils/renderSwitch";
+import { Main } from "@/components/main";
+import { WindowPage, WindowPadding } from "../components/ui/window";
 
 export default function Home() {
   // State of the landing page
@@ -24,11 +25,13 @@ export default function Home() {
 
   // Step updaters
   function nextStep() {
-    console.log('next')
+    console.log("next");
     setStep(Math.min(step + 1, totalSteps));
   }
+
+  // Previous step
   function prevStep() {
-    console.log('prev')
+    console.log("prev");
     setStep(Math.max(step - 1, 0));
   }
 
@@ -36,13 +39,13 @@ export default function Home() {
     <>
       <Head>
         <link rel="shortcut icon" href="favicon.ico" />
+        <title>All Maids PH</title>
       </Head>
-      <FormContext.Provider value={formContext}>
-        <main className="min-h-screen relative bg-primary-foreground">
+      <Main>
+        <WindowPage>
           <Background />
-
-          <div className="relative z-20 container mx-auto px-4 flex flex-col min-h-screen">
-            <div className="flex flex-col items-center lg:items-end justify-center flex-1 py-8">
+          <WindowPadding>
+            <div className="flex flex-col items-center lg:items-end justify-center flex-1">
               {/* Title with step indicator below */}
               <Title />
               <div className="w-full">
@@ -53,42 +56,32 @@ export default function Home() {
                 )}
               </div>
 
-              {/* Show each of the cards */}
-              {(() => {
-                switch (step) {
-                  case 0:
-                    return (
-                      <CardStep0
-                        nextStep={nextStep}
-                        prevStep={prevStep}
-                        step={step}
-                      />
-                    );
-                  case 1:
-                    return (
-                      <CardStep1
-                        nextStep={nextStep}
-                        prevStep={prevStep}
-                        step={step}
-                      />
-                    );
-                  case 2:
-                    return (
-                      <CardStep2 nextStep={nextStep} prevStep={prevStep} />
-                    );
-                  case 3:
-                    return (
-                      <CardStep3 nextStep={nextStep} prevStep={prevStep} />
-                    );
-                  default:
-                    return <></>;
-                }
-              })()}
+              <FormContext.Provider value={formContext}>
+                <RenderSwitch
+                  selection={[
+                    <CardStep0
+                      nextStep={nextStep}
+                      prevStep={prevStep}
+                      step={step}
+                    />,
+                    <CardStep1
+                      nextStep={nextStep}
+                      prevStep={prevStep}
+                      step={step}
+                    />,
+                    <CardStep2 nextStep={nextStep} prevStep={prevStep} />,
+                    <CardStep3 nextStep={nextStep} prevStep={prevStep} />,
+                  ]}
+                  selected={step}
+                ></RenderSwitch>
+              </FormContext.Provider>
               <Contact />
             </div>
-          </div>
-        </main>
-      </FormContext.Provider>
+          </WindowPadding>
+        </WindowPage>
+
+        <WindowPage></WindowPage>
+      </Main>
     </>
   );
 }
