@@ -3,7 +3,7 @@
 import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
 import { Button } from "@/components/button";
 import { ResumeTable } from "@/components/table";
-import { Title } from "@/components/ui/title";
+import { Title } from "@/components/ui/branding";
 import { useParams, useRouter } from "next/navigation";
 import { createRef, Suspense, use, useEffect, useRef, useState } from "react";
 

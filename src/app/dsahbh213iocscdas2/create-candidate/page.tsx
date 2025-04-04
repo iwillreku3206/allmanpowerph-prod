@@ -106,7 +106,7 @@ export default function SearchCandidates() {
             <br />
             <Select
               className="w-full"
-              data={agencies}
+              options={agencies}
               onInput={handleAgencyIdChange}
             ></Select>
             <br />

@@ -1,4 +1,4 @@
-import { Title } from "@/components/ui/title";
+import { Title } from "@/components/ui/branding";
 import Link from "next/link";
 
 export default function NotFound() {

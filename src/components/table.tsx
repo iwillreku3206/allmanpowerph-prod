@@ -32,13 +32,14 @@ const resumeMapper = (
       </td>
       <td className="pl-6 px-4 py-3 text-primary-foreground">{resume.name}</td>
       {resume.search_fields.map((field) => (
-        <td className="px-6 py-3 text-primary-foreground md:table-cell hidden" key={field.key}>
+        <td
+          className="px-6 py-3 text-primary-foreground md:table-cell hidden"
+          key={field.key}
+        >
           {resume.fields[field.key] || ""}
         </td>
       ))}
-      <td className="px-6 py-3 text-primary-foreground">
-        {resume.care_type}
-      </td>
+      <td className="px-6 py-3 text-primary-foreground">{resume.care_type}</td>
       <td className="px-6 py-3">
         <a
           className="text-primary-foreground z-[999]"

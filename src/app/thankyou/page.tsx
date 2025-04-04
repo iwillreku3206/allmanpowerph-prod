@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { SITE_TITLE } from "@/lib/constants";
-import { Title } from "@/components/ui/title";
+import { Title } from "@/components/ui/branding";
 
 export default function ThankYou() {
   return (
