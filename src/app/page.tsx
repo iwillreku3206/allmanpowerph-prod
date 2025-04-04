@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Background } from "@/app/root/background";
 import { Title, Contact } from "@/components/ui/branding";
 import { CardStep1 } from "@/app/root/card-step-1";
@@ -12,17 +12,19 @@ import { ProgressIndicator } from "@/components/ui/progress-indicator";
 import { CardStep0 } from "@/app/root/card-step-0";
 import { CardStep2 } from "@/app/root/card-step-2";
 import { CardStep3 } from "@/app/root/card-step-3";
-import Head from "next/head";
 import { RenderSwitch } from "@/components/utils/renderSwitch";
 import { Main } from "@/components/main";
 import { WindowPage, WindowPadding } from "../components/ui/window";
-import { Modal, useModal } from "@/components/ui/modal";
+import { Divider } from "@/components/ui/divider";
+import { useScrollTarget } from "@/components/ui/scrollTarget";
+import { Button } from "@/components/form/button";
 
 export default function Home() {
   // State of the landing page
-  const testModal = useModal("Hello world");
   const [formContext, setFormContext] = useState(createFormContext());
   const [step, setStep] = useState(0);
+  const target = useRef<HTMLDivElement>(null);
+  const scrollTarget = useScrollTarget(target.current);
   const totalSteps = 4;
 
   // Step updaters
@@ -36,17 +38,12 @@ export default function Home() {
   }
 
   return (
-    <>
-      <Head>
-        <link rel="shortcut icon" href="favicon.ico" />
-        <title>All Maids PH</title>
-      </Head>
-      <Main>
-        <WindowPage>
-          <Background />
-          <WindowPadding>
-            <div className="flex flex-col items-center lg:items-end justify-center flex-1">
-              {/* Title with step indicator below */}
+    <Main>
+      <WindowPage>
+        <Background />
+        <div className="flex flex-row items-end bg-transparent">
+          <div className="flex flex-col items-center lg:items-start justify-center flex-1">
+            <div className="bg-card h-[100vh] px-20 py-32 z-20">
               <Title />
               <div className="w-full">
                 {step >= 0 ? (
@@ -55,11 +52,13 @@ export default function Home() {
                   <></>
                 )}
               </div>
-
+              <Divider />
+              <br />
               <FormContext.Provider value={formContext}>
                 <RenderSwitch
                   selection={[
                     <CardStep0
+                      moreInfoCallback={() => scrollTarget.goto()}
                       nextStep={nextStep}
                       prevStep={prevStep}
                       step={step}
@@ -75,16 +74,14 @@ export default function Home() {
                   selected={step}
                 ></RenderSwitch>
               </FormContext.Provider>
-              <Contact />
             </div>
-          </WindowPadding>
-        </WindowPage>
+          </div>
+        </div>
+      </WindowPage>
 
-        <WindowPage></WindowPage>
-        <Modal onAgree={() => alert("blyat")} modal={testModal}>
-          <div>This is an awesome modal.</div>
-        </Modal>
-      </Main>
-    </>
+      <WindowPage>
+        <div ref={target}></div>
+      </WindowPage>
+    </Main>
   );
 }

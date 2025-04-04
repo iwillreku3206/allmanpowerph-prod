@@ -2,8 +2,10 @@ import { LANDING_BG } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 
 export function Background() {
-  const baseClass = "absolute object-cover opacity-50 h-[100vh]";
-  const animationClass = "motion-translate-x-in-[-5%] motion-blur-in-md";
-
-  return <img className={cn(baseClass, animationClass)} src={LANDING_BG} />;
+  return (
+    <img
+      className="absolute object-cover h-[100vh] right-0 scale-x-[-1] motion-translate-x-in-[-5%] motion-blur-in-md brightness-200"
+      src={LANDING_BG}
+    />
+  );
 }

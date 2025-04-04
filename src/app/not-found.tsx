@@ -9,12 +9,12 @@ export default function NotFound() {
 
       {/* Thank you message */}
       <div className="text-center mb-12">
-        <h2 className="text-white-header-1 mb-4">404 - Not Found</h2>
+        <h2 className="texttype-header-1 text-white mb-4">404 - Not Found</h2>
         <br />
         <Link
           href="/"
           target="_blank"
-          className="text-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity"
+          className="texttype-header-2 text-blue-600 opacity-70 hover:opacity-50 underline transition-opacity"
         >
           Go back home.
         </Link>

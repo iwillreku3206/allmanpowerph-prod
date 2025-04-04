@@ -22,7 +22,7 @@ type ModalProps = {
   modal: Modal;
 };
 
-export function useModal(title: string) {
+export function useModal(title: string): Modal {
   const [isOpen, setIsOpen] = useState(false);
 
   // Modal API
@@ -53,13 +53,15 @@ export function Modal({
 
   // When open, show modal
   return (
-    <div className="fixed w-[100vw] h-[100vh] bg-black bg-opacity-25 z-50 top-0 left-0 flex flex-col items-center backdrop-blur-md">
-      <div className="m-auto card rounded-md bg-white w-[600px] p-8">
+    <div className="fixed w-[100vw] h-[100vh] bg-black bg-opacity-25 md:p-0 p-4 z-50 top-0 left-0 flex flex-col items-center backdrop-blur-md">
+      <div className="m-auto card rounded-md bg-white md:w-[600px] w-full p-8">
         {/* Modal Title */}
-        <div className="text-header-1 pb-4">{modal.title}</div>
+        <div className="texttype-header-1 pb-4">{modal.title}</div>
 
         {/* Modal Description */}
-        <div className="text-body">{children}</div>
+        <div className="texttype-body max-h-[70vh] overflow-y-auto">
+          {children}
+        </div>
         <br />
 
         {/* Modal Buttons */}

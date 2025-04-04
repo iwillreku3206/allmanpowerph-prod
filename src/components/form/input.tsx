@@ -6,11 +6,12 @@ type InputProps = {
 
 export function Input({ className = "", ...props }: InputProps) {
   const baseClass =
-    "px-4 py-3 border border-gray-300 rounded-md text-form focus:outline-none focus:ring-2 focus:ring-primary focus:ring-opacity-50";
+    "bg-muted px-4 py-3 border border-gray-300 rounded-sm texttype-form outline-none focus:bg-white focus:font-bold focus:ring-0 transition-color duration-150";
   const animationClass = "";
 
   return (
     <input
+      spellCheck={false}
       className={cn(baseClass, animationClass, className)}
       {...props}
     ></input>
