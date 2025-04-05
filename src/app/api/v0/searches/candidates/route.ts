@@ -6,9 +6,6 @@ import { QueryResult } from "pg";
 import { z } from "zod";
 import { processResume } from "@/utils/resumeProcessor";  // Import the resume analyzer
 
-console.log('1')
-console.log("hello", processResume)
-console.log('2')
 // Request validation schema
 const requestValidator = z.object({
   search: z.string().uuid(),
@@ -17,7 +14,6 @@ const requestValidator = z.object({
 });
 
 export async function GET(request: NextRequest) {
-  console.log("hello")
   // Validate inputs
   const req = await requestValidator.safeParseAsync({
     search: request.nextUrl.searchParams.get("search"),
@@ -66,8 +62,8 @@ export async function GET(request: NextRequest) {
              c.care_type AS care_type, ag.agency_fee AS agency_fee
       FROM candidates c
       JOIN agencies ag ON c.agency_id = ag.id
-      LIMIT 10
-      OFFSET ${count * 10} ROWS;
+      LIMIT 5
+      OFFSET ${count * 5} ROWS;
     `;
 
     // Fetch the data from the database
@@ -84,11 +80,11 @@ export async function GET(request: NextRequest) {
         
         const result = await processResume(candidateName, resumeUrl, requiredFields, agencyFee, salaryRange);
 
-        console.log(`Result for candidate ${candidate.id}:`, result); // Log the result for debugging
+        // console.log(`Result for candidate ${candidate.id}:`, result); // Log the result for debugging
 
         // Log the candidate's ID and whether they are accepted or rejected
         const status = result.includes("Yes") ? "Accepted" : "Rejected";
-        console.log(`Candidate ${candidate.id}: ${status}`);
+        //console.log(`Candidate ${candidate.id}: ${status}`);
         
         // Only return valid candidates (those that are accepted)
         return result.includes("Yes") ? candidate : null;
@@ -101,9 +97,9 @@ export async function GET(request: NextRequest) {
 
   let validCandidates: any[] = [];
 
-  // Keep reading the database until we get 10 valid candidates
+  // Keep reading the database until we exhaust the db
   let count = 0;
-  while (validCandidates.length < 10 && count * 10 < totalCount) {
+  while (count * 5 < totalCount) {
     const batchResults = await processBatch(count);
     count++;
 

@@ -99,8 +99,10 @@ export const analyzeResume = async (
     Monthly Salary Range:
     ${salaryRange}`;
 
+  let apiKey
   try {
-    const apiKey = getNextApiKey(); // Get the next API key
+    apiKey = getNextApiKey(); // Get the next API key
+    console.log(apiKey)
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
@@ -108,12 +110,11 @@ export const analyzeResume = async (
     const response = await result.response;
     const output = await response.text();
 
-
     return output.toLowerCase().includes("accepted")
       ? `Yes Resume of ${candidateName}: ${output}`
       : `No Resume of ${candidateName}: ${output}`;
   } catch (error) {
-    console.error(`Error analyzing Resume of ${candidateName}:`, error);
+    console.error(`Error analyzing Resume of ${candidateName}:`, error, `Api key: ${apiKey}`);
     return `Resume of ${candidateName}: Error - ${(error as any).message}`;
   }
 };
