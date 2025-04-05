@@ -45,5 +45,4 @@ export async function sendEmail<T extends {}>(options: EmailOptions<T>) {
     text: plaintext,
     html
   })
-  console.log(mail.response)
 }

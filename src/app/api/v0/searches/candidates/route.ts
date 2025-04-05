@@ -58,21 +58,29 @@ export async function GET(request: NextRequest) {
   const processBatch = async (count: number = 0): Promise<any[]> => {
 
     const dataQuery = `
-    SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
-          c.care_type AS care_type, ag.agency_fee AS agency_fee
-    FROM candidates c
-    JOIN agencies ag ON c.agency_id = ag.id
-    LEFT JOIN connections conn ON c.id = conn.candidate_id AND conn.user_id = $1
-    WHERE conn.candidate_id IS NULL 
-    LIMIT 5
-    OFFSET ${count * 5} ROWS;
-  `;
+      SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
+            c.care_type AS care_type, ag.agency_fee AS agency_fee
+      FROM candidates c
+      JOIN agencies ag ON c.agency_id = ag.id
+      LEFT JOIN connections conn ON c.id = conn.candidate_id AND conn.user_id = $1
+      WHERE conn.candidate_id IS NULL 
+      LIMIT 5
+      OFFSET ${count * 5} ROWS;
+    `;
 
 
     const dbRes = await dbPool.query(dataQuery,[ req.data.search]);
+    type CandidateJSON = {
+      id: string,
+      name: string,
+      resume_url: string,
+      agency_fee: string,
+      monthly_salary: string,
+      required_fields: any,
+    }
 
     const analysisResults = await Promise.all(
-      dbRes.rows.map(async (candidate: JSON) => {
+      dbRes.rows.map(async (candidate: CandidateJSON) => {
         const candidateName : string = candidate.name;
         const resumeUrl : string = candidate.resume_url;
         const agencyFee : string = candidate.agency_fee;
@@ -93,7 +101,6 @@ export async function GET(request: NextRequest) {
             console.error("Invalid JSON:", err);
           }
         } else {
-          console.log(result)
           console.error("No JSON found in the string.");
         }
 
