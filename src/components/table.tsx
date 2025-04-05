@@ -2,13 +2,12 @@ import { cn } from "@/lib/utils";
 import { FormEventHandler, use, useState } from "react";
 import { Button } from "./form/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
 
 /**
  * Converts each resume into a formatted table row element.
  */
 const resumeMapper = (
-  resume: DbQueryResponse,
+  resume: any,
   onClick: FormEventHandler,
   checked: boolean = false
 ) => {
@@ -31,15 +30,14 @@ const resumeMapper = (
         />
       </td>
       <td className="pl-6 px-4 py-3 text-primary-foreground">{resume.name}</td>
-      {resume.search_fields.map((field) => (
+      {Object.keys(resume.fields).map((field: any) => (
         <td
-          className="px-6 py-3 text-primary-foreground md:table-cell hidden"
-          key={field.key}
+          className="px-6 py-3 text-primary-foreground md:table-cell"
+          key={field}
         >
-          {resume.fields[field.key] || ""}
+          {resume.fields[field] || ""}
         </td>
       ))}
-      <td className="px-6 py-3 text-primary-foreground">{resume.care_type}</td>
       <td className="px-6 py-3">
         <a
           className="text-primary-foreground z-[999]"
@@ -70,7 +68,7 @@ export function ResumeTable({
   id,
   ...props
 }: {
-  data: [DbQueryResponse[], string[]];
+  data: any;
   className?: string;
   selected: string[];
   page: number;
@@ -85,9 +83,10 @@ export function ResumeTable({
   handleSubmit: () => void;
   id: string;
 }) {
-  const resumes = data[0];
+  const resumes = data;
+
   // Handle clicks
-  const handleClick = (resume: DbQueryResponse) => {
+  const handleClick = (resume: any) => {
     // Add if not there
     if (!selected.includes(resume.id)) addSelected(resume.id);
     // Remove if there
@@ -116,20 +115,19 @@ export function ResumeTable({
           >
             <th className="px-6 py-3 text-left"></th>
             <th className="px-6 py-3 text-left">Name</th>
-            {resumes[0].search_fields.map((f) => (
+            {Object.keys(resumes[0].fields).map((f: string) => (
               <th
-                key={`fieldheader-${f.key}`}
+                key={`fieldheader-${f}`}
                 className="px-6 py-3 text-left md:table-cell hidden"
               >
-                {f.key}
+                {f}
               </th>
             ))}
-            <th className="px-6 py-3 text-left">Care Type</th>
             <th className="px-6 py-3 text-left">Resume</th>
           </tr>
         </thead>
         <tbody>
-          {resumes.map((resume) =>
+          {resumes.map((resume: any) =>
             resumeMapper(
               resume,
               () => handleClick(resume),

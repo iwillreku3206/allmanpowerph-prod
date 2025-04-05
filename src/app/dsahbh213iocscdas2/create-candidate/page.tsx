@@ -38,7 +38,6 @@ export default function SearchCandidates() {
   };
 
   const handleAgencyIdChange = (e: ChangeEvent<HTMLSelectElement>) => {
-    console.log(e);
     setAgencyId(e.target.value);
   };
 

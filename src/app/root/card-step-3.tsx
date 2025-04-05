@@ -56,6 +56,13 @@ export function CardStep3({
       .then(({ status, error }) => {
         // Success
         if (status.toString() === "200") {
+          // Dev Mode
+          if (process.env.NEXT_PUBLIC_ENVIRONMENT_MODE === "DEV") {
+            setError(status);
+            setLoading(false);
+            return;
+          }
+
           router.push("/thankyou");
 
           // Fail

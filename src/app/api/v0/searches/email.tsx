@@ -1,11 +1,12 @@
 export interface SearchEmailProps {
   base: string;
   id: string;
+  fields: { key: string; value: string }[];
   password: string;
 }
 
 export default function NewSearchEmail(props: SearchEmailProps) {
-  const { base, id, password } = props;
+  const { base, id, fields, password } = props;
 
   return (
     <html>
@@ -152,6 +153,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
             font-weight: 300;
             text-align: center;
             text-transform: capitalize; 
+            letter-spacing: -0.05em;
           }
 
           p,
@@ -171,7 +173,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
           }
 
           a {
-            color: #ec0867;
+            color: #567C8F;
             text-decoration: underline; 
           }
 
@@ -194,10 +196,10 @@ export default function NewSearchEmail(props: SearchEmailProps) {
           }
             .btn a {
               background-color: #ffffff;
-              border: solid 1px #ec0867;
+              border: solid 1px #567C8F;
               border-radius: 5px;
               box-sizing: border-box;
-              color: #ec0867;
+              color: #567C8F;
               cursor: pointer;
               display: inline-block;
               font-size: 14px;
@@ -209,12 +211,12 @@ export default function NewSearchEmail(props: SearchEmailProps) {
           }
 
           .btn-primary table td {
-            background-color: #ec0867; 
+            background-color: #F65B35; 
           }
 
           .btn-primary a {
-            background-color: #ec0867;
-            border-color: #ec0867;
+            background-color: #F65B35;
+            border-color: #F65B35;
             color: #ffffff; 
           }
 
@@ -322,6 +324,27 @@ export default function NewSearchEmail(props: SearchEmailProps) {
           }
 
           /* -------------------------------------
+              TABLE STYLING FOR FIELDS
+          ------------------------------------- */
+          .fields-table {
+            background-color: rgba(0, 0, 0, 0.1);
+            padding: 1em;
+            border-radius: 0.25em;
+          }
+
+          .fields-row {
+            margin-y: 4px;
+          }
+
+          .fields-rowdata {
+            font-family: monospace;
+          }
+
+          .fields-row:nth-child(2) {
+            text-align: right;
+          }
+
+          /* -------------------------------------
               PRESERVE THESE STYLES IN THE HEAD
           ------------------------------------- */
           @media all {
@@ -345,11 +368,11 @@ export default function NewSearchEmail(props: SearchEmailProps) {
               text-decoration: none !important; 
             }
             .btn-primary table td:hover {
-              background-color: #d5075d !important; 
+              background-color: #F65B35 !important; 
             }
             .btn-primary a:hover {
-              background-color: #d5075d !important;
-              border-color: #d5075d !important; 
+              background-color: #F65B35 !important;
+              border-color: #F65B35 !important; 
             } 
           }`,
           }}
@@ -414,6 +437,23 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                               this now, but we'll send you emails when we find
                               more people that fit your needs!
                             </p>
+                            <p>
+                              📝&nbsp; Here's a summary of the specific
+                              requirements you requested for your candidates:
+                            </p>
+                            <table className="fields-table">
+                              {fields.map((field) => (
+                                <tr className="fields-row">
+                                  <td className="fields-rowdata">
+                                    {field.key}
+                                  </td>
+                                  <td className="fields-rowdata">
+                                    {field.value}
+                                  </td>
+                                </tr>
+                              ))}
+                            </table>
+                            <br />
                             <table
                               role="presentation"
                               className="border-none btn btn-primary"
@@ -447,7 +487,6 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                                 </tr>
                               </tbody>
                             </table>
-                            <br />
                           </td>
                         </tr>
                       </table>

@@ -1,36 +1,49 @@
 "use client";
 
-import { type DbQueryResponse } from "@/app/api/v0/searches/candidates/route";
 import { Button } from "@/components/form/button";
 import { ResumeTable } from "@/components/table";
 import { Title } from "@/components/ui/branding";
 import { useParams, useRouter } from "next/navigation";
-import { createRef, Suspense, use, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 async function getData(
   search: string,
   page: number,
   count: number
-): Promise<[DbQueryResponse[], string[], number]> {
+): Promise<any> {
+  let onResolve: Function, onReject: Function;
+  let data: Promise<any> = new Promise((res, rej) => {
+    onResolve = res;
+    onReject = rej;
+  });
+
+  // Max wait of 2.5 seconds, after that, pull from db no matter what
+  setTimeout(async () => {
+    await fetch(
+      `/api/v0/searches/connections?search=${search}&page=${page}&count=${count}`
+    )
+      .then((r) => r.json())
+      .then(({ connections }) => onResolve(connections));
+  }, 2500);
+
+  // Requests the server to do AI sht
   const res = await fetch(
     `/api/v0/searches/candidates?search=${search}&page=${page}&count=${count}`
   );
-  const data = (await res.json()) as {
-    data: DbQueryResponse[];
-    totalCount: number;
-  };
-  const selected = data.data
-    .filter((a) => a.requested_interview)
-    .map((a) => a.id);
 
-  return [data.data, selected, data.totalCount];
+  // Await data
+  const result = await data;
+
+  // Return awaited data
+  return result;
 }
 
 export default function Page() {
   const urlParams = useParams();
   const router = useRouter();
 
-  const [data, setData] = useState<[DbQueryResponse[], string[]]>([[], []]);
+  // I cant be bothered to figure out the types for this sht atm
+  const [data, setData] = useState<any>(null);
   const [page, setPage] = useState(1);
   const [totalCount, setTotalCount] = useState(0);
   const [firstLoadDone, setFirstLoadDone] = useState(false);
@@ -46,8 +59,8 @@ export default function Page() {
   useEffect(() => {
     async function get() {
       const data = await getData(id as string, page, count);
-      setData([data[0], data[1]]);
-      setTotalCount(data[2]);
+      setData(data);
+      setTotalCount(data.length);
       setFirstLoadDone(true);
     }
     get();
@@ -95,21 +108,25 @@ export default function Page() {
       {/* Logo */}
       <Title />
 
-      <ResumeTable
-        data={data}
-        id={id as string}
-        selected={selected}
-        page={page}
-        maxPage={Math.ceil(totalCount / count)}
-        firstLoadDone={firstLoadDone}
-        count={count}
-        setPage={handleSetPage}
-        setCount={handleSetCount}
-        removeSelected={handleRemove}
-        addSelected={handleAdd}
-        handleSubmit={handleContactSubmission}
-        disableSubmit={disableSubmit}
-      />
+      {data ? (
+        <ResumeTable
+          data={data}
+          id={id as string}
+          selected={selected}
+          page={page}
+          maxPage={Math.ceil(totalCount / count)}
+          firstLoadDone={firstLoadDone}
+          count={count}
+          setPage={handleSetPage}
+          setCount={handleSetCount}
+          removeSelected={handleRemove}
+          addSelected={handleAdd}
+          handleSubmit={handleContactSubmission}
+          disableSubmit={disableSubmit}
+        />
+      ) : (
+        "Loading..."
+      )}
 
       <dialog ref={dialogRef} className="p-8 rounded-lg max-h-[400px] h-screen">
         <div className="flex flex-col h-full">
