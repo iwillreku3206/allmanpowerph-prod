@@ -1,4 +1,10 @@
-import { useContext, useState } from "react";
+import {
+  MouseEventHandler,
+  useContext,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import { SITE_DESCRIPTION } from "@/lib/constants";
 import { Button } from "@/components/form/button";
 import { Input } from "@/components/form/input";
@@ -16,12 +22,13 @@ export function CardStep0({
   nextStep: Function;
   prevStep: Function;
   step: number;
-  moreInfoCallback: Function;
+  moreInfoCallback: MouseEventHandler<HTMLButtonElement>;
 }) {
   // Show the first field
   const { getField, setField, getAll } = useContext(FormContext);
   const [type, setType] = useState<HelperType>("general");
   const [error, setError] = useState("");
+  const tellMeMoreRef = useRef<HTMLParagraphElement>(null);
 
   // Update state
   const handleSet = (value: HelperType) => () => {
@@ -36,6 +43,26 @@ export function CardStep0({
     { key: "general", name: "Household Help" },
     { key: "elderly", name: "Elderly Care" },
   ];
+
+  useEffect(() => {
+    setInterval(() => {
+      if (tellMeMoreRef.current) {
+        // Add animation
+        tellMeMoreRef.current.classList.add(
+          "motion-preset-wobble-sm",
+          "motion-duration-500"
+        );
+
+        // Set timeout to stop animation
+        setTimeout(() => {
+          tellMeMoreRef.current?.classList.remove(
+            "motion-preset-wobble-sm",
+            "motion-duration-500"
+          );
+        }, 500);
+      }
+    }, 3600);
+  }, []);
 
   return (
     <CardStep
@@ -53,7 +80,10 @@ export function CardStep0({
             <Button
               key={i}
               className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
-              onClick={handleSet(careType.key)}
+              onClick={
+                // @ts-ignore
+                handleSet(careType.key)
+              }
             >
               <img src="/child.svg" className="w-12 h-12" />
               {careType.name}
@@ -67,7 +97,7 @@ export function CardStep0({
           onClick={moreInfoCallback}
           className="bg-transparent text-white rounded-none hover:bg-primary hover:text-black hover:rounded-sm border-l-2 border-r-2 hover:border-none shadow-none"
         >
-          <p className="motion-preset-wobble-sm motion-delay-500">
+          <p className="pointer-events-none" ref={tellMeMoreRef}>
             Wait, tell me more!
           </p>
         </Button>
