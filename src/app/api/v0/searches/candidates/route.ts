@@ -5,6 +5,7 @@ import { NextRequest } from "next/server";
 import { QueryResult } from "pg";
 import { z } from "zod";
 import { processResume } from "@/utils/resumeProcessor";  // Import the resume analyzer
+import { parse } from "path";
 
 // Request validation schema
 const requestValidator = z.object({
@@ -24,14 +25,14 @@ export async function GET(request: NextRequest) {
   if (!req.success) {
     return Response.json({ error: "Invalid request", reason: req.error.format() }, { status: 400 });
   }
-  
+
   const dataQuery = `
-  SELECT count(*)
-  FROM candidates 
-`;
+    SELECT count(*)
+    FROM candidates
+  `;
 
   const countQuery = await dbPool.query(dataQuery);
-  const totalCount = countQuery.rows[0].count; // Get the total count of candidates
+  const totalCount = countQuery.rows[0].count;
 
   let searchSession: QueryResult<SearchSession> | undefined = undefined;
   const cookie = await cookies();
@@ -39,10 +40,11 @@ export async function GET(request: NextRequest) {
 
   if (token) {
     searchSession = await dbPool.query<SearchSession>(
-      `SELECT ss.*, s.fields, s.care_type
+      `SELECT ss.*, s.fields, s.care_type, s.id
        FROM search_sessions ss
        JOIN searches s ON ss.search = s.id
-       WHERE ss.session_token = $1 AND ss.search = $2 LIMIT 1;`,
+       WHERE ss.session_token = $1 AND ss.search = $2
+       LIMIT 1;`,
       [token, req.data.search]
     );
   }
@@ -53,70 +55,86 @@ export async function GET(request: NextRequest) {
 
   const required_fields: JSON = searchSession.rows[0].fields;
 
-  // Function to fetch and process a batch of candidates
   const processBatch = async (count: number = 0): Promise<any[]> => {
-    console.log("Processing batch:", count);
-    // SQL query to fetch 10 candidates from the database
+
     const dataQuery = `
-      SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
-             c.care_type AS care_type, ag.agency_fee AS agency_fee
-      FROM candidates c
-      JOIN agencies ag ON c.agency_id = ag.id
-      LIMIT 5
-      OFFSET ${count * 5} ROWS;
-    `;
+    SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
+          c.care_type AS care_type, ag.agency_fee AS agency_fee
+    FROM candidates c
+    JOIN agencies ag ON c.agency_id = ag.id
+    LEFT JOIN connections conn ON c.id = conn.candidate_id AND conn.user_id = $1
+    WHERE conn.candidate_id IS NULL 
+    LIMIT 5
+    OFFSET ${count * 5} ROWS;
+  `;
 
-    // Fetch the data from the database
-    const dbRes = await dbPool.query(dataQuery);
 
-    // Analyze resumes concurrently for all candidates in the batch
+    const dbRes = await dbPool.query(dataQuery,[ req.data.search]);
+
     const analysisResults = await Promise.all(
-      dbRes.rows.map(async (candidate) => {
-        const candidateName = candidate.name;
-        const resumeUrl = candidate.resume_url;
-        const agencyFee = candidate.agency_fee; 
-        const salaryRange = candidate.monthly_salary; 
-        const requiredFields = JSON.stringify(required_fields); // Convert required fields to JSON
-        
+      dbRes.rows.map(async (candidate: JSON) => {
+        const candidateName : string = candidate.name;
+        const resumeUrl : string = candidate.resume_url;
+        const agencyFee : string = candidate.agency_fee;
+        const salaryRange : string = candidate.monthly_salary;
+        const requiredFields = JSON.stringify(required_fields);
+
         const result = await processResume(candidateName, resumeUrl, requiredFields, agencyFee, salaryRange);
 
-        // console.log(`Result for candidate ${candidate.id}:`, result); // Log the result for debugging
-
-        // Log the candidate's ID and whether they are accepted or rejected
         const status = result.includes("Yes") ? "Accepted" : "Rejected";
-        //console.log(`Candidate ${candidate.id}: ${status}`);
-        
-        // Only return valid candidates (those that are accepted)
-        return result.includes("Yes") ? candidate : null;
+        const jsonMatch = result.match(/```json\s*([\s\S]*?)\s*```/);
+
+        let parsedJson: any = null;
+
+        if (jsonMatch && jsonMatch[1]) {
+          try {
+            parsedJson = JSON.parse(jsonMatch[1]);
+          } catch (err) {
+            console.error("Invalid JSON:", err);
+          }
+        } else {
+          console.log(result)
+          console.error("No JSON found in the string.");
+        }
+
+        if (status === "Accepted") {
+          try {
+            await dbPool.query(
+              `INSERT INTO connections (candidate_id, user_id, fields)
+               VALUES ($1, $2, $3)
+               ON CONFLICT (candidate_id, user_id) DO NOTHING;`,
+              [candidate.id, req.data.search, parsedJson]
+            );
+          } catch (err) {
+            console.error(`Error inserting into connections for candidate ${candidate.id}:`, err);
+          }
+          return candidate;
+        }
+
+        return null;
       })
     );
 
-    // Filter out invalid candidates (null values)
     return analysisResults.filter(candidate => candidate !== null);
   };
 
   let validCandidates: any[] = [];
-
-  // Keep reading the database until we exhaust the db
   let count = 0;
+
   while (count * 5 < totalCount) {
     const batchResults = await processBatch(count);
     count++;
 
-    // If no valid candidates were returned, break the loop
     if (batchResults.length === 0) {
       break;
     }
 
-    // Add valid candidates to the validCandidates array
     validCandidates = [...validCandidates, ...batchResults];
 
-    // If we have found 10 valid candidates, stop fetching more
-    if (validCandidates.length >= 10) {
+    if (validCandidates.length >= 5) {
       break;
     }
   }
 
-  // Return the valid candidates (limit to 10)
-  return Response.json({ data: validCandidates.slice(0, 10), totalCount: validCandidates.length });
+  return Response.json({ data: validCandidates.slice(0, 5), totalCount: validCandidates.length });
 }

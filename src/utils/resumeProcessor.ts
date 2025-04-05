@@ -88,7 +88,7 @@ export const analyzeResume = async (
     If the candidate is missing even a single skill, their resume does not explicitly state that they have the skill, or they do not have the relevant experience, they should be rejected.
     The details regarding the skills are not there since many resumes are not in great details.
     Tell me briefly why the field they were missing got them rejected. I don't need a long explanation.
-    For those accepted, can you give me their name and return the requested fields in a JSON format?
+    For those accepted, can you return the requested fields in a JSON format?
 
     Resume:
     ${resumeText}
@@ -99,10 +99,8 @@ export const analyzeResume = async (
     Monthly Salary Range:
     ${salaryRange}`;
 
-  let apiKey
   try {
-    apiKey = getNextApiKey(); // Get the next API key
-    console.log(apiKey)
+    const apiKey = getNextApiKey(); // Get the next API key
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 
