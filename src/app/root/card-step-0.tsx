@@ -50,7 +50,8 @@ export function CardStep0({
         // Add animation
         tellMeMoreRef.current.classList.add(
           "motion-preset-wobble-sm",
-          "motion-duration-500"
+          "motion-duration-500",
+          "pointer-events-none"
         );
 
         // Set timeout to stop animation
@@ -93,14 +94,16 @@ export function CardStep0({
         <br />
         <br />
         <br />
-        <Button
+        {/* <Button
           onClick={moreInfoCallback}
           className="bg-transparent text-white rounded-none hover:bg-primary hover:text-black hover:rounded-sm border-l-2 border-r-2 hover:border-none shadow-none"
         >
-          <p className="pointer-events-none" ref={tellMeMoreRef}>
-            Wait, tell me more!
-          </p>
-        </Button>
+          <div className="pointer-events-none" onClick={() => alert("aaa")}>
+            <p className="pointer-events-none" ref={tellMeMoreRef}>
+              Wait, tell me more!
+            </p>
+          </div>
+        </Button> */}
       </div>
     </CardStep>
   );

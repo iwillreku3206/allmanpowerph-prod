@@ -7,11 +7,11 @@ import { GoogleGenerativeAI } from "@google/generative-ai";
 
 // API Keys for round-robin usage
 const API_KEYS = [
-  "AIzaSyDneLiPbHBi9cr1vyxu1_nFk1T7q6m6Ldo",
-  "AIzaSyCqKw_OFL47GN-gegtOZa7J5C-X2xNE0g4",
-  "AIzaSyDIGW9FmxmFJPqxzHTOtICv61-0mQC0wX4",
-  "AIzaSyCFd5NfxNRWT6dvjErakArBCmr1q9-_c5o",
-  "AIzaSyC4qed3gSh-tL4acQvPdfAsPdnlJdmf7B4"
+  process.env.GEMINI_API_KEY_1 ?? '',
+  process.env.GEMINI_API_KEY_2 ?? '',
+  process.env.GEMINI_API_KEY_3 ?? '',
+  process.env.GEMINI_API_KEY_4 ?? '',
+  process.env.GEMINI_API_KEY_5 ?? '',
 ];
 
 let apiKeyIndex = 0;
@@ -99,8 +99,8 @@ export const analyzeResume = async (
     Monthly Salary Range:
     ${salaryRange}`;
 
+  const apiKey = getNextApiKey(); // Get the next API key
   try {
-    const apiKey = getNextApiKey(); // Get the next API key
     const genAI = new GoogleGenerativeAI(apiKey);
     const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash" });
 

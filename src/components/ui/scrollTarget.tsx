@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 export type ScrollTarget = {
   goto: () => void;
 };
@@ -9,16 +11,23 @@ export function useScrollTarget(
 ): ScrollTarget {
   let scrollContainer: HTMLElement | null = target;
 
-  // Find scrollable
-  do {
-    scrollContainer = scrollContainer?.parentNode as HTMLElement;
+  useEffect(() => {
+    // Set scroll container
+    scrollContainer = target;
 
-    // No scrollable component above
-    if (!scrollContainer) break;
+    // Find scrollable
+    do {
+      scrollContainer = scrollContainer?.parentNode as HTMLElement;
 
-    // Check if scrollable (does not reset to 0)
-    scrollContainer.scrollTop += 1;
-  } while (scrollContainer?.scrollTop === 0);
+      // No scrollable component above
+      if (!scrollContainer) break;
+
+      // Check if scrollable (does not reset to 0)
+      scrollContainer.scrollTop += 1;
+    } while (scrollContainer?.scrollTop === 0);
+
+    return () => {};
+  }, [target]);
 
   // Scroller API
   const scrollTarget: ScrollTarget = {
