@@ -2,7 +2,7 @@ import { dbPool } from "@/lib/db";
 import { NextRequest } from "next/server";
 
 // Update the `fields` column in the `searches` table and delete connections with the same `id` in `user_id`
-export async function POST(request: NextRequest, { params }: { params: { id: string } }) {
+export async function POST(request: NextRequest, { params }: any) {
   const { id } = await params;
 
   try {

@@ -1,10 +1,9 @@
-// /app/api/v0/searches/[id]/route.ts
-
 import { dbPool } from "@/lib/db";
 import { NextRequest } from "next/server";
 
+
 // Define the API endpoint to fetch details of a search session
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, { params }: any) {
   const { id } = await params;
 
   try {

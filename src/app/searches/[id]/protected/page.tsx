@@ -164,7 +164,14 @@ export default function Page() {
             removeSelected={(id) =>
               setSelected((s) => s.filter((i) => i !== id))
             }
-            addSelected={(id) => setSelected((s) => [...new Set([...s, id])])}
+            addSelected={(id) =>
+              setSelected((s) => {
+                if (!s.includes(id)) {
+                  return [...s, id];
+                }
+                return s;
+              })
+            }
             handleSubmit={handleContactSubmission}
             disableSubmit={disableSubmit}
           />
