@@ -84,9 +84,9 @@ export const analyzeResume = async (
   const prompt = `You are an experienced HR with technical expertise in blue-collar industries.
     You will be given a list of maids, and you need to analyze their resumes.
     The ideal candidate should be within these fields: ${requiredFields}.
-    Be very very very strict, if a candidate does not meet at least one of the requirements, they should be rejected.
-    If the candidate is missing even a single skill, their resume does not explicitly state that they have the skill, or they do not have the relevant experience, they should be rejected.
-    The details regarding the skills are not there since many resumes are not in great details.
+    If a candidate is missing even one of the required fields, or if their resume does not explicitly state that they possess the skill, they should be rejected.
+    If a candidate's skills are not directly mentioned in the resume but can be inferred, assume they are proficient.
+    Agency fees and monthly salary range will not be inside the resume itself, but it will be given to you.
     Tell me briefly why the field they were missing got them rejected. I don't need a long explanation.
     For those accepted, can you return the requested fields in a JSON format?
 
@@ -107,6 +107,8 @@ export const analyzeResume = async (
     const result = await model.generateContent(prompt);
     const response = await result.response;
     const output = await response.text();
+
+    console.log(output)
 
     return output.toLowerCase().includes("accepted")
       ? `Yes Resume of ${candidateName}: ${output}`
