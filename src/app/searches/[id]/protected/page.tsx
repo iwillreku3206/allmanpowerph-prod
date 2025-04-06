@@ -41,6 +41,7 @@ export default function Page() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [disableSubmit, setDisableSubmit] = useState(false);
   const dialogRef = useRef<HTMLDialogElement>(null);
+  const [intervalId, setIntervalId] = useState<number | null>(null);
 
   const [modalOpen, setModalOpen] = useState(false);
   const [fields, setFields] = useState<{ key: string; value: string }[]>([]);
@@ -50,22 +51,25 @@ export default function Page() {
   const id = urlParams.id?.toString();
   if (!id) router.push("/404");
 
+  async function get() {
+    const data = await getData(id as string, page, count);
+    setData(data);
+    setTotalCount(data.length);
+    setFirstLoadDone(true);
+
+    const searchDetails = await fetch(
+      `/api/v0/searches/get_fields/${id}`
+    ).then((r) => r.json());
+    const normalizedFields = (searchDetails.fields || []).map((field: any) =>
+      typeof field === "object" ? field : { key: "", value: field }
+    );
+    setFields(normalizedFields);
+  }
+
   useEffect(() => {
-    async function get() {
-      const data = await getData(id as string, page, count);
-      setData(data);
-      setTotalCount(data.length);
-      setFirstLoadDone(true);
-
-      const searchDetails = await fetch(
-        `/api/v0/searches/get_fields/${id}`
-      ).then((r) => r.json());
-      const normalizedFields = (searchDetails.fields || []).map((field: any) =>
-        typeof field === "object" ? field : { key: "", value: field }
-      );
-      setFields(normalizedFields);
-    }
-
+    intervalId && clearInterval(intervalId)
+    const interval = setInterval(get, 5000)
+    setIntervalId(interval as unknown as number)
     get();
   }, [page, count, selected]);
 
