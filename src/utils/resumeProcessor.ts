@@ -2,13 +2,13 @@
 
 import axios from "axios";
 import Tesseract from "tesseract.js";
-import pdfParse from "pdf-parse";
+// @ts-ignore
+import * as parser from "pdf-parse/lib/pdf-parse.js";
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import fs from 'fs'
 
 // TODO: dumb fix, fix later
-if (!fs.existsSync('./test/data/05-versions-space.pdf'))
-  fs.writeFileSync('./test/data/05-versions-space.pdf', '')
+// if (!fs.existsSync('./test/data/05-versions-space.pdf'))
+//   fs.writeFileSync('./test/data/05-versions-space.pdf', '')
 
 // API Keys for round-robin usage
 const API_KEYS = [
@@ -53,7 +53,7 @@ export const extractTextFromPDF = async (fileUrl: string): Promise<string> => {
     const pdfBuffer = await downloadFile(fileUrl);
 
     // Parse the PDF buffer and extract text
-    const data = await pdfParse(pdfBuffer);
+    const data = await parser(pdfBuffer);
     text = data.text.trim();
 
     // If text is extracted, return it

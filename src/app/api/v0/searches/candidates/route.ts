@@ -5,7 +5,6 @@ import { NextRequest } from "next/server";
 import { QueryResult } from "pg";
 import { z } from "zod";
 import { processResume } from "@/utils/resumeProcessor";  // Import the resume analyzer
-import fs from 'fs'
 import { parse } from "path";
 
 // Request validation schema
@@ -17,9 +16,9 @@ const requestValidator = z.object({
 
 export async function GET(request: NextRequest) {
   // Validate inputs
-    // TODO: dumb fix, fix later
-  if (!fs.existsSync('./test/data/05-versions-space.pdf'))
-    fs.writeFileSync('./test/data/05-versions-space.pdf', '')
+  // TODO: dumb fix, fix later
+  // if (!fs.existsSync('./test/data/05-versions-space.pdf'))
+  //   fs.writeFileSync('./test/data/05-versions-space.pdf', '')
 
   const req = await requestValidator.safeParseAsync({
     search: request.nextUrl.searchParams.get("search"),
@@ -74,7 +73,7 @@ export async function GET(request: NextRequest) {
     `;
 
 
-    const dbRes = await dbPool.query(dataQuery,[ req.data.search]);
+    const dbRes = await dbPool.query(dataQuery, [req.data.search]);
     type CandidateJSON = {
       id: string,
       name: string,
@@ -86,10 +85,10 @@ export async function GET(request: NextRequest) {
 
     const analysisResults = await Promise.all(
       dbRes.rows.map(async (candidate: CandidateJSON) => {
-        const candidateName : string = candidate.name;
-        const resumeUrl : string = candidate.resume_url;
-        const agencyFee : string = candidate.agency_fee;
-        const salaryRange : string = candidate.monthly_salary;
+        const candidateName: string = candidate.name;
+        const resumeUrl: string = candidate.resume_url;
+        const agencyFee: string = candidate.agency_fee;
+        const salaryRange: string = candidate.monthly_salary;
         const requiredFields = JSON.stringify(required_fields);
 
         const result = await processResume(candidateName, resumeUrl, requiredFields, agencyFee, salaryRange);
