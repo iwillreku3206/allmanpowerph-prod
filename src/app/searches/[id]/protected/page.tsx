@@ -67,9 +67,9 @@ export default function Page() {
   }
 
   useEffect(() => {
-    intervalId && clearInterval(intervalId)
-    const interval = setInterval(get, 5000)
-    setIntervalId(interval as unknown as number)
+    //intervalId && clearInterval(intervalId)
+    //const interval = setInterval(get, 5000)
+    //setIntervalId(interval as unknown as number)
     get();
   }, [page, count, selected]);
 
@@ -154,6 +154,8 @@ export default function Page() {
               Edit Qualifications
             </Button>
           </div>
+
+          <div className="flex flex-row md:w-1/2 w-full my-2"><Button className="ml-auto bg-primary w-32" onClick={get}>Refresh</Button></div>
 
           <ResumeTable
             data={data}
