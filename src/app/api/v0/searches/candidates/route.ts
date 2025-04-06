@@ -5,6 +5,7 @@ import { NextRequest } from "next/server";
 import { QueryResult } from "pg";
 import { z } from "zod";
 import { processResume } from "@/utils/resumeProcessor";  // Import the resume analyzer
+import fs from 'fs'
 import { parse } from "path";
 
 // Request validation schema
@@ -16,6 +17,10 @@ const requestValidator = z.object({
 
 export async function GET(request: NextRequest) {
   // Validate inputs
+    // TODO: dumb fix, fix later
+  if (!fs.existsSync('./test/data/05-versions-space.pdf'))
+    fs.writeFileSync('./test/data/05-versions-space.pdf', '')
+
   const req = await requestValidator.safeParseAsync({
     search: request.nextUrl.searchParams.get("search"),
     page: parseInt(request.nextUrl.searchParams.get("page") || "NaN"),
