@@ -3,7 +3,8 @@
 import axios from "axios";
 import Tesseract from "tesseract.js";
 // @ts-ignore
-import * as parser from "pdf-parse/lib/pdf-parse.js";
+// import * as parser from "pdf-parse/lib/pdf-parse.js";
+const pdf = require('pdf-parse')
 import { GoogleGenerativeAI } from "@google/generative-ai";
 import fs from 'fs'
 
@@ -60,8 +61,9 @@ export const extractTextFromPDF = async (fileUrl: string): Promise<string> => {
     const pdfBuffer = await downloadFile(fileUrl);
 
     // Parse the PDF buffer and extract text
-    const data = await parser(pdfBuffer);
-    text = data.text.trim();
+    text = (await pdf(pdfBuffer)).text
+    // const data = await parser(pdfBuffer);
+    // text = data.text.trim();
 
     // If text is extracted, return it
     if (text) {
