@@ -160,7 +160,7 @@ export default function Page() {
           </div>
           
 
-          <div className="w-full w-7xl max-w-screen mx-auto px-2 md:px-4 lg:px-8 overflow-scroll">
+          <div className="w-full w-7xl max-w-screen mx-auto px-2 md:px-4 lg:px-8">
             <ResumeTable
               data={data}
               id={id as string}

@@ -32,7 +32,7 @@ const resumeMapper = (
       <td className="pl-6 px-4 py-3 text-primary-foreground">{resume.name}</td>
       {Object.keys(resume.fields).map((field: any) => (
         <td
-          className="px-6 py-3 text-primary-foreground md:table-cell"
+          className="px-6 py-3 text-primary-foreground table-cell"
           key={field}
         >
           {resume.fields[field] || ""}
@@ -107,35 +107,37 @@ export function ResumeTable({
   // The table
   return (
     <>
-      <table className="w-full rounded-md bg-white font-bodyfont border-collapse">
-        <thead>
-          <tr
-            key="HEADER"
-            className="text-left text-gray-400 border-b border-gray-700"
-          >
-            <th className="px-6 py-3 text-left"></th>
-            <th className="px-6 py-3 text-left">Name</th>
-            {Object.keys(resumes[0].fields).map((f: string) => (
-              <th
-                key={`fieldheader-${f}`}
-                className="px-6 py-3 text-left md:table-cell hidden"
-              >
-                {f}
-              </th>
-            ))}
-            <th className="px-6 py-3 text-left">Resume</th>
-          </tr>
-        </thead>
-        <tbody>
-          {resumes.map((resume: any) =>
-            resumeMapper(
-              resume,
-              () => handleClick(resume),
-              selected.includes(resume.id)
-            )
-          )}
-        </tbody>
-      </table>
+      <div className="w-full overflow-scroll">
+        <table className="w-full rounded-md bg-white font-bodyfont border-collapse max-w-screen overflow-scroll">
+          <thead>
+            <tr
+              key="HEADER"
+              className="text-left text-gray-400 border-b border-gray-700"
+            >
+              <th className="px-6 py-3 text-left"></th>
+              <th className="px-6 py-3 text-left">Name</th>
+              {Object.keys(resumes[0].fields).map((f: string) => (
+                <th
+                  key={`fieldheader-${f}`}
+                  className="px-6 py-3 text-left table-cell"
+                >
+                  {f}
+                </th>
+              ))}
+              <th className="px-6 py-3 text-left">Resume</th>
+            </tr>
+          </thead>
+          <tbody>
+            {resumes.map((resume: any) =>
+              resumeMapper(
+                resume,
+                () => handleClick(resume),
+                selected.includes(resume.id)
+              )
+            )}
+          </tbody>
+        </table>
+      </div>
       <div className="flex flex-col justify-between items-center mt-4">
         <div className="flex flex-row justify-center">
           <Button
