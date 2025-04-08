@@ -106,7 +106,7 @@ export function ResumeTable({
 
   // The table
   return (
-    <div className="md:w-1/2 w-full">
+    <>
       <table className="w-full rounded-md bg-white font-bodyfont border-collapse">
         <thead>
           <tr
@@ -168,6 +168,6 @@ export function ResumeTable({
         </Button>
       </div>
       <br />
-    </div>
+    </>
   );
 }

@@ -144,43 +144,48 @@ export default function Page() {
   };
 
   return (
-    <main className="min-h-screen bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-4">
+    <main className="min-h-screen bg-[#1A1A1A] text-white flex flex-col items-center justify-center p-2 sm:p-4">
       <Title />
 
       {data ? (
         <>
-          <div className="flex justify-end mb-4 w-full max-w-5xl">
-            <Button className="bg-primary" onClick={() => setModalOpen(true)}>
+          <div className="flex justify-center sm:justify-end mb-4 w-full max-w-5xl px-2">
+            <Button className="bg-primary w-full sm:w-auto" onClick={() => setModalOpen(true)}>
               Edit Qualifications
             </Button>
           </div>
 
-          <div className="flex flex-row md:w-1/2 w-full my-2"><Button className="ml-auto bg-primary w-32" onClick={get}>Refresh</Button></div>
+          <div className="flex flex-col sm:flex-row w-full max-w-5xl px-2 mb-4">
+            <Button className="bg-primary w-full sm:w-32 sm:ml-auto" onClick={get}>Refresh</Button>
+          </div>
+          
 
-          <ResumeTable
-            data={data}
-            id={id as string}
-            selected={selected}
-            page={page}
-            maxPage={Math.ceil(totalCount / count)}
-            firstLoadDone={firstLoadDone}
-            count={count}
-            setPage={setPage}
-            setCount={setCount}
-            removeSelected={(id) =>
-              setSelected((s) => s.filter((i) => i !== id))
-            }
-            addSelected={(id) =>
-              setSelected((s) => {
-                if (!s.includes(id)) {
-                  return [...s, id];
-                }
-                return s;
-              })
-            }
-            handleSubmit={handleContactSubmission}
-            disableSubmit={disableSubmit}
-          />
+          <div className="w-full w-7xl max-w-screen mx-auto px-2 md:px-4 lg:px-8 overflow-scroll">
+            <ResumeTable
+              data={data}
+              id={id as string}
+              selected={selected}
+              page={page}
+              maxPage={Math.ceil(totalCount / count)}
+              firstLoadDone={firstLoadDone}
+              count={count}
+              setPage={setPage}
+              setCount={setCount}
+              removeSelected={(id) =>
+                setSelected((s) => s.filter((i) => i !== id))
+              }
+              addSelected={(id) =>
+                setSelected((s) => {
+                  if (!s.includes(id)) {
+                    return [...s, id];
+                  }
+                  return s;
+                })
+              }
+              handleSubmit={handleContactSubmission}
+              disableSubmit={disableSubmit}
+            />
+          </div>
         </>
       ) : (
         "Loading..."
@@ -188,36 +193,38 @@ export default function Page() {
 
       {/* Qualifications Modal */}
       {modalOpen && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-          <div className="bg-white text-black rounded-xl p-6 w-[420px] max-w-full shadow-lg">
-            <h2 className="text-2xl font-semibold mb-4">
-              Edit Qualifications.
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50 p-4">
+          <div className="bg-white text-black rounded-xl p-4 sm:p-6 w-full max-w-[90%] sm:max-w-[420px] max-h-[90vh] overflow-y-auto shadow-lg">
+            <h2 className="text-xl sm:text-2xl font-semibold mb-3 sm:mb-4">
+              Edit Qualifications
             </h2>
-            <hr className="mb-4" />
+            <hr className="mb-3 sm:mb-4" />
 
-            {fields.map((field, index) => (
-              <div key={index} className="flex items-center gap-2 mb-2">
-                <input
-                  type="text"
-                  value={field.key}
-                  readOnly
-                  className="w-1/2 p-2 rounded border text-sm bg-gray-100"
-                />
-                <input
-                  type="text"
-                  value={field.value}
-                  readOnly
-                  className="w-1/2 p-2 rounded border text-sm bg-gray-100"
-                />
-                <button
-                  onClick={() => handleRemoveQualification(index)}
-                  className="text-red-600 hover:text-red-800"
-                  title="Remove"
-                >
-                  ⊖
-                </button>
-              </div>
-            ))}
+            <div className="max-h-[40vh] sm:max-h-none overflow-y-auto pb-2">
+              {fields.map((field, index) => (
+                <div key={index} className="flex items-center gap-2 mb-2">
+                  <input
+                    type="text"
+                    value={field.key}
+                    readOnly
+                    className="w-1/2 p-2 rounded border text-sm bg-gray-100"
+                  />
+                  <input
+                    type="text"
+                    value={field.value}
+                    readOnly
+                    className="w-1/2 p-2 rounded border text-sm bg-gray-100"
+                  />
+                  <button
+                    onClick={() => handleRemoveQualification(index)}
+                    className="text-red-600 hover:text-red-800"
+                    title="Remove"
+                  >
+                    ⊖
+                  </button>
+                </div>
+              ))}
+            </div>
 
             <div className="flex gap-2 mb-4">
               <input
@@ -236,49 +243,51 @@ export default function Page() {
               />
             </div>
 
-            <button
-              onClick={handleAddQualification}
-              className="w-full border border-red-500 text-red-500 py-2 rounded mb-2 hover:bg-red-50"
-            >
-              Add Qualification
-            </button>
+            <div className="flex flex-col gap-2">
+              <button
+                onClick={handleAddQualification}
+                className="w-full border border-red-500 text-red-500 py-2 rounded hover:bg-red-50"
+              >
+                Add Qualification
+              </button>
 
-            {/* Save Button */}
-            <button
-              onClick={handleSave}
-              className="w-full bg-green-500 text-white py-2 rounded mb-2 hover:bg-green-600"
-            >
-              Save
-            </button>
+              {/* Save Button */}
+              <button
+                onClick={handleSave}
+                className="w-full bg-green-500 text-white py-2 rounded hover:bg-green-600"
+              >
+                Save
+              </button>
 
-            <button
-              onClick={() => setModalOpen(false)}
-              className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
-            >
-              Close
-            </button>
+              <button
+                onClick={() => setModalOpen(false)}
+                className="w-full bg-black text-white py-2 rounded hover:bg-gray-800"
+              >
+                Close
+              </button>
+            </div>
           </div>
         </div>
       )}
 
-      <dialog ref={dialogRef} className="p-8 rounded-lg max-h-[400px] h-screen">
+      <dialog ref={dialogRef} className="p-4 sm:p-8 rounded-lg max-w-[90%] w-[400px] max-h-[80vh] sm:max-h-[400px]">
         <div className="flex flex-col h-full">
-          <h1 className="font-bold text-2xl mb-4">Thank you!</h1>
+          <h1 className="font-bold text-xl sm:text-2xl mb-3 sm:mb-4">Thank you!</h1>
           <hr />
-          <p>
+          <p className="my-3 sm:my-4">
             Thank you for using our service! We will contact you regarding the
             details of the agency with your preferred candidates.
           </p>
           <Button
-            className="bg-primary mt-auto"
+            className="bg-primary mt-auto w-full"
             onClick={() => dialogRef.current?.close()}
           >
-            Close.
+            Close
           </Button>
         </div>
       </dialog>
 
-      <div className="text-center text-sm text-gray-400 mt-4">
+      <div className="text-center text-sm text-gray-400 mt-4 px-4">
         Questions or concerns? Call us at:
         <br />
         <span className="font-medium text-white">09270251730</span>
