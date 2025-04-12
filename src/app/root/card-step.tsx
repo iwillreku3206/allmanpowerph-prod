@@ -22,7 +22,7 @@ export function CardStep({
   children: React.ReactNode;
 }) {
   // Classes
-  const baseClass = "bg-transparent rounded-md lg:w-[640px]";
+  const baseClass = "bg-transparent rounded-md lg:w-[640px] overflow-x-hidden overflow-y-scroll max-h-screen";
   const animationClass =
     "motion-translate-y-in-[10%] motion-opacity-in-0 motion-delay-200";
 

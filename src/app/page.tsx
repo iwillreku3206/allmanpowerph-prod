@@ -38,12 +38,12 @@ export default function Home() {
   }
 
   return (
-    <Main>
+    <Main className="overflow-hidden">
       <WindowPage>
         <Background />
-        <div className="flex flex-row items-end bg-transparent">
+        <div className="flex flex-row items-end bg-transparent max-h-screen">
           <div className="flex flex-col items-center lg:items-start justify-center flex-1">
-            <div className="bg-card h-[100vh] px-20 py-32 z-20">
+            <div className="bg-card h-[100vh] px-20 py-32 z-20 overflow-x-scroll">
               <Title />
               <div className="w-full">
                 {step >= 0 ? (
@@ -77,10 +77,6 @@ export default function Home() {
             </div>
           </div>
         </div>
-      </WindowPage>
-
-      <WindowPage>
-        <div ref={target}></div>
       </WindowPage>
     </Main>
   );

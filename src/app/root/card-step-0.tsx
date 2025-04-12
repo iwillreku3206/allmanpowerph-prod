@@ -11,8 +11,6 @@ import { Input } from "@/components/form/input";
 import { FormContext } from "@/components/contexts/form-data";
 import { CardStep } from "./card-step";
 
-type HelperType = "elderly" | "child" | "general";
-
 export function CardStep0({
   nextStep,
   prevStep,
@@ -26,21 +24,29 @@ export function CardStep0({
 }) {
   // Show the first field
   const { getField, setField, getAll } = useContext(FormContext);
-  const [type, setType] = useState<HelperType>("general");
+  const [type, setType] = useState<string>("call_center");
   const [error, setError] = useState("");
+  const [custom, setCustom] = useState("");
+  const [customOpen, setCustomOpen] = useState(false)
   const tellMeMoreRef = useRef<HTMLParagraphElement>(null);
 
   // Update state
-  const handleSet = (value: HelperType) => () => {
+  const handleSet = (value: string) => () => {
     setType(value);
-    setField("_CareType", value);
-    nextStep();
+    setCustomOpen(false)
+    setField("_WorkerType", value);
   };
 
   const careTypes = [
-    { key: "child", name: "Child Care" },
-    { key: "general", name: "Household Help" },
-    { key: "elderly", name: "Elderly Care" },
+    { key: "call_center", name: "Call Center", icon: "/phone.svg" },
+    { key: "customer_service", name: "Customer Service", icon: '/support.svg' },
+    { key: "data_entry", name: "Data Entry", icon: '/data.svg' },
+    { key: "construction", name: "Construction", icon: '/construction.svg' },
+    { key: "sales_rep", name: "Sales", icon: '/sales.svg' },
+    { key: "waiter", name: "Waiter", icon: '/waiter.svg' },
+    { key: "cashier", name: "Cashier", icon: '/cashier.svg' },
+    { key: "janitor", name: "Janitor", icon: '/janitor.svg' },
+    { key: "factory_worker", name: "Factory Worker", icon: '/factory.svg' },
   ];
 
   useEffect(() => {
@@ -64,6 +70,10 @@ export function CardStep0({
     }, 3600);
   }, []);
 
+  useEffect(() => {
+    if (customOpen) setType(custom)
+  }, [custom, customOpen])
+
   return (
     <CardStep
       title="Need domestic help? We got you covered!"
@@ -73,36 +83,33 @@ export function CardStep0({
       nav={false}
       first
     >
-      <div className="mb-4">
-        <div className="text-red-500 font-bodyfont mb-4">{error}</div>
-        <div className="flex flex-row gap-2">
-          {careTypes.map((careType, i) => (
+      {type}
+      <div className="mb-4 flex flex-col gap-2">
+        <div className="text-red-500 font-bodyfont ">{error}</div>
+        <div className="grid grid-cols-3 gap-2">
+          {careTypes.map((workerType, i) => (
             <Button
               key={i}
-              className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2"
+              className={`bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2 ${type == workerType.key ? 'brightness-125' : ''}`}
               onClick={
                 // @ts-ignore
-                handleSet(careType.key)
+                handleSet(workerType.key)
               }
             >
-              <img src="/child.svg" className="w-12 h-12" />
-              {careType.name}
+              <img src={workerType.icon} className="w-12 h-12" />
+              {workerType.name}
             </Button>
           ))}
         </div>
-        <br />
-        <br />
-        <br />
-        {/* <Button
-          onClick={moreInfoCallback}
-          className="bg-transparent text-white rounded-none hover:bg-primary hover:text-black hover:rounded-sm border-l-2 border-r-2 hover:border-none shadow-none"
-        >
-          <div className="pointer-events-none" onClick={() => alert("aaa")}>
-            <p className="pointer-events-none" ref={tellMeMoreRef}>
-              Wait, tell me more!
-            </p>
-          </div>
-        </Button> */}
+        <div className="inline-flex items-center justify-center w-full">
+          <hr className="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+          <span className="absolute px-3 font-medium text-white -translate-x-1/2 bg-card left-1/2">or</span>
+        </div>
+
+        <Button className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2" onClick={() => setCustomOpen(true)}>Custom</Button>
+        {customOpen && <Input onChange={(e) => setCustom(e.target.value)} value={custom} placeholder="Enter a job type (Warehouse manager, )" />}
+
+        <Button className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2" onClick={() => nextStep()}>Next Step</Button>
       </div>
     </CardStep>
   );
