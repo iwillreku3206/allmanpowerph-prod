@@ -9,16 +9,16 @@ export const createFormContext = () => {
 
   let formData: Qual[] = [
     {
-      key: "Monthly Salary Range",
-      value: "Php 8000 - Php 15000",
+      key: "Daily Salary Range",
+      value: "Php 550 - Php 800",
     },
     {
       key: "Years of Experience",
       value: "at least 7 years",
     },
     {
-      key: "Agency Fee",
-      value: "Php 10000 - Php 20000",
+      key: "Agency Rate (per day)",
+      value: "Php 40 - Php 60",
     },
   ];
 
