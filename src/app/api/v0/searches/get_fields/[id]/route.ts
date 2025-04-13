@@ -7,9 +7,9 @@ export async function GET(request: NextRequest, { params }: any) {
   const { id } = await params;
 
   try {
-    // Query the searches table to get the fields and care_type for the given search id
+    // Query the searches table to get the fields and worker_type for the given search id
     const searchQuery = `
-      SELECT fields, care_type 
+      SELECT fields, worker_type 
       FROM searches
       WHERE id = $1
       LIMIT 1;
@@ -24,7 +24,7 @@ export async function GET(request: NextRequest, { params }: any) {
       );
     }
 
-    // If found, return the search fields and care_type
+    // If found, return the search fields and worker_type
     const searchDetails = result.rows[0];
     return new Response(JSON.stringify(searchDetails), {
       status: 200,

@@ -61,16 +61,10 @@ export function CardStep2({
   const [quals, setQuals]: [quals: Qual[], setQuals: Function] =
     useState(getAll());
 
-  const careTypes = {
-    child: "childcare helper",
-    general: "household helper",
-    elderly: "elderly caregiver",
-  };
-
   return (
     <>
       <CardStep
-        title={`Tell us more about your ideal ${careTypes[(quals.find((x) => x.key == "_CareType")?.value as keyof typeof careTypes) || "general"]}!`}
+        title={`Tell us more about your ideal ${quals.find((x) => x.key == "_WorkerType")?.value}.`}
         description={``}
         nextStep={nextStep}
         prevStep={prevStep}
@@ -78,7 +72,7 @@ export function CardStep2({
         <div className="bg-accent rounded-sm flex flex-col texttype-form mt-4">
           {quals
             .filter(
-              (qual) => key(qual) !== "location" && key(qual) !== "_CareType"
+              (qual) => key(qual) !== "location" && key(qual) !== "_WorkerType"
             )
             .filter(
               (qual) => key(qual).trim() !== "" && val(qual).trim() !== ""
@@ -112,7 +106,7 @@ export function CardStep2({
         <div className="flex flex-col space-y-2">
           {quals
             .filter(
-              (qual) => key(qual) !== "location" && key(qual) !== "_CareType"
+              (qual) => key(qual) !== "location" && key(qual) !== "_WorkerType"
             )
             .map((qual, i) => (
               <div

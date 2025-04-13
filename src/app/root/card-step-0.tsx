@@ -37,16 +37,16 @@ export function CardStep0({
     setField("_WorkerType", value);
   };
 
-  const careTypes = [
-    { key: "call_center", name: "Call Center", icon: "/phone.svg" },
-    { key: "customer_service", name: "Customer Service", icon: '/support.svg' },
-    { key: "data_entry", name: "Data Entry", icon: '/data.svg' },
-    { key: "construction", name: "Construction", icon: '/construction.svg' },
-    { key: "sales_rep", name: "Sales", icon: '/sales.svg' },
-    { key: "waiter", name: "Waiter", icon: '/waiter.svg' },
-    { key: "cashier", name: "Cashier", icon: '/cashier.svg' },
-    { key: "janitor", name: "Janitor", icon: '/janitor.svg' },
-    { key: "factory_worker", name: "Factory Worker", icon: '/factory.svg' },
+  const workerTypes = [
+    { key: "Call Center", name: "Call Center", icon: "/phone.svg" },
+    { key: "Customer Service", name: "Customer Service", icon: '/support.svg' },
+    { key: "Data Entry", name: "Data Entry", icon: '/data.svg' },
+    { key: "Construction", name: "Construction", icon: '/construction.svg' },
+    { key: "Sales", name: "Sales", icon: '/sales.svg' },
+    { key: "Waiter", name: "Waiter", icon: '/waiter.svg' },
+    { key: "Cashier", name: "Cashier", icon: '/cashier.svg' },
+    { key: "Janitor", name: "Janitor", icon: '/janitor.svg' },
+    { key: "Factory Worker", name: "Factory Worker", icon: '/factory.svg' },
   ];
 
   useEffect(() => {
@@ -83,11 +83,10 @@ export function CardStep0({
       nav={false}
       first
     >
-      {type}
       <div className="mb-4 flex flex-col gap-2">
         <div className="text-red-500 font-bodyfont ">{error}</div>
         <div className="grid grid-cols-3 gap-2">
-          {careTypes.map((workerType, i) => (
+          {workerTypes.map((workerType, i) => (
             <Button
               key={i}
               className={`bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2 ${type == workerType.key ? 'brightness-125' : ''}`}
@@ -102,14 +101,20 @@ export function CardStep0({
           ))}
         </div>
         <div className="inline-flex items-center justify-center w-full">
-          <hr className="w-full h-px my-8 bg-gray-200 border-0 dark:bg-gray-700" />
+          <hr className="w-full h-px my-4 bg-gray-200 border-0 dark:bg-gray-700" />
           <span className="absolute px-3 font-medium text-white -translate-x-1/2 bg-card left-1/2">or</span>
         </div>
 
-        <Button className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2" onClick={() => setCustomOpen(true)}>Custom</Button>
+        <Button className="bg-accent px-4 texttype-body rounded-sm w-full text-white flex flex-col justify-center items-center gap-2" onClick={() => setCustomOpen(true)}>Custom</Button>
         {customOpen && <Input onChange={(e) => setCustom(e.target.value)} value={custom} placeholder="Enter a job type (Warehouse manager, )" />}
 
-        <Button className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2" onClick={() => nextStep()}>Next Step</Button>
+        <Button className="bg-accent px-4 texttype-body rounded-sm w-full mt-4 text-white flex flex-col justify-center items-center gap-2" onClick={() => {
+          if (type === "") {
+            setError("Cannot have an empty job type")
+          } else {
+            nextStep()
+          }
+        }}>Next Step</Button>
       </div>
     </CardStep>
   );

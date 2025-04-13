@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
 
   if (token) {
     searchSession = await dbPool.query<SearchSession>(
-      `SELECT ss.*, s.fields, s.care_type, s.id
+      `SELECT ss.*, s.fields, s.worker_type, s.id
        FROM search_sessions ss
        JOIN searches s ON ss.search = s.id
        WHERE ss.session_token = $1 AND ss.search = $2

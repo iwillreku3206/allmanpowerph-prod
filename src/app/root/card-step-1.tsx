@@ -30,17 +30,10 @@ export function CardStep1({
     return nextStep();
   };
 
-  type careType = "child" | "general" | "elderly";
-  const careTypes = {
-    child: "childcare",
-    general: "household help",
-    elderly: "elderly care",
-  };
-
   return (
     <CardStep
       title={`Tell us where you are!`}
-      description={`You selected ${careTypes[getField("_CareType") as careType]}. Help us narrow down your ideal candidate by telling us more about you!`}
+      description={`You selected ${getField("_WorkerType")}. Help us narrow down your ideal candidate by telling us more about you!`}
       nextStep={nextStep}
       prevStep={prevStep}
       nav={true}

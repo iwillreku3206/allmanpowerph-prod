@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
 
   if (token) {
     searchSession = await dbPool.query<SearchSession>(
-      `SELECT ss.*, s.fields, s.care_type, s.id
+      `SELECT ss.*, s.fields, s.worker_type, s.id
        FROM search_sessions ss
        JOIN searches s ON ss.search = s.id
        WHERE ss.session_token = $1 AND ss.search = $2
@@ -63,7 +63,7 @@ export async function GET(request: NextRequest) {
 
     const dataQuery = `
       SELECT c.id AS id, c.name AS name, c.monthly_salary AS monthly_salary, c.resume_url AS resume_url, 
-            c.care_type AS care_type, ag.agency_fee AS agency_fee
+            c.worker_type AS worker_type, ag.agency_fee AS agency_fee
       FROM candidates c
       JOIN agencies ag ON c.agency_id = ag.id
       LEFT JOIN connections conn ON c.id = conn.candidate_id AND conn.user_id = $1

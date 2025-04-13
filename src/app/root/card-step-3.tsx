@@ -45,10 +45,10 @@ export function CardStep3({
       },
       body: JSON.stringify({
         location: getField("location"),
-        careType: getField("_CareType"),
+        workerType: getField("_WorkerType"),
         email: email,
         fields: getAll().filter(
-          (f) => f.key !== "location" && f.key !== "_CareType"
+          (f) => f.key !== "location" && f.key !== "_WorkerType"
         ),
       }),
     })
