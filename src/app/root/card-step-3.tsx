@@ -55,11 +55,12 @@ export function CardStep3({
       .then((r) => r.json())
       .then(({ status, error }) => {
         // Success
-        if (status.toString() === "200") {
+        if (status === 200 || status.toString() === "200") {
           // Dev Mode
           if (process.env.NEXT_PUBLIC_ENVIRONMENT_MODE === "DEV") {
             setError(status);
             setLoading(false);
+            router.push("/thankyou");
             return;
           }
 

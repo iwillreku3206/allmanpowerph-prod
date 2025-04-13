@@ -403,9 +403,9 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                         <img
                           src={`${base}/favicon.ico`}
                           height="40"
-                          alt="All Maids PH"
+                          alt="All Manpower PH"
                         />
-                        <h1 className="title">All Maids PH</h1>
+                        <h1 className="title">All Manpower PH</h1>
                       </a>
                     </td>
                   </tr>
@@ -443,7 +443,7 @@ export default function NewSearchEmail(props: SearchEmailProps) {
                             </p>
                             <table className="fields-table">
                               {fields.map((field) => (
-                                <tr className="fields-row">
+                                <tr className="fields-row" key={field.key}>
                                   <td className="fields-rowdata">
                                     {field.key}
                                   </td>

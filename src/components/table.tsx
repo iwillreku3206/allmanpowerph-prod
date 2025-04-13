@@ -98,7 +98,7 @@ export function ResumeTable({
 
   if (resumes.length == 0 && firstLoadDone)
     return (
-      <div>
+      <div className="text-center">
         We are currently in the process of looking for candidates... We will get
         back to you in the next few days
       </div>
